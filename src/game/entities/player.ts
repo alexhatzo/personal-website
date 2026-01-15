@@ -9,6 +9,21 @@ export const mobileInput = {
   down: false,
 };
 
+// Shared state for action button (throwing pokeball)
+export const mobileAction = {
+  pressed: false,
+  callback: null as (() => void) | null,
+  trigger() {
+    if (this.callback) {
+      this.callback();
+    }
+  },
+};
+
+export interface PlayerOptions {
+  onAction?: () => void;
+}
+
 /**
  * Create player entity with movement controls
  */
@@ -16,7 +31,8 @@ export function createPlayer(
   k: KAPLAYCtx,
   x: number,
   y: number,
-  initialDir: Direction = "down"
+  initialDir: Direction = "down",
+  options: PlayerOptions = {}
 ): GameObj {
   const player = k.add([
     k.sprite("player", { anim: `idle-${initialDir}` }),
@@ -30,6 +46,18 @@ export function createPlayer(
 
   let currentAnim = `idle-${initialDir}`;
   let direction: Direction = initialDir;
+
+  // Register action callback for mobile controls
+  if (options.onAction) {
+    mobileAction.callback = options.onAction;
+
+    // Listen for spacebar press (action key)
+    k.onKeyPress("space", () => {
+      if (player.exists() && options.onAction) {
+        options.onAction();
+      }
+    });
+  }
 
   // Movement update loop
   k.onUpdate(() => {

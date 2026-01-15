@@ -3,16 +3,17 @@ import kaplay from "kaplay";
 import type { KAPLAYCtx } from "kaplay";
 import { SIZES } from "./constants";
 import { loadSprites } from "./sprites";
-import { setupCityScene, setupInteriorScenes } from "./scenes";
+import { setupCityScene, setupInteriorScenes, setOnCaptureCallback } from "./scenes";
 
-// Re-export mobileInput for MobileControls component
-export { mobileInput } from "./entities";
+// Re-export mobileInput and mobileAction for MobileControls component
+export { mobileInput, mobileAction } from "./entities";
 
 interface GameCanvasProps {
   onZoneEnter: (section: string) => void;
+  onCapture?: (creatureId: string) => void;
 }
 
-export default function GameCanvas({ onZoneEnter }: GameCanvasProps) {
+export default function GameCanvas({ onZoneEnter, onCapture }: GameCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<KAPLAYCtx | null>(null);
   const initializedRef = useRef(false);
@@ -34,6 +35,11 @@ export default function GameCanvas({ onZoneEnter }: GameCanvasProps) {
 
     gameRef.current = k;
 
+    // Set up capture callback for Experience building
+    if (onCapture) {
+      setOnCaptureCallback(onCapture);
+    }
+
     // Load all sprites
     loadSprites(k);
 
@@ -51,7 +57,7 @@ export default function GameCanvas({ onZoneEnter }: GameCanvasProps) {
         gameRef.current = null;
       }
     };
-  }, [onZoneEnter]);
+  }, [onZoneEnter, onCapture]);
 
   return (
     <div

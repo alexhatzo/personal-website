@@ -29,4 +29,19 @@ export function loadSprites(k: KAPLAYCtx): void {
     sliceX: 27,
     sliceY: 18,
   });
+
+  // Mushroom creatures for Experience building
+  // Sprite sheets are 10 columns x 6 rows of 32x32 sprites
+  // Row 3 (frames 30-32) for full-body idle - frame 33 has extra elements
+  const mushroomAnimConfig = {
+    sliceX: 10,
+    sliceY: 6,
+    anims: {
+      idle: { from: 30, to: 32, loop: true, speed: 6 },
+    },
+  };
+
+  k.loadSprite("mushroom-green", "/sprites/Free Mushrooms/Mushroom_Spotted.png", mushroomAnimConfig);
+  k.loadSprite("mushroom-blue", "/sprites/Free Mushrooms/Mushroom_Reg.png", mushroomAnimConfig);
+  k.loadSprite("mushroom-pink", "/sprites/Free Mushrooms/Mushroom_spike.png", mushroomAnimConfig);
 }

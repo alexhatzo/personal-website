@@ -1,12 +1,10 @@
 import type { KAPLAYCtx } from "../types";
 import { TILES, CSS_COLORS } from "../constants";
 
-// Tree configurations: [topTile, bottomTile]
+// Tree configurations: [topTile, bottomTile] - only using verified working pairs
 const TREE_TYPES: Array<[number, number]> = [
-  [TILES.ROUND_TOP, TILES.ROUND_BOTTOM],       // Round green tree (233 + 260)
-  [TILES.ROUND_TOP_2, TILES.ROUND_BOTTOM_2],   // Round green tree variant (233 + 259)
-  [TILES.PINE_TOP, TILES.PINE_BOTTOM],         // Pine tree (232 + 261)
-  [TILES.AUTUMN_TOP, TILES.AUTUMN_BOTTOM],     // Autumn orange tree (313 + 340)
+  [TILES.ROUND_TOP, TILES.ROUND_BOTTOM],       // Green tree (233 + 260) - WORKS
+  [TILES.AUTUMN_TOP, TILES.AUTUMN_BOTTOM],     // Autumn orange tree (313 + 340) - WORKS
 ];
 
 /**

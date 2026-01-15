@@ -1,3 +1,3 @@
 // Re-export all scene setup functions
 export { setupCityScene } from "./city";
-export { setupInteriorScenes } from "./interior";
+export { setupInteriorScenes, setOnCaptureCallback } from "./interior";
