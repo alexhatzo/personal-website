@@ -1,15 +1,25 @@
 // Verified tile indices from tilemap (27 columns x 18 rows)
 // Only including tiles we've actually verified work
 export const TILES = {
-  // Trees (verified green)
-  TREE_1: 232,          // Green triangular tree
-  TREE_2: 233,          // Green triangular tree variant
-  TREE_ROUND_1: 259,    // Round green tree/bush
-  TREE_ROUND_2: 260,    // Round green tree/bush variant
+  // Two-tile trees (top + bottom, stacked vertically)
+  // Round green trees
+  ROUND_TOP: 233,       // Round tree canopy (top half)
+  ROUND_BOTTOM: 260,    // Round tree with trunk (bottom half)
+  ROUND_TOP_2: 233,     // Same top, different bottom
+  ROUND_BOTTOM_2: 259,  // Variant bottom
   
-  // Autumn trees
-  TREE_AUTUMN_1: 286,   // Orange/autumn bush
-  TREE_AUTUMN_2: 313,   // Red autumn bush
+  // Pine trees (triangular)
+  PINE_TOP: 232,        // Pine tree top (triangular)
+  PINE_BOTTOM: 261,     // Pine tree trunk (narrow)
+  
+  // Autumn/orange trees
+  AUTUMN_TOP: 313,      // Autumn tree top (orange)
+  AUTUMN_BOTTOM: 340,   // Autumn tree trunk
+  
+  // Single-tile small trees/bushes
+  SMALL_PINE: 234,      // Complete small pine
+  SMALL_ROUND: 264,     // Complete small round tree
+  BUSH_GREEN: 286,      // Green bush
   
   // Interior walls (for rooms only)
   WALL_DARK: 189,       // Dark interior wall

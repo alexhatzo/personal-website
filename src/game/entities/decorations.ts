@@ -1,22 +1,39 @@
 import type { KAPLAYCtx } from "../types";
 import { TILES, CSS_COLORS } from "../constants";
 
+// Tree configurations: [topTile, bottomTile]
+const TREE_TYPES: Array<[number, number]> = [
+  [TILES.ROUND_TOP, TILES.ROUND_BOTTOM],       // Round green tree (233 + 260)
+  [TILES.ROUND_TOP_2, TILES.ROUND_BOTTOM_2],   // Round green tree variant (233 + 259)
+  [TILES.PINE_TOP, TILES.PINE_BOTTOM],         // Pine tree (232 + 261)
+  [TILES.AUTUMN_TOP, TILES.AUTUMN_BOTTOM],     // Autumn orange tree (313 + 340)
+];
+
 /**
- * Create a tree using tilemap (verified tiles)
+ * Create a two-tile tree using tilemap (top + bottom stacked)
  */
 export function createTree(k: KAPLAYCtx, x: number, y: number, variant: number = 0): void {
-  // Use verified tree tiles
-  const treeTypes = [TILES.TREE_1, TILES.TREE_2, TILES.TREE_ROUND_1, TILES.TREE_ROUND_2];
-  const frame = treeTypes[variant % treeTypes.length];
+  const [topTile, bottomTile] = TREE_TYPES[variant % TREE_TYPES.length];
+  const T = 16; // tile size
   
+  // Top half (canopy)
   k.add([
-    k.sprite("tiles", { frame }),
-    k.pos(x - 8, y - 8),
+    k.sprite("tiles", { frame: topTile }),
+    k.pos(x - 8, y - 8 - T), // positioned above the bottom
     k.z(y),
   ]);
+  
+  // Bottom half (trunk)
+  k.add([
+    k.sprite("tiles", { frame: bottomTile }),
+    k.pos(x - 8, y - 8),
+    k.z(y + 1), // slightly in front
+  ]);
+  
+  // Collision at base of tree
   k.add([
     k.circle(6),
-    k.pos(x, y),
+    k.pos(x, y + 4),
     k.area(),
     k.body({ isStatic: true }),
     k.opacity(0),
