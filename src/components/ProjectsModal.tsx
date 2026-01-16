@@ -1,15 +1,26 @@
 import Modal from "./Modal";
 import { usePortfolioData } from "../context/PortfolioContext";
 
+type Section = "about" | "projects" | "skills" | "experience" | "contact";
+
 interface ProjectsModalProps {
   onClose: () => void;
+  showNav?: boolean;
+  currentSection?: Section;
+  onNavigate?: (section: Section) => void;
 }
 
-export default function ProjectsModal({ onClose }: ProjectsModalProps) {
+export default function ProjectsModal({ onClose, showNav, currentSection, onNavigate }: ProjectsModalProps) {
   const { projects } = usePortfolioData();
 
   return (
-    <Modal title="Projects" onClose={onClose}>
+    <Modal 
+      title="Projects" 
+      onClose={onClose}
+      showNav={showNav}
+      currentSection={currentSection}
+      onNavigate={onNavigate}
+    >
       <div className="space-y-6">
         {projects.map((project, index) => (
           <div

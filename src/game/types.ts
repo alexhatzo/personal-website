@@ -16,6 +16,9 @@ export interface SpawnPosition extends Position {
 // Direction for player facing
 export type Direction = "up" | "down" | "left" | "right";
 
+// Door side for building entrances
+export type DoorSide = "bottom" | "top" | "left" | "right";
+
 // Building configuration
 export interface BuildingConfig {
   x: number;
@@ -25,6 +28,7 @@ export interface BuildingConfig {
   section: SectionType;
   label: string;
   color: readonly [number, number, number];
+  doorSide: DoorSide;
 }
 
 // Section types (portfolio sections)

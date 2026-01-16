@@ -82,7 +82,7 @@ export function createRoadSegment(
 }
 
 /**
- * Create road lane markings (CSS-based)
+ * Create horizontal road lane markings (CSS-based)
  */
 export function createRoadMarkings(
   k: KAPLAYCtx,
@@ -96,6 +96,25 @@ export function createRoadMarkings(
       k.pos(x, y),
       k.color(CSS_COLORS.ROAD_MARKING[0], CSS_COLORS.ROAD_MARKING[1], CSS_COLORS.ROAD_MARKING[2]),
       k.z(-49),
+    ]);
+  }
+}
+
+/**
+ * Create vertical road lane markings (CSS-based)
+ */
+export function createVerticalRoadMarkings(
+  k: KAPLAYCtx,
+  x: number,
+  startY: number,
+  endY: number
+): void {
+  for (let y = startY; y < endY; y += T * 3) {
+    k.add([
+      k.rect(3, T * 1.5),
+      k.pos(x, y),
+      k.color(CSS_COLORS.ROAD_MARKING[0], CSS_COLORS.ROAD_MARKING[1], CSS_COLORS.ROAD_MARKING[2]),
+      k.z(-45),
     ]);
   }
 }
@@ -201,11 +220,11 @@ export function createUIText(
   color: [number, number, number] = [255, 255, 255]
 ): void {
   k.add([
-    k.text(text, { size }),
+    k.text(text, { size, font: "gameFont" }),
     k.pos(x, y),
     k.anchor("center"),
     k.color(color[0], color[1], color[2]),
     k.fixed(),
-    k.z(200),
+    k.z(1000),
   ]);
 }

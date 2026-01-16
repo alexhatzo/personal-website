@@ -22,8 +22,31 @@ export {
 export {
   createCreature,
   findNearestCreature,
-  MUSHROOM_SPRITES,
+  playDeathAnimation,
   type CreatureConfig,
-  type MushroomSprite,
 } from "./creatures";
 export { throwPokeball, createCaptureEffect } from "./pokeball";
+export { shootArrow, createArrowHitEffect } from "./arrow";
+export { swingHammer, createHammerHitEffect } from "./hammer";
+export {
+  createWanderingCreature,
+  findNearestWanderingCreature,
+  type WanderingCreatureConfig,
+} from "./wanderingCreature";
+export { showChatBubble, getNextDialogue } from "./chatBubble";
+export {
+  BUILDING_CREATURE_CONFIGS,
+  getCreatureConfigForSection,
+  sectionHasCreatures,
+  type BuildingCreatureConfig,
+  type ActionType,
+} from "./creatureConfigs";
+
+// Re-export sprite registry helpers for convenience
+export {
+  SPRITE_REGISTRY,
+  getSpritesForType,
+  getSpriteTypeForSprite,
+  getSpriteTypeKey,
+  type SpriteTypeConfig,
+} from "../sprites";

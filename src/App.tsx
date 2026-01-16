@@ -7,6 +7,7 @@ import ExperienceModal from "./components/ExperienceModal";
 import ContactModal from "./components/ContactModal";
 import MobileControls from "./components/MobileControls";
 import CaptureModal from "./components/CaptureModal";
+import WelcomeOverlay from "./components/WelcomeOverlay";
 import { PortfolioProvider, usePortfolio } from "./context/PortfolioContext";
 
 type Section = "about" | "projects" | "skills" | "experience" | "contact" | null;
@@ -34,6 +35,8 @@ function ErrorScreen({ message }: { message: string }) {
   );
 }
 
+type NavigableSection = "about" | "projects" | "skills" | "experience" | "contact";
+
 function AppContent() {
   const { data, isLoading, error } = usePortfolio();
   const [activeSection, setActiveSection] = useState<Section>(null);
@@ -45,6 +48,10 @@ function AppContent() {
 
   const handleClose = useCallback(() => {
     setActiveSection(null);
+  }, []);
+
+  const handleNavigate = useCallback((section: NavigableSection) => {
+    setActiveSection(section);
   }, []);
 
   const handleCapture = useCallback((creatureId: string) => {
@@ -63,6 +70,13 @@ function AppContent() {
     return <ErrorScreen message={error || "Data not available"} />;
   }
 
+  // Common props for section modals
+  const modalNavProps = {
+    showNav: true,
+    currentSection: activeSection as NavigableSection,
+    onNavigate: handleNavigate,
+  };
+
   return (
     <div className="relative w-full h-screen overflow-hidden">
       {/* Game Canvas - Full screen background */}
@@ -75,15 +89,18 @@ function AppContent() {
       {/* Mobile Controls - only visible on small screens and no modal open */}
       {!activeSection && !capturedJobId && <MobileControls />}
 
-      {/* Modal Overlays */}
-      {activeSection === "about" && <AboutModal onClose={handleClose} />}
-      {activeSection === "projects" && <ProjectsModal onClose={handleClose} />}
-      {activeSection === "skills" && <SkillsModal onClose={handleClose} />}
-      {activeSection === "experience" && <ExperienceModal onClose={handleClose} />}
-      {activeSection === "contact" && <ContactModal onClose={handleClose} />}
+      {/* Modal Overlays with section navigation */}
+      {activeSection === "about" && <AboutModal onClose={handleClose} {...modalNavProps} />}
+      {activeSection === "projects" && <ProjectsModal onClose={handleClose} {...modalNavProps} />}
+      {activeSection === "skills" && <SkillsModal onClose={handleClose} {...modalNavProps} />}
+      {activeSection === "experience" && <ExperienceModal onClose={handleClose} {...modalNavProps} />}
+      {activeSection === "contact" && <ContactModal onClose={handleClose} {...modalNavProps} />}
 
       {/* Capture Modal - shown when a creature is captured */}
       {capturedJobId && <CaptureModal jobId={capturedJobId} onClose={handleCaptureClose} />}
+
+      {/* Welcome Overlay - shown on first visit */}
+      <WelcomeOverlay />
     </div>
   );
 }

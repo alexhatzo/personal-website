@@ -21,12 +21,16 @@ export default function MobileControls() {
   };
 
   const buttonClass =
-    "w-14 h-14 bg-slate-800/80 border-2 border-slate-600 rounded-lg flex items-center justify-center text-2xl text-white active:bg-slate-700 select-none";
+    "w-14 h-14 bg-slate-800/80 border-2 border-slate-600 rounded-lg flex items-center justify-center text-2xl text-white active:bg-slate-700 select-none focus:outline-none focus:ring-2 focus:ring-blue-400";
 
   return (
     <>
       {/* D-pad controls on the left */}
-      <div className="fixed bottom-6 left-6 z-40 md:hidden">
+      <nav
+        className="fixed bottom-6 left-6 z-40 md:hidden"
+        role="group"
+        aria-label="Game movement controls"
+      >
         <div className="grid grid-cols-3 gap-1">
           {/* Top row - Up button */}
           <div />
@@ -36,6 +40,7 @@ export default function MobileControls() {
             onTouchEnd={() => handleTouchEnd("up")}
             onTouchCancel={handleAllTouchEnd}
             onContextMenu={(e) => e.preventDefault()}
+            aria-label="Move up"
           >
             ↑
           </button>
@@ -48,6 +53,7 @@ export default function MobileControls() {
             onTouchEnd={() => handleTouchEnd("left")}
             onTouchCancel={handleAllTouchEnd}
             onContextMenu={(e) => e.preventDefault()}
+            aria-label="Move left"
           >
             ←
           </button>
@@ -58,6 +64,7 @@ export default function MobileControls() {
             onTouchEnd={() => handleTouchEnd("right")}
             onTouchCancel={handleAllTouchEnd}
             onContextMenu={(e) => e.preventDefault()}
+            aria-label="Move right"
           >
             →
           </button>
@@ -70,19 +77,21 @@ export default function MobileControls() {
             onTouchEnd={() => handleTouchEnd("down")}
             onTouchCancel={handleAllTouchEnd}
             onContextMenu={(e) => e.preventDefault()}
+            aria-label="Move down"
           >
             ↓
           </button>
           <div />
         </div>
-      </div>
+      </nav>
 
       {/* Action button on the right - styled like a pokeball */}
       <div className="fixed bottom-10 right-6 z-40 md:hidden">
         <button
-          className="w-16 h-16 rounded-full bg-gradient-to-b from-red-500 to-red-600 border-4 border-slate-800 flex items-center justify-center active:scale-95 select-none shadow-lg relative overflow-hidden"
+          className="w-16 h-16 rounded-full bg-gradient-to-b from-red-500 to-red-600 border-4 border-slate-800 flex items-center justify-center active:scale-95 select-none shadow-lg relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
           onTouchStart={handleActionPress}
           onContextMenu={(e) => e.preventDefault()}
+          aria-label="Catch creature action button"
         >
           {/* White bottom half */}
           <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-b from-slate-100 to-white" />
@@ -91,7 +100,9 @@ export default function MobileControls() {
           {/* Center button */}
           <div className="relative w-5 h-5 rounded-full bg-white border-4 border-slate-800" />
         </button>
-        <p className="text-center text-white text-xs mt-1 text-shadow">Catch!</p>
+        <p className="text-center text-white text-xs mt-1 text-shadow" aria-hidden="true">
+          Catch!
+        </p>
       </div>
     </>
   );

@@ -1,15 +1,26 @@
 import Modal from "./Modal";
 import { usePortfolioData } from "../context/PortfolioContext";
 
+type Section = "about" | "projects" | "skills" | "experience" | "contact";
+
 interface AboutModalProps {
   onClose: () => void;
+  showNav?: boolean;
+  currentSection?: Section;
+  onNavigate?: (section: Section) => void;
 }
 
-export default function AboutModal({ onClose }: AboutModalProps) {
+export default function AboutModal({ onClose, showNav, currentSection, onNavigate }: AboutModalProps) {
   const { about } = usePortfolioData();
 
   return (
-    <Modal title="About Me" onClose={onClose}>
+    <Modal 
+      title="About Me" 
+      onClose={onClose}
+      showNav={showNav}
+      currentSection={currentSection}
+      onNavigate={onNavigate}
+    >
       <div className="space-y-4">
         <div className="flex items-center gap-4">
           <div className="w-24 h-24 bg-slate-700 rounded-lg flex items-center justify-center text-4xl">
