@@ -1,55 +1,23 @@
 import Modal from "./Modal";
+import { usePortfolioData } from "../context/PortfolioContext";
 
 interface ContactModalProps {
   onClose: () => void;
 }
 
-interface SocialLink {
-  name: string;
-  icon: string;
-  url: string;
-  handle: string;
-}
-
-const socialLinks: SocialLink[] = [
-  {
-    name: "GitHub",
-    icon: "📂",
-    url: "https://github.com/yourusername",
-    handle: "@yourusername",
-  },
-  {
-    name: "LinkedIn",
-    icon: "💼",
-    url: "https://linkedin.com/in/yourusername",
-    handle: "/in/yourusername",
-  },
-  {
-    name: "Twitter",
-    icon: "🐦",
-    url: "https://twitter.com/yourusername",
-    handle: "@yourusername",
-  },
-  {
-    name: "Email",
-    icon: "📧",
-    url: "mailto:your.email@example.com",
-    handle: "your.email@example.com",
-  },
-];
-
 export default function ContactModal({ onClose }: ContactModalProps) {
+  const { contact } = usePortfolioData();
+
   return (
     <Modal title="Contact" onClose={onClose}>
       <div className="space-y-6">
         <p className="text-slate-300 text-center">
-          I'm always open to discussing new opportunities, interesting projects,
-          or just having a chat about technology. Feel free to reach out!
+          {contact.intro}
         </p>
 
         {/* Social Links */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {socialLinks.map((link, index) => (
+          {contact.socialLinks.map((link, index) => (
             <a
               key={index}
               href={link.url}
@@ -75,7 +43,7 @@ export default function ContactModal({ onClose }: ContactModalProps) {
             Prefer email? Click below to send me a message directly.
           </p>
           <a
-            href="mailto:your.email@example.com?subject=Hello from your portfolio!"
+            href={`mailto:${contact.email}?subject=Hello from your portfolio!`}
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors font-semibold"
           >
             📨 Send Email
@@ -84,7 +52,7 @@ export default function ContactModal({ onClose }: ContactModalProps) {
 
         {/* Fun message */}
         <p className="text-slate-500 text-sm text-center italic">
-          Thanks for exploring my portfolio! Hope you enjoyed the walk around the city 🏙️
+          Thanks for exploring my portfolio! Hope you enjoyed the walk around the city
         </p>
       </div>
     </Modal>

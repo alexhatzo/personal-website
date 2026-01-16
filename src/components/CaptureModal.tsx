@@ -1,57 +1,16 @@
 import Modal from "./Modal";
+import { usePortfolioData } from "../context/PortfolioContext";
 
 interface CaptureModalProps {
   jobId: string;
   onClose: () => void;
 }
 
-interface Experience {
-  role: string;
-  company: string;
-  period: string;
-  description: string[];
-  tech?: string[];
-}
-
-// Job data indexed by creature ID
-const JOBS: Record<string, Experience> = {
-  "job-0": {
-    role: "Senior Software Engineer",
-    company: "Company Name",
-    period: "2023 - Present",
-    description: [
-      "Led development of key features that improved user engagement by X%",
-      "Mentored junior developers and conducted code reviews",
-      "Architected scalable solutions handling thousands of concurrent users",
-    ],
-    tech: ["React", "Node.js", "AWS", "TypeScript"],
-  },
-  "job-1": {
-    role: "Software Engineer",
-    company: "Previous Company",
-    period: "2021 - 2023",
-    description: [
-      "Built and maintained customer-facing web applications",
-      "Implemented CI/CD pipelines reducing deployment time by 50%",
-      "Collaborated with design team to improve UX across products",
-    ],
-    tech: ["Vue.js", "Python", "PostgreSQL", "Docker"],
-  },
-  "job-2": {
-    role: "Junior Developer",
-    company: "First Company",
-    period: "2019 - 2021",
-    description: [
-      "Developed features for internal tools and dashboards",
-      "Participated in agile sprints and daily standups",
-      "Learned best practices for clean, maintainable code",
-    ],
-    tech: ["JavaScript", "HTML/CSS", "MySQL", "Git"],
-  },
-};
-
 export default function CaptureModal({ jobId, onClose }: CaptureModalProps) {
-  const job = JOBS[jobId];
+  const { experience } = usePortfolioData();
+  
+  // Find the job by ID from the experience array
+  const job = experience.find((exp) => exp.id === jobId);
 
   if (!job) {
     return (

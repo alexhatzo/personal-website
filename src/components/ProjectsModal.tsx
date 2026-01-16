@@ -1,43 +1,13 @@
 import Modal from "./Modal";
+import { usePortfolioData } from "../context/PortfolioContext";
 
 interface ProjectsModalProps {
   onClose: () => void;
 }
 
-interface Project {
-  title: string;
-  description: string;
-  tech: string[];
-  link?: string;
-  github?: string;
-}
-
-const projects: Project[] = [
-  {
-    title: "Interactive Portfolio",
-    description:
-      "This very website! A gamified portfolio experience built with React, Kaplay.js, and TypeScript. Walk around and explore!",
-    tech: ["React", "TypeScript", "Kaplay.js", "Tailwind CSS"],
-    github: "https://github.com/yourusername/personal-website",
-  },
-  {
-    title: "Project Two",
-    description:
-      "Description of your second project. What problem did it solve? What did you learn?",
-    tech: ["Technology 1", "Technology 2", "Technology 3"],
-    link: "https://project-two.com",
-    github: "https://github.com/yourusername/project-two",
-  },
-  {
-    title: "Project Three",
-    description:
-      "Description of your third project. Highlight the most impressive or interesting aspects.",
-    tech: ["Technology 1", "Technology 2"],
-    link: "https://project-three.com",
-  },
-];
-
 export default function ProjectsModal({ onClose }: ProjectsModalProps) {
+  const { projects } = usePortfolioData();
+
   return (
     <Modal title="Projects" onClose={onClose}>
       <div className="space-y-6">

@@ -1,17 +1,17 @@
 import type { KAPLAYCtx, BuildingConfig, SectionType } from "../types";
 import { COLORS, SIZES } from "../constants";
+import { getBuildingLabel } from "../content";
 
 const T = SIZES.TILE;
 
-// Building configurations for the city
-export const BUILDINGS: BuildingConfig[] = [
+// Building configurations for the city (labels come from portfolio.json via getBuildingLabel)
+export const BUILDINGS: Omit<BuildingConfig, "label">[] = [
   {
     x: SIZES.WORLD_W / 2 - 40,
     y: 20,
     w: 80,
     h: 56,
     section: "about",
-    label: "ABOUT ME",
     color: COLORS.ABOUT,
   },
   {
@@ -20,7 +20,6 @@ export const BUILDINGS: BuildingConfig[] = [
     w: 64,
     h: 80,
     section: "projects",
-    label: "PROJECTS",
     color: COLORS.PROJECTS,
   },
   {
@@ -29,7 +28,6 @@ export const BUILDINGS: BuildingConfig[] = [
     w: 64,
     h: 80,
     section: "skills",
-    label: "SKILLS",
     color: COLORS.SKILLS,
   },
   {
@@ -38,7 +36,6 @@ export const BUILDINGS: BuildingConfig[] = [
     w: 80,
     h: 56,
     section: "experience",
-    label: "EXPERIENCE",
     color: COLORS.EXPERIENCE,
   },
   {
@@ -47,7 +44,6 @@ export const BUILDINGS: BuildingConfig[] = [
     w: 80,
     h: 56,
     section: "contact",
-    label: "CONTACT",
     color: COLORS.CONTACT,
   },
 ];
@@ -55,8 +51,9 @@ export const BUILDINGS: BuildingConfig[] = [
 /**
  * Create a building with doors, windows, and collision zones
  */
-export function createBuilding(k: KAPLAYCtx, config: BuildingConfig): void {
-  const { x, y, w, h, section, label, color } = config;
+export function createBuilding(k: KAPLAYCtx, config: Omit<BuildingConfig, "label">): void {
+  const { x, y, w, h, section, color } = config;
+  const label = getBuildingLabel(section);
 
   // Building shadow
   k.add([

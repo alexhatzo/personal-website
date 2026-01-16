@@ -1,69 +1,87 @@
 import type { BuildingContent, SectionType } from "./types";
 
-// Content displayed inside each building
+// Module-level state for building labels and interior titles
+// These get set by GameCanvas before the game initializes
+let buildingLabels: Record<SectionType, string> = {
+  about: "ABOUT ME",
+  projects: "PROJECTS",
+  skills: "SKILLS",
+  experience: "EXPERIENCE",
+  contact: "CONTACT",
+};
+
+let interiorTitles: Record<SectionType, string> = {
+  about: "About Me",
+  projects: "My Projects",
+  skills: "My Skills",
+  experience: "Work Experience",
+  contact: "Contact Me",
+};
+
+// Setters called from GameCanvas with data from portfolio.json
+export function setBuildingLabels(labels: Record<SectionType, string>): void {
+  buildingLabels = labels;
+}
+
+export function setInteriorTitles(titles: Record<SectionType, string>): void {
+  interiorTitles = titles;
+}
+
+// Getters for use in game code
+export function getBuildingLabel(section: SectionType): string {
+  return buildingLabels[section];
+}
+
+export function getInteriorTitle(section: SectionType): string {
+  return interiorTitles[section];
+}
+
+// Content displayed inside each building (short text for the interior boards)
+// These are simple summaries - the full content is in the React modals
 export const BUILDING_CONTENT: Record<SectionType, BuildingContent> = {
   about: {
-    title: "About Me",
+    get title() { return interiorTitles.about; },
     lines: [
-      "Hi! I'm a developer who",
-      "loves building creative",
-      "web experiences.",
+      "Walk around to explore!",
       "",
-      "Skills: React, TypeScript",
-      "This site proves websites",
-      "can be fun to explore!",
+      "Click on elements or",
+      "press SPACE to interact.",
     ],
   },
   projects: {
-    title: "My Projects",
+    get title() { return interiorTitles.projects; },
     lines: [
-      "1. This Portfolio!",
-      "   Walk around & explore",
+      "Check out my work!",
       "",
-      "2. Project Two",
-      "   A cool app I built",
-      "",
-      "3. Project Three",
-      "   Another creation",
+      "Each project showcases",
+      "different skills.",
     ],
   },
   skills: {
-    title: "My Skills",
+    get title() { return interiorTitles.skills; },
     lines: [
-      "Frontend:",
-      "  React, TypeScript, CSS",
+      "Technical expertise in:",
       "",
-      "Backend:",
-      "  Node.js, Python, SQL",
-      "",
-      "Tools:",
-      "  Git, Docker, AWS",
+      "Frontend, Backend,",
+      "DevOps & more!",
     ],
   },
   experience: {
-    title: "Work History",
+    get title() { return interiorTitles.experience; },
     lines: [
-      "2023 - Now",
-      "  Senior Dev @ Company",
+      "Capture the mushrooms",
+      "to see my work history!",
       "",
-      "2021 - 2023",
-      "  Engineer @ Startup",
-      "",
-      "2019 - 2021",
-      "  Junior @ First Job",
+      "Press SPACE near them.",
     ],
   },
   contact: {
-    title: "Contact Me",
+    get title() { return interiorTitles.contact; },
     lines: [
-      "Email:",
-      "  hello@example.com",
+      "Let's connect!",
       "",
-      "GitHub:",
-      "  github.com/you",
-      "",
-      "LinkedIn:",
-      "  linkedin.com/in/you",
+      "Find me on GitHub,",
+      "LinkedIn, or email.",
     ],
   },
 };

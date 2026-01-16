@@ -1,63 +1,22 @@
 import Modal from "./Modal";
+import { usePortfolioData } from "../context/PortfolioContext";
 
 interface ExperienceModalProps {
   onClose: () => void;
 }
 
-interface Experience {
-  role: string;
-  company: string;
-  period: string;
-  description: string[];
-  tech?: string[];
-}
-
-const experiences: Experience[] = [
-  {
-    role: "Senior Software Engineer",
-    company: "Company Name",
-    period: "2023 - Present",
-    description: [
-      "Led development of key features that improved user engagement by X%",
-      "Mentored junior developers and conducted code reviews",
-      "Architected scalable solutions handling thousands of concurrent users",
-    ],
-    tech: ["React", "Node.js", "AWS"],
-  },
-  {
-    role: "Software Engineer",
-    company: "Previous Company",
-    period: "2021 - 2023",
-    description: [
-      "Built and maintained customer-facing web applications",
-      "Implemented CI/CD pipelines reducing deployment time by 50%",
-      "Collaborated with design team to improve UX across products",
-    ],
-    tech: ["Vue.js", "Python", "PostgreSQL"],
-  },
-  {
-    role: "Junior Developer",
-    company: "First Company",
-    period: "2019 - 2021",
-    description: [
-      "Developed features for internal tools and dashboards",
-      "Participated in agile sprints and daily standups",
-      "Learned best practices for clean, maintainable code",
-    ],
-    tech: ["JavaScript", "HTML/CSS", "MySQL"],
-  },
-];
-
 export default function ExperienceModal({ onClose }: ExperienceModalProps) {
+  const { experience } = usePortfolioData();
+
   return (
     <Modal title="Experience" onClose={onClose}>
       <div className="space-y-6">
         {/* Timeline */}
         <div className="relative">
-          {experiences.map((exp, index) => (
-            <div key={index} className="relative pl-8 pb-6 last:pb-0">
+          {experience.map((exp, index) => (
+            <div key={exp.id} className="relative pl-8 pb-6 last:pb-0">
               {/* Timeline line */}
-              {index !== experiences.length - 1 && (
+              {index !== experience.length - 1 && (
                 <div className="absolute left-[11px] top-6 w-0.5 h-full bg-slate-700" />
               )}
               {/* Timeline dot */}
@@ -83,7 +42,7 @@ export default function ExperienceModal({ onClose }: ExperienceModalProps) {
                   ))}
                 </ul>
 
-                {exp.tech && (
+                {exp.tech && exp.tech.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {exp.tech.map((tech, techIndex) => (
                       <span
