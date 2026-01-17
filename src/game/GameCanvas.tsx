@@ -76,8 +76,7 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
       root: canvasRef.current,
       width: canvasW,
       height: canvasH,
-      letterbox: !isMobile, // Disable letterbox on mobile to fill screen
-      stretch: isMobile,    // Stretch to fill on mobile
+      letterbox: true,
       crisp: true,
       background: [34, 100, 34],
     });
@@ -113,14 +112,20 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
     };
   }, [onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData]);
 
+  // Game aspect ratio is 3:2 (480:320 or 240:160)
+  // On mobile, we want the game to fill the width and use the correct height
   return (
     <div
       ref={canvasRef}
       className={`w-full flex justify-center ${
         isMobile 
-          ? 'items-start h-[calc(100vh-130px)]' 
+          ? 'items-start' 
           : 'items-center h-full'
       }`}
+      style={isMobile ? {
+        // Set height based on aspect ratio (width * 2/3)
+        height: 'min(calc(100vw * 0.667), calc(100vh - 140px))',
+      } : undefined}
     />
   );
 }
