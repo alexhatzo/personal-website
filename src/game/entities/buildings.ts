@@ -487,7 +487,7 @@ function createSkyscraper(
  */
 function getHouseWindowPositions(
   x: number, y: number, w: number, h: number,
-  doorX: number, doorY: number, doorW: number, doorH: number,
+  _doorX: number, _doorY: number, _doorW: number, _doorH: number,
   doorSide: string
 ): Array<{ wx: number; wy: number }> {
   const positions: Array<{ wx: number; wy: number }> = [];

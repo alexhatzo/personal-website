@@ -94,7 +94,6 @@ function getCreaturePositions(
   } else {
     // For more creatures, distribute evenly
     const cols = Math.min(count, 4);
-    const rows = Math.ceil(count / cols);
     for (let i = 0; i < count; i++) {
       const col = i % cols;
       const row = Math.floor(i / cols);

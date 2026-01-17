@@ -289,9 +289,6 @@ export function setupCityScene(k: KAPLAYCtx): void {
       k.fixed(),
     ]);
 
-    // Track current hint type
-    let currentHintType: "door" | "creature" | null = null;
-
     // Check proximity to doors and creatures every frame
     player.onUpdate(() => {
       const doors = k.get("door");
@@ -311,17 +308,14 @@ export function setupCityScene(k: KAPLAYCtx): void {
 
       // Determine which hint to show (creature takes priority)
       if (nearCreature) {
-        currentHintType = "creature";
         hintText.text = "Press SPACE to talk";
         hintText.opacity = Math.min(1, hintText.opacity + 0.1);
         hintText.pos = k.vec2(k.width() / 2, k.height() - 40);
       } else if (nearDoor) {
-        currentHintType = "door";
         hintText.text = "Walk into door to enter";
         hintText.opacity = Math.min(1, hintText.opacity + 0.1);
         hintText.pos = k.vec2(k.width() / 2, k.height() - 40);
       } else {
-        currentHintType = null;
         hintText.opacity = Math.max(0, hintText.opacity - 0.1);
       }
     });

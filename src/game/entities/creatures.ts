@@ -1,5 +1,5 @@
 import type { KAPLAYCtx, GameObj } from "../types";
-import { getSpriteTypeForSprite, getSpritesForType } from "../sprites";
+import { getSpriteTypeForSprite } from "../sprites";
 
 // ============================================================================
 // Types
@@ -126,7 +126,7 @@ export function createCreature(
  * Automatically uses the correct death animation for the sprite type
  */
 export function playDeathAnimation(
-  k: KAPLAYCtx,
+  _k: KAPLAYCtx,
   creature: GameObj,
   onComplete: () => void
 ): void {
