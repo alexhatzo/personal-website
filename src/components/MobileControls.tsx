@@ -1,6 +1,19 @@
+import { useState, useEffect } from "react";
 import { mobileInput, mobileAction } from "../game/GameCanvas";
 
 export default function MobileControls() {
+  const [actionLabel, setActionLabel] = useState("Chat");
+
+  // Update label periodically to reflect current context
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (mobileAction.label !== actionLabel) {
+        setActionLabel(mobileAction.label);
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, [actionLabel]);
+
   const handleTouchStart = (direction: "up" | "down" | "left" | "right") => {
     mobileInput[direction] = true;
   };
@@ -101,7 +114,7 @@ export default function MobileControls() {
           <div className="relative w-5 h-5 rounded-full bg-white border-4 border-slate-800" />
         </button>
         <p className="text-center text-white text-xs mt-1 text-shadow" aria-hidden="true">
-          Catch!
+          {actionLabel}
         </p>
       </div>
     </>

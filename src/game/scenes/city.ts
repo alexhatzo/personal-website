@@ -5,6 +5,7 @@ import {
   createPlayer,
   setupCamera,
   setupWorldBounds,
+  mobileAction,
   createTree,
   createBench,
   createLampPost,
@@ -324,7 +325,7 @@ export function setupCityScene(k: KAPLAYCtx): void {
     let canTalk = true;
     const talkCooldown = 1.5; // Prevent spam
 
-    k.onKeyPress("space", () => {
+    const handleTalk = () => {
       if (!canTalk) return;
 
       const nearestCreature = findNearestWanderingCreature(k, player.pos, 50);
@@ -338,7 +339,13 @@ export function setupCityScene(k: KAPLAYCtx): void {
       // Get dialogue and show chat bubble
       const dialogue = getNextDialogue(nearestCreature);
       showChatBubble(k, nearestCreature, dialogue, 2.5);
-    });
+    };
+
+    // Set up mobile action for city scene
+    mobileAction.setLabel("Chat");
+    mobileAction.setCallback(handleTalk);
+
+    k.onKeyPress("space", handleTalk);
 
     // === 11. UI ===
     createUIText(k, "Welcome to my Portfolio!", k.width() / 2, 10, 10);

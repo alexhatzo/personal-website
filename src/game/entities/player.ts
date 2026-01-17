@@ -9,14 +9,21 @@ export const mobileInput = {
   down: false,
 };
 
-// Shared state for action button (throwing pokeball)
+// Shared state for action button
 export const mobileAction = {
   pressed: false,
   callback: null as (() => void) | null,
+  label: "Chat" as string,
   trigger() {
     if (this.callback) {
       this.callback();
     }
+  },
+  setLabel(newLabel: string) {
+    this.label = newLabel;
+  },
+  setCallback(cb: (() => void) | null) {
+    this.callback = cb;
   },
 };
 

@@ -4,6 +4,7 @@ import { createFloorGrid, createRoomWalls, createUIText } from "../utils";
 import {
   createPlayer,
   setupWorldBounds,
+  mobileAction,
   getFloorColor,
   createInteriorFurniture,
   createCreature,
@@ -290,15 +291,23 @@ function createCreatureRoom(
     });
   });
 
-  // Create action handler based on action type
+  // Create action handler based on action type and set mobile label
   let actionHandler: (() => void) | undefined;
+  let actionLabel = "Action";
+  
   if (creatureConfig.actionType === "pokeball") {
     actionHandler = createPokeballActionHandler(k);
+    actionLabel = "Catch";
   } else if (creatureConfig.actionType === "arrow") {
     actionHandler = createArrowActionHandler(k);
+    actionLabel = "Shoot";
   } else if (creatureConfig.actionType === "hammer") {
     actionHandler = createHammerActionHandler(k);
+    actionLabel = "Smash";
   }
+
+  // Set mobile action label
+  mobileAction.setLabel(actionLabel);
 
   // Create player with action callback
   const player = createPlayer(
@@ -396,11 +405,17 @@ function createStandardInteriorScene(k: KAPLAYCtx, section: SectionType): void {
 
     // SPACE interaction for About and Contact rooms
     if (section === "about" || section === "contact") {
-      k.onKeyPress("space", () => {
+      const handleInteract = () => {
         if (sectionInteractCallback) {
           sectionInteractCallback(section);
         }
-      });
+      };
+
+      // Set up mobile action for About/Contact
+      mobileAction.setLabel("Info");
+      mobileAction.setCallback(handleInteract);
+
+      k.onKeyPress("space", handleInteract);
     }
 
     // UI
