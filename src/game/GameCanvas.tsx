@@ -112,8 +112,8 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
     };
   }, [onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData]);
 
-  // Game aspect ratio is 3:2 (480:320 or 240:160)
-  // On mobile, we want the game to fill the width and use the correct height
+  // On mobile: height = width * 2/3 (to match 3:2 aspect ratio), capped at 75vh
+  // This fills the width while maintaining aspect ratio
   return (
     <div
       ref={canvasRef}
@@ -123,8 +123,8 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
           : 'items-center h-full'
       }`}
       style={isMobile ? {
-        // Set height based on aspect ratio (width * 2/3)
-        height: 'min(calc(100vw * 0.667), calc(100vh - 140px))',
+        // Height based on aspect ratio (width * 2/3), but max 75% of screen
+        height: 'min(calc(100vw * 0.667), 75vh)',
       } : undefined}
     />
   );
