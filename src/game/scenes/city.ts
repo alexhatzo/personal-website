@@ -349,5 +349,25 @@ export function setupCityScene(k: KAPLAYCtx): void {
     // === 11. UI ===
     createUIText(k, "Welcome to my Portfolio!", k.width() / 2, 10, 10);
     createUIText(k, "Use arrow keys or WASD to move", k.width() / 2, k.height() - 10, 8, [220, 220, 220]);
+    
+    // Disclaimer text
+    k.add([
+      k.text("Not a game dev", { size: 7, font: "gameFont" }),
+      k.pos(8, k.height() - 20),
+      k.anchor("left"),
+      k.color(255, 255, 255),
+      k.opacity(0.7),
+      k.fixed(),
+      k.z(1000),
+    ]);
+    k.add([
+      k.text("Just having fun", { size: 7, font: "gameFont" }),
+      k.pos(k.width() - 8, k.height() - 20),
+      k.anchor("right"),
+      k.color(255, 255, 255),
+      k.opacity(0.7),
+      k.fixed(),
+      k.z(1000),
+    ]);
   });
 }

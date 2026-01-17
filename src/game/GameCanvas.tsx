@@ -3,9 +3,9 @@ import kaplay from "kaplay";
 import type { KAPLAYCtx } from "kaplay";
 import { SIZES } from "./constants";
 import { loadSprites } from "./sprites";
-import { setupCityScene, setupInteriorScenes, setOnCaptureCallback } from "./scenes";
-import { setBuildingLabels, setInteriorTitles } from "./content";
-import type { BuildingsData } from "../types/portfolio";
+import { setupCityScene, setupInteriorScenes, setOnCaptureCallback, setOnSectionInteractCallback } from "./scenes";
+import { setBuildingLabels, setInteriorTitles, setAboutData, setContactData } from "./content";
+import type { BuildingsData, AboutData, ContactData } from "../types/portfolio";
 
 // Re-export mobileInput and mobileAction for MobileControls component
 export { mobileInput, mobileAction } from "./entities";
@@ -13,10 +13,13 @@ export { mobileInput, mobileAction } from "./entities";
 interface GameCanvasProps {
   onZoneEnter: (section: string) => void;
   onCapture?: (creatureId: string) => void;
+  onSectionInteract?: (section: string) => void;
   buildingsData?: BuildingsData;
+  aboutData?: AboutData;
+  contactData?: ContactData;
 }
 
-export default function GameCanvas({ onZoneEnter, onCapture, buildingsData }: GameCanvasProps) {
+export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData }: GameCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<KAPLAYCtx | null>(null);
   const initializedRef = useRef(false);
@@ -44,6 +47,14 @@ export default function GameCanvas({ onZoneEnter, onCapture, buildingsData }: Ga
       });
     }
 
+    // Set about and contact data for content boards
+    if (aboutData) {
+      setAboutData(aboutData);
+    }
+    if (contactData) {
+      setContactData(contactData);
+    }
+
     // Initialize Kaplay
     const k = kaplay({
       root: canvasRef.current,
@@ -59,6 +70,11 @@ export default function GameCanvas({ onZoneEnter, onCapture, buildingsData }: Ga
     // Set up capture callback for Experience building
     if (onCapture) {
       setOnCaptureCallback(onCapture);
+    }
+
+    // Set up section interact callback for About/Contact buildings
+    if (onSectionInteract) {
+      setOnSectionInteractCallback(onSectionInteract);
     }
 
     // Load all sprites
@@ -78,7 +94,7 @@ export default function GameCanvas({ onZoneEnter, onCapture, buildingsData }: Ga
         gameRef.current = null;
       }
     };
-  }, [onZoneEnter, onCapture, buildingsData]);
+  }, [onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData]);
 
   return (
     <div

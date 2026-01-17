@@ -21,33 +21,33 @@ export default function ProjectsModal({ onClose, showNav, currentSection, onNavi
       currentSection={currentSection}
       onNavigate={onNavigate}
     >
-      <div className="space-y-6">
+      <div className="space-y-8">
         {projects.map((project, index) => (
           <div
             key={index}
-            className="bg-slate-800 rounded-lg p-4 border border-slate-700 hover:border-slate-500 transition-colors"
+            className="bg-slate-800/80 rounded-xl p-6 sm:p-8 border border-slate-700 hover:border-slate-500 transition-colors"
           >
-            <h3 className="text-lg font-bold text-white mb-2">{project.title}</h3>
-            <p className="text-slate-300 mb-3">{project.description}</p>
+            <h3 className="text-xl font-bold text-white mb-3">{project.title}</h3>
+            <p className="text-slate-300 mb-5 leading-relaxed">{project.description}</p>
 
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3 mb-5">
               {project.tech.map((tech, techIndex) => (
                 <span
                   key={techIndex}
-                  className="px-2 py-1 bg-slate-700 text-slate-300 text-sm rounded"
+                  className="px-3 py-1.5 bg-slate-700/80 text-slate-300 text-sm rounded-lg"
                 >
                   {tech}
                 </span>
               ))}
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-5 pt-2">
               {project.link && (
                 <a
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 text-sm"
+                  className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
                 >
                   🔗 Live Demo
                 </a>
@@ -57,7 +57,7 @@ export default function ProjectsModal({ onClose, showNav, currentSection, onNavi
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 text-sm"
+                  className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
                 >
                   📂 GitHub
                 </a>
@@ -66,7 +66,7 @@ export default function ProjectsModal({ onClose, showNav, currentSection, onNavi
           </div>
         ))}
 
-        <p className="text-slate-500 text-sm text-center pt-4">
+        <p className="text-slate-500 text-sm text-center pt-6">
           More projects coming soon...
         </p>
       </div>

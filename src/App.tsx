@@ -62,6 +62,10 @@ function AppContent() {
     setCapturedJobId(null);
   }, []);
 
+  const handleSectionInteract = useCallback((section: string) => {
+    setActiveSection(section as Section);
+  }, []);
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -83,7 +87,10 @@ function AppContent() {
       <GameCanvas 
         onZoneEnter={handleZoneEnter} 
         onCapture={handleCapture}
+        onSectionInteract={handleSectionInteract}
         buildingsData={data.buildings}
+        aboutData={data.about}
+        contactData={data.contact}
       />
 
       {/* Mobile Controls - only visible on small screens and no modal open */}

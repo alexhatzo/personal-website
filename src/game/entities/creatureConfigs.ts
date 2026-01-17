@@ -74,7 +74,7 @@ export const BUILDING_CREATURE_CONFIGS: BuildingCreatureConfig[] = [
     ],
   },
   
-  // Skills building - goblin with arrow shooting
+  // Skills building - goblins with arrow shooting (one per skill category)
   {
     section: "skills",
     hasCreatures: true,
@@ -82,7 +82,9 @@ export const BUILDING_CREATURE_CONFIGS: BuildingCreatureConfig[] = [
     roomTitle: "My Skills",
     instructionText: "Press SPACE to shoot!",
     creatures: [
-      { id: "skill-0", sprite: "goblin", label: "TypeScript" },
+      { id: "skill-0", sprite: "goblin", label: "Frontend" },
+      { id: "skill-1", sprite: "goblin", label: "Backend" },
+      { id: "skill-2", sprite: "goblin", label: "DevOps" },
     ],
   },
   

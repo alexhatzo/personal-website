@@ -1,6 +1,26 @@
 @import "tailwindcss";
 
 /* ============================================
+   BASE RESET (in base layer to not override utilities)
+   ============================================ */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body, #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #0f172a;
+  }
+}
+
+/* ============================================
    DESIGN SYSTEM TOKENS
    ============================================ */
 :root {
@@ -50,24 +70,6 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   --shadow-glow: 0 0 20px rgb(251 191 36 / 0.3);
-}
-
-/* ============================================
-   BASE STYLES
-   ============================================ */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body, #root {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #0f172a;
 }
 
 /* Pixel art rendering - prevents blurring when scaling */

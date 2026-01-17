@@ -91,7 +91,7 @@ export default function Modal({
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 animate-fadeIn"
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn p-4 sm:p-8"
       onClick={handleBackdropClick}
       role="presentation"
     >
@@ -100,17 +100,17 @@ export default function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="bg-slate-900 border-4 border-slate-600 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden shadow-2xl animate-scaleIn"
+        className="bg-slate-900 border border-slate-700 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl shadow-black/50 animate-scaleIn"
       >
         {/* Header */}
-        <div className="bg-slate-800 px-6 py-4 border-b-2 border-slate-600 flex justify-between items-center">
-          <h2 id={titleId} className="text-2xl font-bold text-white pixel-text">
+        <div className="bg-slate-800/80 px-8 py-5 sm:px-12 sm:py-6 border-b border-slate-700 flex justify-between items-center">
+          <h2 id={titleId} className="text-xl sm:text-2xl font-bold text-white pixel-text">
             {title}
           </h2>
           <button
             ref={closeButtonRef}
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors text-2xl leading-none p-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="text-slate-400 hover:text-white hover:bg-slate-700 transition-all text-2xl leading-none p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             aria-label="Close modal"
           >
             ×
@@ -119,8 +119,8 @@ export default function Modal({
 
         {/* Section Navigation Tabs */}
         {showNav && onNavigate && (
-          <nav className="bg-slate-800/50 px-4 py-2 border-b border-slate-700" aria-label="Portfolio sections">
-            <ul className="flex gap-1 overflow-x-auto">
+          <nav className="bg-slate-800/30 px-6 py-4 sm:px-8 border-b border-slate-700/50" aria-label="Portfolio sections">
+            <ul className="flex gap-2 sm:gap-3 overflow-x-auto">
               {sections.map((section) => {
                 const isActive = section === currentSection;
                 return (
@@ -128,11 +128,11 @@ export default function Modal({
                     <button
                       onClick={() => onNavigate(section)}
                       className={`
-                        px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors
-                        flex items-center gap-1.5
+                        px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all
+                        flex items-center gap-2
                         ${isActive 
-                          ? "bg-blue-600 text-white" 
-                          : "text-slate-400 hover:text-white hover:bg-slate-700"
+                          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25" 
+                          : "text-slate-400 hover:text-white hover:bg-slate-700/50"
                         }
                         focus:outline-none focus:ring-2 focus:ring-blue-400
                       `}
@@ -149,7 +149,7 @@ export default function Modal({
         )}
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(80vh-80px)] text-slate-200">
+        <div className="p-8 sm:p-12 lg:p-14 overflow-y-auto max-h-[calc(90vh-100px)] text-slate-200 leading-relaxed">
           {children}
         </div>
       </div>

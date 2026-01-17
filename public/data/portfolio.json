@@ -1,76 +1,76 @@
 {
   "about": {
-    "name": "Your Name",
-    "title": "Software Engineer / Developer",
-    "avatar": "👨‍💻",
+    "name": "Alexandros Hatzopoulos",
+    "title": "DevOps Engineer / Cloud & Platform Engineer",
+    "avatar": "🛠️",
     "bio": [
-      "Welcome to my interactive portfolio! I'm a passionate developer who loves building creative and engaging web experiences. This website itself is a testament to my belief that portfolios should be more than just a list of projects – they should be an experience.",
-      "When I'm not coding, you can find me exploring new technologies, contributing to open source, or playing video games (which clearly influenced this portfolio design)."
+      "DevOps engineer focused on building reliable cloud infrastructure, Kubernetes platforms, and automation across AWS and OCI.",
+      "I like turning messy deployments into repeatable systems (Terraform, Helm, CI/CD) and shipping tools that make teams faster."
     ],
     "quickFacts": {
-      "location": "Your City, Country",
-      "education": "Your University / Self-taught",
-      "status": "Open to opportunities",
-      "funFact": "Built this portfolio as a mini-game!"
+      "location": "Venice, CA",
+      "education": "USC (BS CS & Business, 2023)",
+      "status": "Open to new opportunities",
+      "funFact": "Bilingual (Greek/English) and into DJing + tennis."
     }
   },
   "experience": [
     {
       "id": "job-0",
-      "role": "Senior Software Engineer",
-      "company": "Company Name",
-      "period": "2023 - Present",
+      "role": "DevOps Engineer",
+      "company": "P1 Technologies",
+      "period": "May 2022 - Present",
       "description": [
-        "Led development of key features that improved user engagement by X%",
-        "Mentored junior developers and conducted code reviews",
-        "Architected scalable solutions handling thousands of concurrent users"
+        "Led migration of Skydance Animation services to OCI, standing up OKE (Kubernetes) and standardizing infra with Terraform/Ansible/Packer",
+        "Cut deployment time 50%+ by replacing many K8s manifests with a single Helm-based workflow (EKS)",
+        "Built monitoring + alerting platform (Grafana/Slack/Jira) with <5 min average response time to hardware issues"
       ],
-      "tech": ["React", "Node.js", "AWS", "TypeScript"]
+      "tech": ["Kubernetes", "AWS", "OCI", "Terraform", "Helm", "Python", "Grafana", "Prometheus", "Ansible", "Packer", "CI/CD"]
     },
     {
       "id": "job-1",
-      "role": "Software Engineer",
-      "company": "Previous Company",
-      "period": "2021 - 2023",
+      "role": "Software Developer",
+      "company": "VETO A.E.",
+      "period": "Sep 2020 - Aug 2021",
       "description": [
-        "Built and maintained customer-facing web applications",
-        "Implemented CI/CD pipelines reducing deployment time by 50%",
-        "Collaborated with design team to improve UX across products"
+        "Redesigned e-commerce front ends (CS-Cart) and improved UI/UX across multiple sites",
+        "Helped drive 110%+ e-shop sales growth through UX + e-commerce strategy improvements",
+        "Built an internal data access tool integrating with Oracle DB used by employees and B2B customers"
       ],
-      "tech": ["Vue.js", "Python", "PostgreSQL", "Docker"]
+      "tech": ["JavaScript", "HTML", "CSS", "MySQL", "PHP", "CS-Cart"]
     },
     {
       "id": "job-2",
-      "role": "Junior Developer",
-      "company": "First Company",
-      "period": "2019 - 2021",
+      "role": "Front-End Developer",
+      "company": "McCann Worldgroup",
+      "period": "May 2020 - Aug 2020",
       "description": [
-        "Developed features for internal tools and dashboards",
-        "Participated in agile sprints and daily standups",
-        "Learned best practices for clean, maintainable code"
+        "Introduced/implemented modern frameworks (Laravel + Vue) into active projects",
+        "Built campaign front-end experiences with Vue.js and collaborated with remote stakeholders"
       ],
-      "tech": ["JavaScript", "HTML/CSS", "MySQL", "Git"]
+      "tech": ["Vue.js", "JavaScript", "HTML", "CSS", "Laravel"]
     }
   ],
   "projects": [
     {
-      "title": "Interactive Portfolio",
-      "description": "This very website! A gamified portfolio experience built with React, Kaplay.js, and TypeScript. Walk around and explore!",
-      "tech": ["React", "TypeScript", "Kaplay.js", "Tailwind CSS"],
-      "github": "https://github.com/yourusername/personal-website"
+      "title": "P1 Protect Monitoring Platform",
+      "description": "Monitoring + alerting system for edge infrastructure using Kubernetes + Grafana with Slack/Jira integrations to catch outages early.",
+      "tech": ["Kubernetes", "Grafana", "Prometheus", "AWS", "Slack", "Jira"],
+      "github": ""
     },
     {
-      "title": "Project Two",
-      "description": "Description of your second project. What problem did it solve? What did you learn?",
-      "tech": ["Technology 1", "Technology 2", "Technology 3"],
-      "link": "https://project-two.com",
-      "github": "https://github.com/yourusername/project-two"
+      "title": "Multi-Region Data Sync Tool (OCI OKE)",
+      "description": "Multi-region data manager deployed on OCI Kubernetes to enable real-time collaboration and faster cross-region file sync than traditional rsync workflows.",
+      "tech": ["OCI", "Kubernetes (OKE)", "Python", "Networking"],
+      "link": "",
+      "github": ""
     },
     {
-      "title": "Project Three",
-      "description": "Description of your third project. Highlight the most impressive or interesting aspects.",
-      "tech": ["Technology 1", "Technology 2"],
-      "link": "https://project-three.com"
+      "title": "Lino (Founder)",
+      "description": "Founded and launched a linen clothing brand spanning design, production, and sales between Greece and Los Angeles.",
+      "tech": ["Entrepreneurship", "Operations", "Brand"],
+      "link": "",
+      "github": ""
     }
   ],
   "skills": {
@@ -78,53 +78,42 @@
       {
         "name": "Frontend",
         "icon": "🎨",
-        "skills": ["React", "TypeScript", "JavaScript", "HTML/CSS", "Tailwind CSS", "Next.js"]
+        "skills": ["React.js", "Vue.js", "JavaScript", "HTML", "CSS"]
       },
       {
         "name": "Backend",
         "icon": "⚙️",
-        "skills": ["Node.js", "Python", "PostgreSQL", "MongoDB", "REST APIs", "GraphQL"]
+        "skills": ["Python", "Java", "C++", "PHP", "MySQL"]
       },
       {
         "name": "DevOps & Tools",
         "icon": "🛠️",
-        "skills": ["Git", "Docker", "AWS", "CI/CD", "Linux", "Terraform"]
-      },
-      {
-        "name": "Other",
-        "icon": "✨",
-        "skills": ["Game Development", "UI/UX Design", "Agile/Scrum", "Technical Writing"]
+        "skills": ["Kubernetes", "AWS", "OCI", "Terraform", "Helm", "GitHub Actions", "CI/CD", "Ansible", "Packer", "Grafana", "Prometheus"]
       }
     ],
-    "currentlyLearning": "Always expanding my skillset! Currently diving deeper into game development, WebGL, and creative coding."
+    "currentlyLearning": "Building more interactive web experiences (creative coding / game-style UIs) and sharpening system design for scalable platforms."
   },
   "contact": {
-    "intro": "I'm always open to discussing new opportunities, interesting projects, or just having a chat about technology. Feel free to reach out!",
-    "email": "your.email@example.com",
+    "intro": "If you're building cloud platforms, Kubernetes infrastructure, or automation-heavy systems, I’d love to connect.",
+    "email": "alexandros.hatzo@gmail.com",
     "socialLinks": [
       {
         "name": "GitHub",
         "icon": "📂",
-        "url": "https://github.com/yourusername",
-        "handle": "@yourusername"
+        "url": "https://github.com/alexhatzo",
+        "handle": "@alexhatzo"
       },
       {
         "name": "LinkedIn",
         "icon": "💼",
-        "url": "https://linkedin.com/in/yourusername",
-        "handle": "/in/yourusername"
-      },
-      {
-        "name": "Twitter",
-        "icon": "🐦",
-        "url": "https://twitter.com/yourusername",
-        "handle": "@yourusername"
+        "url": "https://linkedin.com/in/alexhatzo",
+        "handle": "/in/alexhatzo"
       },
       {
         "name": "Email",
         "icon": "📧",
-        "url": "mailto:your.email@example.com",
-        "handle": "your.email@example.com"
+        "url": "mailto:alexandros.hatzo@gmail.com",
+        "handle": "alexandros.hatzo@gmail.com"
       }
     ]
   },

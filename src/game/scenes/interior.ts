@@ -25,11 +25,21 @@ const { ROOM_W, ROOM_H } = SIZES;
 // Store onCapture callback at module level so it can be set from GameCanvas
 let captureCallback: ((id: string) => void) | null = null;
 
+// Store onSectionInteract callback for About/Contact rooms
+let sectionInteractCallback: ((section: string) => void) | null = null;
+
 /**
  * Set the capture callback from outside
  */
 export function setOnCaptureCallback(callback: (id: string) => void): void {
   captureCallback = callback;
+}
+
+/**
+ * Set the section interact callback from outside (for About/Contact modals)
+ */
+export function setOnSectionInteractCallback(callback: (section: string) => void): void {
+  sectionInteractCallback = callback;
 }
 
 /**
@@ -385,8 +395,20 @@ function createStandardInteriorScene(k: KAPLAYCtx, section: SectionType): void {
       k.go("city", { x: exit.returnPos.x, y: exit.returnPos.y + 8, dir: "down" });
     });
 
+    // SPACE interaction for About and Contact rooms
+    if (section === "about" || section === "contact") {
+      k.onKeyPress("space", () => {
+        if (sectionInteractCallback) {
+          sectionInteractCallback(section);
+        }
+      });
+    }
+
     // UI
-    createUIText(k, "Walk down to exit", k.width() / 2, k.height() - 10, 8, [200, 200, 200]);
+    const uiText = section === "about" || section === "contact" 
+      ? "Press SPACE to learn more | Walk down to exit"
+      : "Walk down to exit";
+    createUIText(k, uiText, k.width() / 2, k.height() - 10, 8, [200, 200, 200]);
   });
 }
 

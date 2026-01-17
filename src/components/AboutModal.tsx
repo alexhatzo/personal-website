@@ -21,30 +21,44 @@ export default function AboutModal({ onClose, showNav, currentSection, onNavigat
       currentSection={currentSection}
       onNavigate={onNavigate}
     >
-      <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <div className="w-24 h-24 bg-slate-700 rounded-lg flex items-center justify-center text-4xl">
+      <div className="space-y-6">
+        <div className="flex items-center gap-5 sm:gap-6 pb-2">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 bg-slate-700/80 rounded-xl flex items-center justify-center text-5xl shrink-0">
             {about.avatar}
           </div>
           <div>
-            <h3 className="text-xl font-bold text-white">{about.name}</h3>
-            <p className="text-slate-400">{about.title}</p>
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-1">{about.name}</h3>
+            <p className="text-slate-400 text-lg">{about.title}</p>
           </div>
         </div>
 
-        {about.bio.map((paragraph, index) => (
-          <p key={index} className="leading-relaxed">
-            {paragraph}
-          </p>
-        ))}
+        <div className="space-y-4">
+          {about.bio.map((paragraph, index) => (
+            <p key={index} className="leading-relaxed text-slate-300">
+              {paragraph}
+            </p>
+          ))}
+        </div>
 
-        <div className="pt-4 border-t border-slate-700">
-          <h4 className="font-semibold text-white mb-2">Quick Facts</h4>
-          <ul className="space-y-1 text-slate-300">
-            <li>📍 Location: {about.quickFacts.location}</li>
-            <li>🎓 Education: {about.quickFacts.education}</li>
-            <li>💼 Currently: {about.quickFacts.status}</li>
-            <li>🎮 Fun fact: {about.quickFacts.funFact}</li>
+        <div className="pt-6 mt-6 border-t border-slate-700">
+          <h4 className="font-semibold text-white text-lg mb-4">Quick Facts</h4>
+          <ul className="space-y-3 text-slate-300">
+            <li className="flex items-start gap-3">
+              <span className="text-lg">📍</span>
+              <span><span className="text-slate-400">Location:</span> {about.quickFacts.location}</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-lg">🎓</span>
+              <span><span className="text-slate-400">Education:</span> {about.quickFacts.education}</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-lg">💼</span>
+              <span><span className="text-slate-400">Currently:</span> {about.quickFacts.status}</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-lg">🎮</span>
+              <span><span className="text-slate-400">Fun fact:</span> {about.quickFacts.funFact}</span>
+            </li>
           </ul>
         </div>
       </div>

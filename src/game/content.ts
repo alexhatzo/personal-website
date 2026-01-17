@@ -1,4 +1,5 @@
 import type { BuildingContent, SectionType } from "./types";
+import type { AboutData, ContactData } from "../types/portfolio";
 
 // Module-level state for building labels and interior titles
 // These get set by GameCanvas before the game initializes
@@ -18,6 +19,10 @@ let interiorTitles: Record<SectionType, string> = {
   contact: "Contact Me",
 };
 
+// Portfolio data for content boards
+let aboutData: AboutData | null = null;
+let contactData: ContactData | null = null;
+
 // Setters called from GameCanvas with data from portfolio.json
 export function setBuildingLabels(labels: Record<SectionType, string>): void {
   buildingLabels = labels;
@@ -25,6 +30,14 @@ export function setBuildingLabels(labels: Record<SectionType, string>): void {
 
 export function setInteriorTitles(titles: Record<SectionType, string>): void {
   interiorTitles = titles;
+}
+
+export function setAboutData(data: AboutData): void {
+  aboutData = data;
+}
+
+export function setContactData(data: ContactData): void {
+  contactData = data;
 }
 
 // Getters for use in game code
@@ -36,17 +49,56 @@ export function getInteriorTitle(section: SectionType): string {
   return interiorTitles[section];
 }
 
+export function getAboutData(): AboutData | null {
+  return aboutData;
+}
+
+export function getContactData(): ContactData | null {
+  return contactData;
+}
+
+// Helper to truncate text to fit on content board (roughly 24 chars per line)
+function truncate(text: string, maxLen: number = 24): string {
+  if (text.length <= maxLen) return text;
+  return text.slice(0, maxLen - 2) + "..";
+}
+
+// Generate about content lines from portfolio data
+function getAboutLines(): string[] {
+  if (!aboutData) {
+    return ["Loading...", "", "Please wait."];
+  }
+  return [
+    truncate(aboutData.name, 22),
+    "",
+    truncate(aboutData.title, 22),
+    "",
+    "Press SPACE for more!",
+  ];
+}
+
+// Generate contact content lines from portfolio data
+function getContactLines(): string[] {
+  if (!contactData) {
+    return ["Loading...", "", "Please wait."];
+  }
+  return [
+    truncate(contactData.email, 22),
+    "",
+    ...contactData.socialLinks.slice(0, 2).map((link) => 
+      `${link.icon} ${truncate(link.name, 18)}`
+    ),
+    "",
+    "Press SPACE for more!",
+  ];
+}
+
 // Content displayed inside each building (short text for the interior boards)
-// These are simple summaries - the full content is in the React modals
+// About and Contact use dynamic data from portfolio.json
 export const BUILDING_CONTENT: Record<SectionType, BuildingContent> = {
   about: {
     get title() { return interiorTitles.about; },
-    lines: [
-      "Walk around to explore!",
-      "",
-      "Click on elements or",
-      "press SPACE to interact.",
-    ],
+    get lines() { return getAboutLines(); },
   },
   projects: {
     get title() { return interiorTitles.projects; },
@@ -77,11 +129,6 @@ export const BUILDING_CONTENT: Record<SectionType, BuildingContent> = {
   },
   contact: {
     get title() { return interiorTitles.contact; },
-    lines: [
-      "Let's connect!",
-      "",
-      "Find me on GitHub,",
-      "LinkedIn, or email.",
-    ],
+    get lines() { return getContactLines(); },
   },
 };
