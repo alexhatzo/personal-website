@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import kaplay from "kaplay";
 import type { KAPLAYCtx } from "kaplay";
 import { SIZES } from "./constants";
@@ -9,6 +9,12 @@ import type { BuildingsData, AboutData, ContactData } from "../types/portfolio";
 
 // Re-export mobileInput and mobileAction for MobileControls component
 export { mobileInput, mobileAction } from "./entities";
+
+// Detect if we're on mobile (touch device or narrow screen)
+function isMobileDevice(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth < 768 || 'ontouchstart' in window;
+}
 
 interface GameCanvasProps {
   onZoneEnter: (section: string) => void;
@@ -23,6 +29,12 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
   const canvasRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<KAPLAYCtx | null>(null);
   const initializedRef = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile on mount
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
 
   useEffect(() => {
     if (!canvasRef.current || initializedRef.current) return;
@@ -55,12 +67,17 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
       setContactData(contactData);
     }
 
-    // Initialize Kaplay
+    // Initialize Kaplay - use smaller viewport on mobile for 2x zoom effect
+    const isMobile = isMobileDevice();
+    const canvasW = isMobile ? Math.floor(SIZES.CANVAS_W / 2) : SIZES.CANVAS_W;
+    const canvasH = isMobile ? Math.floor(SIZES.CANVAS_H / 2) : SIZES.CANVAS_H;
+    
     const k = kaplay({
       root: canvasRef.current,
-      width: SIZES.CANVAS_W,
-      height: SIZES.CANVAS_H,
-      letterbox: true,
+      width: canvasW,
+      height: canvasH,
+      letterbox: !isMobile, // Disable letterbox on mobile to fill screen
+      stretch: isMobile,    // Stretch to fill on mobile
       crisp: true,
       background: [34, 100, 34],
     });
@@ -99,13 +116,11 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
   return (
     <div
       ref={canvasRef}
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
+      className={`w-full flex justify-center ${
+        isMobile 
+          ? 'items-start h-[calc(100vh-130px)]' 
+          : 'items-center h-full'
+      }`}
     />
   );
 }
