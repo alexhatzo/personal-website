@@ -90,8 +90,9 @@ export default function MobileControls() {
     e.preventDefault();
   };
 
+  // Slightly smaller buttons for landscape to avoid overlap with letterboxed game
   const buttonClass =
-    "w-14 h-14 bg-slate-800/80 border-2 border-slate-600 rounded-lg flex items-center justify-center text-2xl text-white active:bg-slate-700 select-none touch-none focus:outline-none focus:ring-2 focus:ring-blue-400";
+    "w-12 h-12 sm:w-14 sm:h-14 bg-slate-800/90 border-2 border-slate-600 rounded-lg flex items-center justify-center text-xl sm:text-2xl text-white active:bg-slate-700 select-none touch-none focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-lg";
 
   // Get the right icon for current action
   const renderActionIcon = () => {
@@ -112,9 +113,9 @@ export default function MobileControls() {
 
   return (
     <>
-      {/* D-pad controls on the left */}
+      {/* D-pad controls on the left - positioned for landscape thumb reach */}
       <nav
-        className="fixed bottom-6 left-6 z-40 md:hidden select-none touch-none"
+        className="fixed bottom-4 left-4 z-40 md:hidden select-none touch-none"
         role="group"
         aria-label="Game movement controls"
         onTouchStart={preventSelection}
@@ -173,10 +174,10 @@ export default function MobileControls() {
         </div>
       </nav>
 
-      {/* Action button on the right - changes based on context */}
-      <div className="fixed bottom-10 right-6 z-40 md:hidden select-none touch-none">
+      {/* Action button on the right - positioned for landscape right thumb */}
+      <div className="fixed bottom-6 right-4 z-40 md:hidden select-none touch-none">
         <button
-          className={`w-16 h-16 rounded-full ${getButtonStyle(actionLabel)} border-4 border-slate-800 flex items-center justify-center active:scale-95 select-none touch-none shadow-lg relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2`}
+          className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${getButtonStyle(actionLabel)} border-4 border-slate-800 flex items-center justify-center active:scale-95 select-none touch-none shadow-xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2`}
           onTouchStart={handleActionPress}
           onContextMenu={(e) => e.preventDefault()}
           aria-label={`${actionLabel} action button`}

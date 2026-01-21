@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import kaplay from "kaplay";
 import type { KAPLAYCtx } from "kaplay";
 import { SIZES } from "./constants";
@@ -9,12 +9,6 @@ import type { BuildingsData, AboutData, ContactData } from "../types/portfolio";
 
 // Re-export mobileInput and mobileAction for MobileControls component
 export { mobileInput, mobileAction } from "./entities";
-
-// Detect if we're on mobile (touch device or narrow screen)
-function isMobileDevice(): boolean {
-  if (typeof window === 'undefined') return false;
-  return window.innerWidth < 768 || 'ontouchstart' in window;
-}
 
 interface GameCanvasProps {
   onZoneEnter: (section: string) => void;
@@ -29,16 +23,13 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
   const canvasRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<KAPLAYCtx | null>(null);
   const initializedRef = useRef(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Detect mobile on mount
-  useEffect(() => {
-    setIsMobile(isMobileDevice());
-  }, []);
 
   useEffect(() => {
+    // Skip if already initialized or no canvas ref
     if (!canvasRef.current || initializedRef.current) return;
     initializedRef.current = true;
+    
+    // Clean up any existing content before initializing
     canvasRef.current.innerHTML = "";
 
     // Set building labels and interior titles from portfolio data
@@ -67,15 +58,11 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
       setContactData(contactData);
     }
 
-    // Initialize Kaplay - use smaller viewport on mobile for 2x zoom effect
-    const isMobile = isMobileDevice();
-    const canvasW = isMobile ? Math.floor(SIZES.CANVAS_W / 2) : SIZES.CANVAS_W;
-    const canvasH = isMobile ? Math.floor(SIZES.CANVAS_H / 2) : SIZES.CANVAS_H;
-    
+    // Initialize Kaplay - use full canvas size, letterbox handles scaling
     const k = kaplay({
       root: canvasRef.current,
-      width: canvasW,
-      height: canvasH,
+      width: SIZES.CANVAS_W,
+      height: SIZES.CANVAS_H,
       letterbox: true,
       crisp: true,
       background: [34, 100, 34],
@@ -110,22 +97,15 @@ export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, 
         gameRef.current = null;
       }
     };
-  }, [onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData]);
+    // Empty dependency array - only initialize once per mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // On mobile: height = width * 2/3 (to match 3:2 aspect ratio), capped at 75vh
-  // This fills the width while maintaining aspect ratio
+  // Simple container - Kaplay's letterbox mode handles all scaling
   return (
     <div
       ref={canvasRef}
-      className={`w-full flex justify-center ${
-        isMobile 
-          ? 'items-start' 
-          : 'items-center h-full'
-      }`}
-      style={isMobile ? {
-        // Height based on aspect ratio (width * 2/3), but max 75% of screen
-        height: 'min(calc(100vw * 0.667), 75vh)',
-      } : undefined}
+      className="w-full h-full flex items-center justify-center"
     />
   );
 }

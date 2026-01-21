@@ -8,6 +8,9 @@ import ContactModal from "./components/ContactModal";
 import MobileControls from "./components/MobileControls";
 import CaptureModal from "./components/CaptureModal";
 import WelcomeOverlay from "./components/WelcomeOverlay";
+import LandscapePrompt from "./components/LandscapePrompt";
+import SkipButton from "./components/SkipButton";
+import StaticPortfolio from "./components/StaticPortfolio";
 import { PortfolioProvider, usePortfolio } from "./context/PortfolioContext";
 
 type Section = "about" | "projects" | "skills" | "experience" | "contact" | null;
@@ -41,6 +44,7 @@ function AppContent() {
   const { data, isLoading, error } = usePortfolio();
   const [activeSection, setActiveSection] = useState<Section>(null);
   const [capturedJobId, setCapturedJobId] = useState<string | null>(null);
+  const [staticView, setStaticView] = useState(false);
 
   const handleZoneEnter = useCallback((section: string) => {
     setActiveSection(section as Section);
@@ -66,6 +70,14 @@ function AppContent() {
     setActiveSection(section as Section);
   }, []);
 
+  const handleSkipToStatic = useCallback(() => {
+    setStaticView(true);
+  }, []);
+
+  const handleBackToGame = useCallback(() => {
+    setStaticView(false);
+  }, []);
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -82,33 +94,45 @@ function AppContent() {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
-      {/* Game Canvas - Full screen background */}
-      <GameCanvas 
-        onZoneEnter={handleZoneEnter} 
-        onCapture={handleCapture}
-        onSectionInteract={handleSectionInteract}
-        buildingsData={data.buildings}
-        aboutData={data.about}
-        contactData={data.contact}
-      />
+    <>
+      {/* Static Portfolio - overlays when active */}
+      {staticView && <StaticPortfolio onBackToGame={handleBackToGame} />}
 
-      {/* Mobile Controls - only visible on small screens and no modal open */}
-      {!activeSection && !capturedJobId && <MobileControls />}
+      {/* Game View - hidden but mounted when static view is active */}
+      <div className={`relative w-full h-screen overflow-hidden ${staticView ? 'hidden' : ''}`}>
+        {/* Landscape rotation prompt for mobile portrait */}
+        <LandscapePrompt onSkip={handleSkipToStatic} />
 
-      {/* Modal Overlays with section navigation */}
-      {activeSection === "about" && <AboutModal onClose={handleClose} {...modalNavProps} />}
-      {activeSection === "projects" && <ProjectsModal onClose={handleClose} {...modalNavProps} />}
-      {activeSection === "skills" && <SkillsModal onClose={handleClose} {...modalNavProps} />}
-      {activeSection === "experience" && <ExperienceModal onClose={handleClose} {...modalNavProps} />}
-      {activeSection === "contact" && <ContactModal onClose={handleClose} {...modalNavProps} />}
+        {/* Desktop skip button */}
+        <SkipButton onClick={handleSkipToStatic} />
 
-      {/* Capture Modal - shown when a creature is captured */}
-      {capturedJobId && <CaptureModal jobId={capturedJobId} onClose={handleCaptureClose} />}
+        {/* Game Canvas - Full screen background */}
+        <GameCanvas 
+          onZoneEnter={handleZoneEnter} 
+          onCapture={handleCapture}
+          onSectionInteract={handleSectionInteract}
+          buildingsData={data.buildings}
+          aboutData={data.about}
+          contactData={data.contact}
+        />
 
-      {/* Welcome Overlay - shown on first visit */}
-      <WelcomeOverlay />
-    </div>
+        {/* Mobile Controls - only visible on small screens and no modal open */}
+        {!activeSection && !capturedJobId && <MobileControls />}
+
+        {/* Modal Overlays with section navigation */}
+        {activeSection === "about" && <AboutModal onClose={handleClose} {...modalNavProps} />}
+        {activeSection === "projects" && <ProjectsModal onClose={handleClose} {...modalNavProps} />}
+        {activeSection === "skills" && <SkillsModal onClose={handleClose} {...modalNavProps} />}
+        {activeSection === "experience" && <ExperienceModal onClose={handleClose} {...modalNavProps} />}
+        {activeSection === "contact" && <ContactModal onClose={handleClose} {...modalNavProps} />}
+
+        {/* Capture Modal - shown when a creature is captured */}
+        {capturedJobId && <CaptureModal jobId={capturedJobId} onClose={handleCaptureClose} />}
+
+        {/* Welcome Overlay - shown on first visit */}
+        <WelcomeOverlay onSkip={handleSkipToStatic} />
+      </div>
+    </>
   );
 }
 

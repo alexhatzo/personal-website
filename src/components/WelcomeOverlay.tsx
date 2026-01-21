@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 
 const STORAGE_KEY = "portfolio_hasVisited";
 
-export default function WelcomeOverlay() {
+interface WelcomeOverlayProps {
+  onSkip?: () => void;
+}
+
+export default function WelcomeOverlay({ onSkip }: WelcomeOverlayProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -16,6 +20,12 @@ export default function WelcomeOverlay() {
   const handleDismiss = () => {
     localStorage.setItem(STORAGE_KEY, "true");
     setIsVisible(false);
+  };
+
+  const handleSkip = () => {
+    localStorage.setItem(STORAGE_KEY, "true");
+    setIsVisible(false);
+    onSkip?.();
   };
 
   if (!isVisible) return null;
@@ -93,6 +103,16 @@ export default function WelcomeOverlay() {
         >
           Let's Explore! 🚀
         </button>
+
+        {/* Skip to portfolio option */}
+        {onSkip && (
+          <button
+            onClick={handleSkip}
+            className="w-full py-2 text-slate-400 hover:text-white text-sm transition-colors"
+          >
+            Or skip to portfolio →
+          </button>
+        )}
 
         {/* Skip hint */}
         <p className="text-slate-500 text-xs text-center mt-3">
