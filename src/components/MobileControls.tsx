@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { mobileInput, mobileAction } from "../game/GameCanvas";
 
+// Detect if device has touch capability (true mobile device)
+function isTouchDevice(): boolean {
+  if (typeof window === 'undefined') return false;
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
+
 // Action button icons for different contexts
 function PokeballIcon() {
   return (
@@ -55,6 +61,26 @@ function getButtonStyle(label: string): string {
 
 export default function MobileControls() {
   const [actionLabel, setActionLabel] = useState("Chat");
+  const [showControls, setShowControls] = useState(false);
+
+  // Check if we should show mobile controls (touch device in landscape)
+  useEffect(() => {
+    const checkMobile = () => {
+      const isTouch = isTouchDevice();
+      const isLandscape = window.innerWidth > window.innerHeight;
+      // Show controls on touch devices that are in landscape (or close to landscape)
+      setShowControls(isTouch && isLandscape);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    window.addEventListener("orientationchange", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      window.removeEventListener("orientationchange", checkMobile);
+    };
+  }, []);
 
   // Update label periodically to reflect current context
   useEffect(() => {
@@ -65,6 +91,9 @@ export default function MobileControls() {
     }, 100);
     return () => clearInterval(interval);
   }, [actionLabel]);
+
+  // Don't render controls if not on a touch device in landscape
+  if (!showControls) return null;
 
   const handleTouchStart = (direction: "up" | "down" | "left" | "right") => {
     mobileInput[direction] = true;
@@ -115,7 +144,7 @@ export default function MobileControls() {
     <>
       {/* D-pad controls on the left - positioned for landscape thumb reach */}
       <nav
-        className="fixed bottom-4 left-4 z-40 md:hidden select-none touch-none"
+        className="fixed bottom-4 left-4 z-40 select-none touch-none"
         role="group"
         aria-label="Game movement controls"
         onTouchStart={preventSelection}
@@ -175,7 +204,7 @@ export default function MobileControls() {
       </nav>
 
       {/* Action button on the right - positioned for landscape right thumb */}
-      <div className="fixed bottom-6 right-4 z-40 md:hidden select-none touch-none">
+      <div className="fixed bottom-6 right-4 z-40 select-none touch-none">
         <button
           className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${getButtonStyle(actionLabel)} border-4 border-slate-800 flex items-center justify-center active:scale-95 select-none touch-none shadow-xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2`}
           onTouchStart={handleActionPress}

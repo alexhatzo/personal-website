@@ -17,7 +17,7 @@ type Section = "about" | "projects" | "skills" | "experience" | "contact" | null
 
 function LoadingScreen() {
   return (
-    <div className="w-full h-screen bg-slate-900 flex items-center justify-center">
+    <div className="w-full h-dvh bg-slate-900 flex items-center justify-center">
       <div className="text-center">
         <div className="text-4xl mb-4 animate-bounce">🎮</div>
         <p className="text-white text-lg">Loading portfolio...</p>
@@ -28,7 +28,7 @@ function LoadingScreen() {
 
 function ErrorScreen({ message }: { message: string }) {
   return (
-    <div className="w-full h-screen bg-slate-900 flex items-center justify-center">
+    <div className="w-full h-dvh bg-slate-900 flex items-center justify-center">
       <div className="text-center">
         <div className="text-4xl mb-4">⚠️</div>
         <p className="text-red-400 text-lg">Failed to load portfolio data</p>
@@ -99,7 +99,7 @@ function AppContent() {
       {staticView && <StaticPortfolio onBackToGame={handleBackToGame} />}
 
       {/* Game View - hidden but mounted when static view is active */}
-      <div className={`relative w-full h-screen overflow-hidden ${staticView ? 'hidden' : ''}`}>
+      <div className={`relative w-full h-dvh overflow-hidden ${staticView ? 'hidden' : ''}`}>
         {/* Landscape rotation prompt for mobile portrait */}
         <LandscapePrompt onSkip={handleSkipToStatic} />
 
