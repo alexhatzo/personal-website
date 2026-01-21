@@ -91,7 +91,7 @@ export default function Modal({
 
   return (
     <div
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn p-4 sm:p-8"
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn p-2 sm:p-4 md:p-8"
       onClick={handleBackdropClick}
       role="presentation"
     >
@@ -100,27 +100,27 @@ export default function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="bg-slate-900 border border-slate-700 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl shadow-black/50 animate-scaleIn"
+        className="bg-slate-900 border border-slate-700 rounded-xl sm:rounded-2xl max-w-3xl w-full max-h-[85vh] landscape:max-h-[90vh] landscape:max-w-2xl overflow-hidden shadow-2xl shadow-black/50 animate-scaleIn"
       >
-        {/* Header */}
-        <div className="bg-slate-800/80 px-8 py-5 sm:px-12 sm:py-6 border-b border-slate-700 flex justify-between items-center">
-          <h2 id={titleId} className="text-xl sm:text-2xl font-bold text-white pixel-text">
+        {/* Header - compact on landscape mobile */}
+        <div className="bg-slate-800/80 px-4 py-3 sm:px-8 sm:py-5 md:px-12 md:py-6 border-b border-slate-700 flex justify-between items-center">
+          <h2 id={titleId} className="text-base sm:text-xl md:text-2xl font-bold text-white pixel-text">
             {title}
           </h2>
           <button
             ref={closeButtonRef}
             onClick={onClose}
-            className="text-slate-400 hover:text-white hover:bg-slate-700 transition-all text-2xl leading-none p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="text-slate-400 hover:text-white hover:bg-slate-700 transition-all text-xl sm:text-2xl leading-none p-1.5 sm:p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             aria-label="Close modal"
           >
             ×
           </button>
         </div>
 
-        {/* Section Navigation Tabs */}
+        {/* Section Navigation Tabs - more compact */}
         {showNav && onNavigate && (
-          <nav className="bg-slate-800/30 px-6 py-4 sm:px-8 border-b border-slate-700/50" aria-label="Portfolio sections">
-            <ul className="flex gap-2 sm:gap-3 overflow-x-auto">
+          <nav className="bg-slate-800/30 px-3 py-2 sm:px-6 sm:py-4 border-b border-slate-700/50" aria-label="Portfolio sections">
+            <ul className="flex gap-1 sm:gap-2 overflow-x-auto">
               {sections.map((section) => {
                 const isActive = section === currentSection;
                 return (
@@ -128,8 +128,8 @@ export default function Modal({
                     <button
                       onClick={() => onNavigate(section)}
                       className={`
-                        px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all
-                        flex items-center gap-2
+                        px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition-all
+                        flex items-center gap-1 sm:gap-2
                         ${isActive 
                           ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25" 
                           : "text-slate-400 hover:text-white hover:bg-slate-700/50"
@@ -138,7 +138,7 @@ export default function Modal({
                       `}
                       aria-current={isActive ? "page" : undefined}
                     >
-                      <span aria-hidden="true">{SECTION_LABELS[section].icon}</span>
+                      <span aria-hidden="true" className="text-sm sm:text-base">{SECTION_LABELS[section].icon}</span>
                       <span className="hidden sm:inline">{SECTION_LABELS[section].label}</span>
                     </button>
                   </li>
@@ -148,8 +148,8 @@ export default function Modal({
           </nav>
         )}
 
-        {/* Content */}
-        <div className="p-8 sm:p-12 lg:p-14 overflow-y-auto max-h-[calc(90vh-100px)] text-slate-200 leading-relaxed">
+        {/* Content - smaller text and padding on mobile landscape */}
+        <div className="p-4 sm:p-8 md:p-12 overflow-y-auto max-h-[calc(85vh-80px)] landscape:max-h-[calc(90vh-70px)] text-slate-200 text-sm sm:text-base leading-relaxed">
           {children}
         </div>
       </div>

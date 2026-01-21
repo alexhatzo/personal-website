@@ -23,6 +23,9 @@
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     -webkit-text-size-adjust: 100%;
+    /* Prevent text selection on mobile */
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   /* Prevent iOS Safari zoom on input focus */
