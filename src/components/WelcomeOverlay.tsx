@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface WelcomeOverlayProps {
   onSkip?: () => void;
@@ -7,6 +7,24 @@ interface WelcomeOverlayProps {
 
 export default function WelcomeOverlay({ onSkip, onStart }: WelcomeOverlayProps) {
   const [isVisible, setIsVisible] = useState(true);
+  const [isLandscapeMobile, setIsLandscapeMobile] = useState(false);
+
+  useEffect(() => {
+    const checkOrientation = () => {
+      const isMobile = window.innerWidth < 1024 && 'ontouchstart' in window;
+      const isLandscape = window.innerWidth > window.innerHeight;
+      setIsLandscapeMobile(isMobile && isLandscape);
+    };
+
+    checkOrientation();
+    window.addEventListener("resize", checkOrientation);
+    window.addEventListener("orientationchange", checkOrientation);
+
+    return () => {
+      window.removeEventListener("resize", checkOrientation);
+      window.removeEventListener("orientationchange", checkOrientation);
+    };
+  }, []);
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -20,9 +38,68 @@ export default function WelcomeOverlay({ onSkip, onStart }: WelcomeOverlayProps)
 
   if (!isVisible) return null;
 
+  // Compact version for mobile landscape
+  if (isLandscapeMobile) {
+    return (
+      <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 animate-fadeIn p-2">
+        <div className="bg-slate-900 border-2 border-slate-600 rounded-lg w-full max-w-2xl p-4 shadow-2xl animate-scaleIn flex gap-4">
+          {/* Left side - Header & Controls */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-3xl">🎮</span>
+              <div>
+                <h1 className="text-lg font-bold text-white pixel-text leading-tight">
+                  Welcome!
+                </h1>
+                <p className="text-slate-400 text-xs">
+                  Interactive pixel portfolio
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-slate-800 rounded-lg p-2 text-xs">
+              <div className="flex gap-4">
+                <div>
+                  <span className="text-slate-400">Desktop:</span>
+                  <div className="flex gap-1 mt-1">
+                    <kbd className="px-1.5 py-0.5 bg-slate-700 text-slate-200 rounded text-xs">↑↓←→</kbd>
+                  </div>
+                </div>
+                <div>
+                  <span className="text-slate-400">Mobile:</span>
+                  <p className="text-slate-300 mt-1">D-pad controls</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right side - Actions */}
+          <div className="flex flex-col justify-center gap-2 min-w-[140px]">
+            <button
+              onClick={handleDismiss}
+              className="py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg transition-colors text-sm"
+              autoFocus
+            >
+              Let's Explore! 🚀
+            </button>
+            {onSkip && (
+              <button
+                onClick={handleSkip}
+                className="py-1.5 text-slate-400 hover:text-white text-xs transition-colors"
+              >
+                Skip to portfolio →
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Standard version for desktop and portrait mobile
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 animate-fadeIn">
-      <div className="bg-slate-900 border-4 border-slate-600 rounded-lg max-w-md w-full mx-4 p-6 shadow-2xl animate-scaleIn">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 animate-fadeIn overflow-y-auto p-4">
+      <div className="bg-slate-900 border-4 border-slate-600 rounded-lg max-w-md w-full p-6 shadow-2xl animate-scaleIn">
         {/* Header */}
         <div className="text-center mb-6">
           <div className="text-5xl mb-3">🎮</div>
