@@ -19,7 +19,7 @@ interface GameCanvasProps {
   contactData?: ContactData;
 }
 
-export default function GameCanvas({ onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData }: GameCanvasProps) {
+export default function GameCanvas({ onZoneEnter: _onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData }: GameCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<KAPLAYCtx | null>(null);
   const initializedRef = useRef(false);
