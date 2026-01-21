@@ -102,7 +102,7 @@ function AppContent() {
       {staticView && <StaticPortfolio onBackToGame={handleBackToGame} />}
 
       {/* Game View - hidden but mounted when static view is active */}
-      <div className={`relative w-full h-dvh overflow-hidden ${staticView ? 'hidden' : ''}`}>
+      <div className={`relative w-full h-dvh overflow-hidden bg-[#0a0a0a] ${staticView ? 'hidden' : ''}`}>
         {/* Landscape rotation prompt for mobile portrait */}
         <LandscapePrompt onSkip={handleSkipToStatic} />
 

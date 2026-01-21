@@ -112,7 +112,7 @@ export default function GameCanvas({ onZoneEnter: _onZoneEnter, onCapture, onSec
   return (
     <div
       ref={canvasRef}
-      className="w-full h-full flex items-center justify-center"
+      className="w-full h-full flex items-center justify-center game-container"
     />
   );
 }

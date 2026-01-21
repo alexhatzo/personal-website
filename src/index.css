@@ -18,7 +18,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #0f172a;
+    background-color: #0a0a0a;
     /* Prevent mobile browser zoom/scale issues */
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
@@ -93,6 +93,16 @@
 canvas {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+}
+
+/* Kaplay letterbox bars - match game aesthetic */
+._kap {
+  background-color: #0a0a0a !important;
+}
+
+/* Game container background for letterbox areas */
+.game-container {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
 }
 
 /* ============================================
