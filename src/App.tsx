@@ -11,7 +11,9 @@ import WelcomeOverlay from "./components/WelcomeOverlay";
 import LandscapePrompt from "./components/LandscapePrompt";
 import SkipButton from "./components/SkipButton";
 import StaticPortfolio from "./components/StaticPortfolio";
+import MuteButton from "./components/MuteButton";
 import { PortfolioProvider, usePortfolio } from "./context/PortfolioContext";
+import { useBackgroundMusic } from "./hooks/useBackgroundMusic";
 
 type Section = "about" | "projects" | "skills" | "experience" | "contact" | null;
 
@@ -45,6 +47,7 @@ function AppContent() {
   const [activeSection, setActiveSection] = useState<Section>(null);
   const [capturedJobId, setCapturedJobId] = useState<string | null>(null);
   const [staticView, setStaticView] = useState(false);
+  const { isMuted, isPlaying, play: playMusic, toggleMute } = useBackgroundMusic();
 
   const handleZoneEnter = useCallback((section: string) => {
     setActiveSection(section as Section);
@@ -106,6 +109,9 @@ function AppContent() {
         {/* Desktop skip button */}
         <SkipButton onClick={handleSkipToStatic} />
 
+        {/* Mute button - only show when music has started */}
+        {isPlaying && <MuteButton isMuted={isMuted} onToggle={toggleMute} />}
+
         {/* Game Canvas - Full screen background */}
         <GameCanvas 
           onZoneEnter={handleZoneEnter} 
@@ -114,6 +120,9 @@ function AppContent() {
           buildingsData={data.buildings}
           aboutData={data.about}
           contactData={data.contact}
+          experienceData={data.experience}
+          projectsData={data.projects}
+          skillsData={data.skills}
         />
 
         {/* Mobile Controls - only visible on small screens and no modal open */}
@@ -130,7 +139,7 @@ function AppContent() {
         {capturedJobId && <CaptureModal jobId={capturedJobId} onClose={handleCaptureClose} />}
 
         {/* Welcome Overlay - shown on first visit */}
-        <WelcomeOverlay onSkip={handleSkipToStatic} />
+        <WelcomeOverlay onSkip={handleSkipToStatic} onStart={playMusic} />
       </div>
     </>
   );

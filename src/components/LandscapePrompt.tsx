@@ -50,9 +50,15 @@ export default function LandscapePrompt({ onSkip }: LandscapePromptProps) {
       <h2 className="text-2xl font-bold text-white text-center mb-3 pixel-text">
         Rotate Your Device
       </h2>
-      <p className="text-slate-400 text-center max-w-xs mb-8 leading-relaxed">
+      <p className="text-slate-400 text-center max-w-xs mb-4 leading-relaxed">
         This interactive portfolio experience works best in landscape mode
       </p>
+      
+      {/* Desktop recommendation */}
+      <div className="flex items-center gap-2 text-amber-400/80 text-sm mb-8 px-4 py-2 bg-amber-500/10 rounded-lg border border-amber-500/20">
+        <span>💻</span>
+        <span>Best experienced on a computer or larger screen</span>
+      </div>
       
       {/* Visual comparison */}
       <div className="flex items-center gap-6 mb-10">

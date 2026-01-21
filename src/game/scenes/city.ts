@@ -348,7 +348,7 @@ export function setupCityScene(k: KAPLAYCtx): void {
     k.onKeyPress("space", handleTalk);
 
     // === 11. UI ===
-    createUIText(k, "Welcome to my Portfolio!", k.width() / 2, 10, 10);
+    createUIText(k, "Hatzo's Funky Portfolio!", k.width() / 2, 10, 10);
     createUIText(k, "Use arrow keys or WASD to move", k.width() / 2, k.height() - 10, 8, [220, 220, 220]);
     
     // Disclaimer text

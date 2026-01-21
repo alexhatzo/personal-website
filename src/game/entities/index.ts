@@ -38,6 +38,7 @@ export {
   BUILDING_CREATURE_CONFIGS,
   getCreatureConfigForSection,
   sectionHasCreatures,
+  setCreatureLabels,
   type BuildingCreatureConfig,
   type ActionType,
 } from "./creatureConfigs";

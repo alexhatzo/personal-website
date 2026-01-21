@@ -5,7 +5,8 @@ import { SIZES } from "./constants";
 import { loadSprites } from "./sprites";
 import { setupCityScene, setupInteriorScenes, setOnCaptureCallback, setOnSectionInteractCallback } from "./scenes";
 import { setBuildingLabels, setInteriorTitles, setAboutData, setContactData } from "./content";
-import type { BuildingsData, AboutData, ContactData } from "../types/portfolio";
+import { setCreatureLabels } from "./entities";
+import type { BuildingsData, AboutData, ContactData, Experience, ProjectsData, SkillsData } from "../types/portfolio";
 
 // Re-export mobileInput and mobileAction for MobileControls component
 export { mobileInput, mobileAction } from "./entities";
@@ -17,9 +18,12 @@ interface GameCanvasProps {
   buildingsData?: BuildingsData;
   aboutData?: AboutData;
   contactData?: ContactData;
+  experienceData?: Experience[];
+  projectsData?: ProjectsData;
+  skillsData?: SkillsData;
 }
 
-export default function GameCanvas({ onZoneEnter: _onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData }: GameCanvasProps) {
+export default function GameCanvas({ onZoneEnter: _onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData, experienceData, projectsData, skillsData }: GameCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<KAPLAYCtx | null>(null);
   const initializedRef = useRef(false);
@@ -57,6 +61,9 @@ export default function GameCanvas({ onZoneEnter: _onZoneEnter, onCapture, onSec
     if (contactData) {
       setContactData(contactData);
     }
+
+    // Set creature labels from portfolio data (experience roles, project titles, skill categories)
+    setCreatureLabels(experienceData, projectsData, skillsData);
 
     // Initialize Kaplay - use full canvas size, letterbox handles scaling
     const k = kaplay({

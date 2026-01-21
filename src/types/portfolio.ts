@@ -32,6 +32,16 @@ export interface Project {
   github?: string;
 }
 
+export interface ProjectCategory {
+  name: string;
+  icon: string;
+  projects: Project[];
+}
+
+export interface ProjectsData {
+  categories: ProjectCategory[];
+}
+
 export interface SkillCategory {
   name: string;
   icon: string;
@@ -72,7 +82,7 @@ export interface BuildingsData {
 export interface PortfolioData {
   about: AboutData;
   experience: Experience[];
-  projects: Project[];
+  projects: ProjectsData;
   skills: SkillsData;
   contact: ContactData;
   buildings: BuildingsData;

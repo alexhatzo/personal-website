@@ -1,29 +1,19 @@
-import { useState, useEffect } from "react";
-
-const STORAGE_KEY = "portfolio_hasVisited";
+import { useState } from "react";
 
 interface WelcomeOverlayProps {
   onSkip?: () => void;
+  onStart?: () => void;
 }
 
-export default function WelcomeOverlay({ onSkip }: WelcomeOverlayProps) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    // Check if user has visited before
-    const hasVisited = localStorage.getItem(STORAGE_KEY);
-    if (!hasVisited) {
-      setIsVisible(true);
-    }
-  }, []);
+export default function WelcomeOverlay({ onSkip, onStart }: WelcomeOverlayProps) {
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleDismiss = () => {
-    localStorage.setItem(STORAGE_KEY, "true");
     setIsVisible(false);
+    onStart?.();
   };
 
   const handleSkip = () => {
-    localStorage.setItem(STORAGE_KEY, "true");
     setIsVisible(false);
     onSkip?.();
   };
@@ -113,11 +103,6 @@ export default function WelcomeOverlay({ onSkip }: WelcomeOverlayProps) {
             Or skip to portfolio →
           </button>
         )}
-
-        {/* Skip hint */}
-        <p className="text-slate-500 text-xs text-center mt-3">
-          This message won't appear again
-        </p>
       </div>
     </div>
   );

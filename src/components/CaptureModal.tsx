@@ -1,6 +1,6 @@
 import Modal from "./Modal";
 import { usePortfolioData } from "../context/PortfolioContext";
-import type { Experience, Project, SkillCategory } from "../types/portfolio";
+import type { Experience, ProjectCategory, SkillCategory } from "../types/portfolio";
 
 interface CaptureModalProps {
   jobId: string; // Actually creatureId - can be job-*, project-*, or skill-*
@@ -89,58 +89,65 @@ function ExperienceContent({ job }: { job: Experience }) {
   );
 }
 
-function ProjectContent({ project }: { project: Project }) {
+function ProjectContent({ category }: { category: ProjectCategory }) {
   return (
     <>
       <div className="text-center mb-8">
         <div className="text-6xl mb-4 animate-bounce">🔨</div>
         <p className="text-green-400 font-bold text-2xl animate-pulse">
-          Project Smashed!
+          Projects Smashed!
         </p>
       </div>
 
       <div className="bg-slate-800/80 rounded-xl p-6 sm:p-8 border border-green-500/30 animate-cardReveal shadow-xl shadow-green-500/10">
-        <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">{project.title}</h3>
-        <p className="text-slate-300 mb-6 leading-relaxed text-lg">{project.description}</p>
+        {/* Category Header */}
+        <div className="flex items-center gap-4 mb-6">
+          <span className="text-4xl">{category.icon}</span>
+          <h3 className="text-xl sm:text-2xl font-bold text-white">{category.name} Projects</h3>
+        </div>
 
-        {project.tech && project.tech.length > 0 && (
-          <div className="pt-5 border-t border-slate-700/50 mb-6">
-            <p className="text-sm text-slate-400 mb-3 font-medium">Technologies:</p>
-            <div className="flex flex-wrap gap-2">
-              {project.tech.map((tech, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1.5 bg-slate-700/80 text-slate-300 text-sm rounded-lg hover:bg-slate-600 transition-colors"
-                >
-                  {tech}
-                </span>
-              ))}
+        {/* Projects in this category */}
+        <div className="space-y-5">
+          {category.projects.map((project, index) => (
+            <div key={index} className="bg-slate-700/50 rounded-lg p-4 border border-slate-600/50">
+              <div className="flex justify-between items-start gap-3 mb-2">
+                <h4 className="text-lg font-semibold text-white">{project.title}</h4>
+                <div className="flex gap-2 flex-shrink-0">
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 text-sm transition-colors"
+                    >
+                      📂
+                    </a>
+                  )}
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-green-400 hover:text-green-300 text-sm transition-colors"
+                    >
+                      🔗
+                    </a>
+                  )}
+                </div>
+              </div>
+              <p className="text-slate-300 text-sm leading-relaxed mb-3">{project.description}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {project.tech.map((tech, techIndex) => (
+                  <span
+                    key={techIndex}
+                    className="px-2 py-1 bg-slate-600/80 text-slate-300 text-xs rounded"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-
-        {/* Links */}
-        <div className="flex gap-4 flex-wrap pt-2">
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-700 text-white rounded-xl hover:bg-slate-600 transition-all shadow-lg"
-            >
-              📂 GitHub
-            </a>
-          )}
-          {project.link && (
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-500 transition-all shadow-lg shadow-green-600/25"
-            >
-              🔗 Live Demo
-            </a>
-          )}
+          ))}
         </div>
       </div>
     </>
@@ -196,9 +203,9 @@ export default function CaptureModal({ jobId: creatureId, onClose }: CaptureModa
   if (type === "job" && !isNaN(index) && index < experience.length) {
     const job = experience[index];
     content = <ExperienceContent job={job} />;
-  } else if (type === "project" && !isNaN(index) && index < projects.length) {
-    const project = projects[index];
-    content = <ProjectContent project={project} />;
+  } else if (type === "project" && !isNaN(index) && index < projects.categories.length) {
+    const category = projects.categories[index];
+    content = <ProjectContent category={category} />;
   } else if (type === "skill" && !isNaN(index) && index < skills.categories.length) {
     const category = skills.categories[index];
     content = <SkillsContent category={category} />;

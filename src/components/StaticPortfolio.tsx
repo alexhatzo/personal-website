@@ -109,47 +109,61 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
             Projects
           </h2>
           
-          <div className="space-y-6">
-            {projects.map((project, index) => (
-              <div
-                key={index}
-                className="bg-slate-800/80 rounded-xl p-6 border border-slate-700 hover:border-slate-500 transition-colors"
-              >
-                <h3 className="text-xl font-bold text-white mb-3">{project.title}</h3>
-                <p className="text-slate-300 mb-5 leading-relaxed">{project.description}</p>
-
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {project.tech.map((tech, techIndex) => (
-                    <span
-                      key={techIndex}
-                      className="px-3 py-1.5 bg-slate-700/80 text-slate-300 text-sm rounded-lg"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+          <div className="space-y-10">
+            {projects.categories.map((category, catIndex) => (
+              <div key={catIndex}>
+                {/* Category Header */}
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="text-2xl">{category.icon}</span>
+                  <h3 className="text-xl font-bold text-white">{category.name}</h3>
+                  <div className="flex-1 h-px bg-slate-700 ml-2" />
                 </div>
 
-                <div className="flex gap-5">
-                  {project.link && (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                {/* Projects in this category */}
+                <div className="space-y-4">
+                  {category.projects.map((project, projIndex) => (
+                    <div
+                      key={projIndex}
+                      className="bg-slate-800/80 rounded-xl p-6 border border-slate-700 hover:border-slate-500 transition-colors"
                     >
-                      🔗 Live Demo
-                    </a>
-                  )}
-                  {project.github && (
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
-                    >
-                      📂 GitHub
-                    </a>
-                  )}
+                      <h4 className="text-lg font-bold text-white mb-2">{project.title}</h4>
+                      <p className="text-slate-300 mb-4 leading-relaxed">{project.description}</p>
+
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.tech.map((tech, techIndex) => (
+                          <span
+                            key={techIndex}
+                            className="px-3 py-1.5 bg-slate-700/80 text-slate-300 text-sm rounded-lg"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex gap-5">
+                        {project.link && (
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                          >
+                            🔗 Link
+                          </a>
+                        )}
+                        {project.github && (
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                          >
+                            📂 GitHub
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
@@ -251,7 +265,7 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
 
           <div className="text-center pt-8">
             <a
-              href="/resume.pdf"
+              href="/data/Hatzopoulos Alexandros Resume 2025.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition-colors font-medium"

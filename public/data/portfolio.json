@@ -1,7 +1,7 @@
 {
   "about": {
     "name": "Alexandros Hatzopoulos",
-    "title": "DevOps Engineer / Cloud & Platform Engineer",
+    "title": "DevOps/Cloud Engineer",
     "avatar": "🛠️",
     "bio": [
       "DevOps engineer focused on building reliable cloud infrastructure, Kubernetes platforms, and automation across AWS and OCI.",
@@ -22,14 +22,15 @@
       "period": "May 2022 - Present",
       "description": [
         "Led migration of Skydance Animation services to OCI, standing up OKE (Kubernetes) and standardizing infra with Terraform/Ansible/Packer",
-        "Cut deployment time 50%+ by replacing many K8s manifests with a single Helm-based workflow (EKS)",
-        "Built monitoring + alerting platform (Grafana/Slack/Jira) with <5 min average response time to hardware issues"
+        "Cut deployment time 50%+ by replacing many K8s manifests with a single custom Helm chart (EKS) for Warner Brothers animation studio",
+        "Built monitoring + alerting platform (Grafana/Slack/Jira) with <5 min average response time to hardware issues for P1's Data Protection service (P1 Protect)",
+        "Sped up quote turnaround to customers by 90%+ by building an internal sizing tool for P1 Protect that automates vendor pricing aggregation and real-time calculations"
       ],
-      "tech": ["Kubernetes", "AWS", "OCI", "Terraform", "Helm", "Python", "Grafana", "Prometheus", "Ansible", "Packer", "CI/CD"]
+      "tech": ["Kubernetes", "AWS", "OCI", "GCP", "Terraform", "Helm", "Python", "Grafana", "Prometheus", "Ansible", "Packer", "CI/CD", "Slack", "Jira"]
     },
     {
       "id": "job-1",
-      "role": "Software Developer",
+      "role": "Web Developer",
       "company": "VETO A.E.",
       "period": "Sep 2020 - Aug 2021",
       "description": [
@@ -51,44 +52,109 @@
       "tech": ["Vue.js", "JavaScript", "HTML", "CSS", "Laravel"]
     }
   ],
-  "projects": [
-    {
-      "title": "P1 Protect Monitoring Platform",
-      "description": "Monitoring + alerting system for edge infrastructure using Kubernetes + Grafana with Slack/Jira integrations to catch outages early.",
-      "tech": ["Kubernetes", "Grafana", "Prometheus", "AWS", "Slack", "Jira"],
-      "github": ""
-    },
-    {
-      "title": "Multi-Region Data Sync Tool (OCI OKE)",
-      "description": "Multi-region data manager deployed on OCI Kubernetes to enable real-time collaboration and faster cross-region file sync than traditional rsync workflows.",
-      "tech": ["OCI", "Kubernetes (OKE)", "Python", "Networking"],
-      "link": "",
-      "github": ""
-    },
-    {
-      "title": "Lino (Founder)",
-      "description": "Founded and launched a linen clothing brand spanning design, production, and sales between Greece and Los Angeles.",
-      "tech": ["Entrepreneurship", "Operations", "Brand"],
-      "link": "",
-      "github": ""
-    }
-  ],
+  "projects": {
+    "categories": [
+      {
+        "name": "Work",
+        "icon": "💼",
+        "projects": [
+          {
+            "title": "P1 Protect Monitoring Platform",
+            "description": "Monitoring + alerting system for edge infrastructure using Kubernetes + Grafana with Slack/Jira integrations to catch outages early.",
+            "tech": ["Kubernetes", "Grafana", "Prometheus", "AWS", "Slack", "Jira"]
+          },
+          {
+            "title": "Multi-Region Data Sync Tool",
+            "description": "Multi-region data manager deployed on OCI Kubernetes to enable real-time collaboration and faster cross-region file sync than traditional rsync workflows.",
+            "tech": ["OCI", "Kubernetes (OKE)", "Python", "Networking"]
+          },
+          {
+            "title": "Softnet Terraform Provider",
+            "description": "Custom Terraform provider for managing Softdrive cloud resources, enabling infrastructure-as-code for virtual computer instances with full CRUD operations.",
+            "tech": ["Go", "Terraform", "OpenAPI", "IaC"]
+          },
+          {
+            "title": "Warner EKS Helm Chart",
+            "description": "Custom Helm chart and EKS infrastructure for deploying Flix (storyboarding app) at Warner Brothers Animation with multi-AZ HA and Karpenter autoscaling.",
+            "tech": ["Kubernetes", "Helm", "AWS EKS", "Terraform", "Karpenter"]
+          },
+          {
+            "title": "P1 Protect AI Sizer",
+            "description": "AI-powered agent that monitors Zoom meetings, extracts sizing discussions, and auto-generates structured proposals for sales team review.",
+            "tech": ["Python", "OpenAI", "AWS", "DynamoDB", "SQS", "Kubernetes"]
+          }
+        ]
+      },
+      {
+        "name": "Personal",
+        "icon": "🧪",
+        "projects": [
+          {
+            "title": "Agent²",
+            "description": "Multi-agent orchestration MCP for Cursor that chains specialized AI agents together for complex development workflows.",
+            "tech": ["Python", "MCP", "AI Agents", "Cursor"],
+            "github": "https://github.com/alexhatzo/agent-squared"
+          },
+          {
+            "title": "Mnesia",
+            "description": "(YCW25 - top 10%) Backend for a Knowledge Management AI with proactive CRM assistant capabilities, using OpenAI + Pinecone for semantic search and proposal generation.",
+            "tech": ["Python", "OpenAI", "Pinecone", "Streamlit", "AWS"],
+            "github": "https://github.com/alexhatzo/ai-km"
+          },
+          {
+            "title": "AI Product Descriptions",
+            "description": "AI-powered tool that generates SEO-friendly e-commerce product descriptions using GPT-4 Vision with quality scoring and reporting.",
+            "tech": ["Python", "OpenAI GPT-4 Vision", "Pydantic", "CLI"],
+            "github": "https://github.com/alexhatzo/ai-product-descriptions"
+          },
+          {
+            "title": "Personal Website",
+            "description": "This game-style interactive portfolio built with React, TypeScript, and Kaplay game engine.",
+            "tech": ["React", "TypeScript", "Kaplay", "Tailwind CSS"],
+            "github": "https://github.com/alexhatzo/personal-website"
+          }
+        ]
+      },
+      {
+        "name": "Life",
+        "icon": "🎯",
+        "projects": [
+          {
+            "title": "Lino (Founder)",
+            "description": "Founded and launched a linen clothing brand spanning design, production, and sales between Greece and Los Angeles.",
+            "tech": ["Entrepreneurship", "Operations", "Brand"]
+          },
+          {
+            "title": "Expat Society (VP of Events)",
+            "description": "Managed a $200k+ budget and led a team to execute 8 successful events, selling over 5,000 tickets in one year at USC.",
+            "tech": ["Event Planning", "Budget Management", "Marketing"]
+          },
+          {
+            "title": "DJ-ing & Events (Hatzo)",
+            "description": "DJ-ing on the side under the artist name Hatzo and putting on events in NYC under the brand 128bpm.nyc.",
+            "tech": ["Music Production", "Event Hosting", "Brand Building"],
+            "link": "https://www.instagram.com/128bpm.nyc/"
+          }
+        ]
+      }
+    ]
+  },
   "skills": {
     "categories": [
       {
-        "name": "Frontend",
-        "icon": "🎨",
-        "skills": ["React.js", "Vue.js", "JavaScript", "HTML", "CSS"]
+        "name": "Fullstack",
+        "icon": "💻",
+        "skills": ["React.js", "Vue.js", "JavaScript", "HTML", "CSS", "Python", "Java", "C++", "PHP", "MySQL"]
       },
       {
-        "name": "Backend",
-        "icon": "⚙️",
-        "skills": ["Python", "Java", "C++", "PHP", "MySQL"]
-      },
-      {
-        "name": "DevOps & Tools",
+        "name": "DevOps & Cloud",
         "icon": "🛠️",
-        "skills": ["Kubernetes", "AWS", "OCI", "Terraform", "Helm", "GitHub Actions", "CI/CD", "Ansible", "Packer", "Grafana", "Prometheus"]
+        "skills": ["Kubernetes", "AWS", "OCI", "GCP", "Terraform", "Helm", "GitHub Actions", "CI/CD", "Ansible", "Packer", "Grafana", "Prometheus"]
+      },
+      {
+        "name": "General",
+        "icon": "🌟",
+        "skills": ["Greek (Native)", "English (Native)", "French (Basic)", "AI Integrations", "Event Planning", "DJ-ing", "Skiing"]
       }
     ],
     "currentlyLearning": "Building more interactive web experiences (creative coding / game-style UIs) and sharpening system design for scalable platforms."

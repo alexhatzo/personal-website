@@ -10,8 +10,9 @@ export default function SkipButton({ onClick }: SkipButtonProps) {
       title="View as traditional portfolio"
     >
       <span className="text-base">📋</span>
+      <span className="font-medium">Portfolio</span>
       <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap">
-        Skip to portfolio
+        → Skip to full view
       </span>
     </button>
   );
