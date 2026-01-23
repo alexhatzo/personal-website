@@ -1,18 +1,17 @@
 import { useEffect, useRef } from "react";
 import kaplay from "kaplay";
 import type { KAPLAYCtx } from "kaplay";
-import { SIZES } from "./constants";
+import { SIZES, BACKGROUND_COLOR } from "./constants";
 import { loadSprites } from "./sprites";
-import { setupCityScene, setupInteriorScenes, setOnCaptureCallback, setOnSectionInteractCallback } from "./scenes";
+import { setupCityScene, setupInteriorScenes } from "./scenes";
 import { setBuildingLabels, setInteriorTitles, setAboutData, setContactData } from "./content";
 import { setCreatureLabels } from "./entities";
 import type { BuildingsData, AboutData, ContactData, Experience, ProjectsData, SkillsData } from "../types/portfolio";
 
-// Re-export mobileInput and mobileAction for MobileControls component
-export { mobileInput, mobileAction } from "./entities";
+// Re-export mobileInput, mobileAction, and event name for MobileControls component
+export { mobileInput, mobileAction, ACTION_LABEL_CHANGE_EVENT } from "./entities";
 
 interface GameCanvasProps {
-  onZoneEnter: (section: string) => void;
   onCapture?: (creatureId: string) => void;
   onSectionInteract?: (section: string) => void;
   buildingsData?: BuildingsData;
@@ -23,20 +22,24 @@ interface GameCanvasProps {
   skillsData?: SkillsData;
 }
 
-export default function GameCanvas({ onZoneEnter: _onZoneEnter, onCapture, onSectionInteract, buildingsData, aboutData, contactData, experienceData, projectsData, skillsData }: GameCanvasProps) {
+export default function GameCanvas({ onCapture, onSectionInteract, buildingsData, aboutData, contactData, experienceData, projectsData, skillsData }: GameCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<KAPLAYCtx | null>(null);
   const initializedRef = useRef(false);
-
+  
+  // Store callbacks in refs so they're always up-to-date without causing re-initialization
+  const onCaptureRef = useRef(onCapture);
+  const onSectionInteractRef = useRef(onSectionInteract);
+  
+  // Effect 1: Keep callback refs synchronized with props
   useEffect(() => {
-    // Skip if already initialized or no canvas ref
-    if (!canvasRef.current || initializedRef.current) return;
-    initializedRef.current = true;
-    
-    // Clean up any existing content before initializing
-    canvasRef.current.innerHTML = "";
-
-    // Set building labels and interior titles from portfolio data
+    onCaptureRef.current = onCapture;
+    onSectionInteractRef.current = onSectionInteract;
+  }, [onCapture, onSectionInteract]);
+  
+  // Effect 2: Set portfolio content data (building labels, interior titles, creature labels)
+  // This runs on mount and whenever data props change
+  useEffect(() => {
     if (buildingsData) {
       setBuildingLabels({
         about: buildingsData.about.label,
@@ -53,17 +56,23 @@ export default function GameCanvas({ onZoneEnter: _onZoneEnter, onCapture, onSec
         contact: buildingsData.contact.interiorTitle,
       });
     }
-
-    // Set about and contact data for content boards
     if (aboutData) {
       setAboutData(aboutData);
     }
     if (contactData) {
       setContactData(contactData);
     }
-
-    // Set creature labels from portfolio data (experience roles, project titles, skill categories)
     setCreatureLabels(experienceData, projectsData, skillsData);
+  }, [buildingsData, aboutData, contactData, experienceData, projectsData, skillsData]);
+
+  // Effect 3: Initialize Kaplay game engine (runs once on mount)
+  // Uses refs for callbacks so the game doesn't reinitialize when callbacks change
+  useEffect(() => {
+    if (!canvasRef.current || initializedRef.current) return;
+    initializedRef.current = true;
+    
+    // Clean up any existing content before initializing
+    canvasRef.current.innerHTML = "";
 
     // Initialize Kaplay - use full canvas size, letterbox handles scaling
     const k = kaplay({
@@ -72,40 +81,32 @@ export default function GameCanvas({ onZoneEnter: _onZoneEnter, onCapture, onSec
       height: SIZES.CANVAS_H,
       letterbox: true,
       crisp: true,
-      background: [34, 100, 34],
+      background: BACKGROUND_COLOR,
     });
 
     gameRef.current = k;
 
-    // Set up capture callback for Experience building
-    if (onCapture) {
-      setOnCaptureCallback(onCapture);
-    }
-
-    // Set up section interact callback for About/Contact buildings
-    if (onSectionInteract) {
-      setOnSectionInteractCallback(onSectionInteract);
-    }
-
     // Load all sprites
     loadSprites(k);
 
-    // Setup scenes
+    // Setup scenes - wrap callbacks in functions that access refs
+    // This ensures callbacks are always up-to-date without reinitializing scenes
     setupCityScene(k);
-    setupInteriorScenes(k);
+    setupInteriorScenes(k, {
+      onCapture: (creatureId: string) => onCaptureRef.current?.(creatureId),
+      onSectionInteract: (section: string) => onSectionInteractRef.current?.(section),
+    });
 
     // Start the game
     k.go("city");
 
-    // Cleanup
+    // Cleanup when component unmounts
     return () => {
       if (gameRef.current) {
         gameRef.current.quit();
         gameRef.current = null;
       }
     };
-    // Empty dependency array - only initialize once per mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Simple container - Kaplay's letterbox mode handles all scaling

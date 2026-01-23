@@ -71,8 +71,8 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
           
           <div className="space-y-6">
             <div className="space-y-4">
-              {about.bio.map((paragraph, index) => (
-                <p key={index} className="leading-relaxed text-slate-300 text-lg">
+              {about.bio.map((paragraph) => (
+                <p key={paragraph} className="leading-relaxed text-slate-300 text-lg">
                   {paragraph}
                 </p>
               ))}
@@ -110,8 +110,8 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
           </h2>
           
           <div className="space-y-10">
-            {projects.categories.map((category, catIndex) => (
-              <div key={catIndex}>
+            {projects.categories.map((category) => (
+              <div key={category.name}>
                 {/* Category Header */}
                 <div className="flex items-center gap-3 mb-6">
                   <span className="text-2xl">{category.icon}</span>
@@ -121,18 +121,18 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
 
                 {/* Projects in this category */}
                 <div className="space-y-4">
-                  {category.projects.map((project, projIndex) => (
+                  {category.projects.map((project) => (
                     <div
-                      key={projIndex}
+                      key={project.title}
                       className="bg-slate-800/80 rounded-xl p-6 border border-slate-700 hover:border-slate-500 transition-colors"
                     >
                       <h4 className="text-lg font-bold text-white mb-2">{project.title}</h4>
                       <p className="text-slate-300 mb-4 leading-relaxed">{project.description}</p>
 
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {project.tech.map((tech, techIndex) => (
+                        {project.tech.map((tech) => (
                           <span
-                            key={techIndex}
+                            key={tech}
                             className="px-3 py-1.5 bg-slate-700/80 text-slate-300 text-sm rounded-lg"
                           >
                             {tech}
@@ -147,6 +147,7 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                            aria-label={`View live project: ${project.title}`}
                           >
                             🔗 Link
                           </a>
@@ -157,6 +158,7 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                            aria-label={`View source code on GitHub: ${project.title}`}
                           >
                             📂 GitHub
                           </a>
@@ -178,9 +180,9 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {skills.categories.map((category, index) => (
+            {skills.categories.map((category) => (
               <div
-                key={index}
+                key={category.name}
                 className="bg-slate-800/80 rounded-xl p-6 border border-slate-700"
               >
                 <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-3">
@@ -188,9 +190,9 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
                   {category.name}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill, skillIndex) => (
+                  {category.skills.map((skill) => (
                     <span
-                      key={skillIndex}
+                      key={skill}
                       className="px-3.5 py-1.5 bg-slate-700/80 text-slate-200 text-sm rounded-full"
                     >
                       {skill}
@@ -238,8 +240,8 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
                   </div>
 
                   <ul className="space-y-2.5 text-slate-300 mb-5">
-                    {exp.description.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex gap-3 leading-relaxed">
+                    {exp.description.map((item) => (
+                      <li key={item} className="flex gap-3 leading-relaxed">
                         <span className="text-slate-500 mt-1">•</span>
                         <span>{item}</span>
                       </li>
@@ -248,9 +250,9 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
 
                   {exp.tech && exp.tech.length > 0 && (
                     <div className="flex flex-wrap gap-2 pt-2">
-                      {exp.tech.map((tech, techIndex) => (
+                      {exp.tech.map((tech) => (
                         <span
-                          key={techIndex}
+                          key={tech}
                           className="px-3 py-1 bg-slate-700/80 text-slate-400 text-sm rounded-lg"
                         >
                           {tech}
@@ -288,9 +290,9 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {contact.socialLinks.map((link, index) => (
+              {contact.socialLinks.map((link) => (
                 <a
-                  key={index}
+                  key={link.name}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"

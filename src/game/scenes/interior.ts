@@ -23,24 +23,16 @@ import { BUILDING_CONTENT } from "../content";
 const T = SIZES.TILE;
 const { ROOM_W, ROOM_H } = SIZES;
 
-// Store onCapture callback at module level so it can be set from GameCanvas
-let captureCallback: ((id: string) => void) | null = null;
-
-// Store onSectionInteract callback for About/Contact rooms
-let sectionInteractCallback: ((section: string) => void) | null = null;
-
 /**
- * Set the capture callback from outside
+ * Callbacks that can be provided to interior scenes.
+ * These are captured via closure when scenes are registered,
+ * avoiding module-level mutable state.
  */
-export function setOnCaptureCallback(callback: (id: string) => void): void {
-  captureCallback = callback;
-}
-
-/**
- * Set the section interact callback from outside (for About/Contact modals)
- */
-export function setOnSectionInteractCallback(callback: (section: string) => void): void {
-  sectionInteractCallback = callback;
+export interface InteriorSceneCallbacks {
+  /** Called when a creature is captured (Experience, Projects, Skills rooms) */
+  onCapture?: (id: string) => void;
+  /** Called when player interacts in About/Contact rooms */
+  onSectionInteract?: (section: string) => void;
 }
 
 /**
@@ -108,9 +100,40 @@ function getCreaturePositions(
 }
 
 /**
+ * Create exit door with visual and collision area
+ */
+function createExitDoor(
+  k: KAPLAYCtx,
+  offsetX: number,
+  offsetY: number,
+  returnPos: { x: number; y: number }
+): void {
+  // Visible door
+  k.add([
+    k.rect(T * 2, T),
+    k.pos(offsetX + ROOM_W / 2 - T, offsetY + ROOM_H - T),
+    k.color(100, 70, 50),
+    k.outline(1, k.Color.fromArray([70, 50, 35])),
+    k.z(0),
+  ]);
+  // Invisible collision area
+  k.add([
+    k.rect(T * 2, T),
+    k.pos(offsetX + ROOM_W / 2 - T, offsetY + ROOM_H - T),
+    k.area(),
+    k.opacity(0),
+    "exit",
+    { returnPos },
+  ]);
+}
+
+/**
  * Create action handler for pokeball throwing
  */
-function createPokeballActionHandler(k: KAPLAYCtx): () => void {
+function createPokeballActionHandler(
+  k: KAPLAYCtx,
+  onCapture?: (id: string) => void
+): () => void {
   let canThrow = true;
   const throwCooldown = 0.5;
 
@@ -136,8 +159,8 @@ function createPokeballActionHandler(k: KAPLAYCtx): () => void {
         createCaptureEffect(k, creature.pos);
         creature.destroy();
 
-        if (captureCallback) {
-          captureCallback(creatureId);
+        if (onCapture) {
+          onCapture(creatureId);
         }
       });
     });
@@ -147,7 +170,10 @@ function createPokeballActionHandler(k: KAPLAYCtx): () => void {
 /**
  * Create action handler for arrow shooting
  */
-function createArrowActionHandler(k: KAPLAYCtx): () => void {
+function createArrowActionHandler(
+  k: KAPLAYCtx,
+  onCapture?: (id: string) => void
+): () => void {
   let canShoot = true;
   const shootCooldown = 0.5;
 
@@ -173,8 +199,8 @@ function createArrowActionHandler(k: KAPLAYCtx): () => void {
       playDeathAnimation(k, creature, () => {
         creature.destroy();
 
-        if (captureCallback) {
-          captureCallback(creatureId);
+        if (onCapture) {
+          onCapture(creatureId);
         }
       });
     });
@@ -184,7 +210,10 @@ function createArrowActionHandler(k: KAPLAYCtx): () => void {
 /**
  * Create action handler for hammer swinging
  */
-function createHammerActionHandler(k: KAPLAYCtx): () => void {
+function createHammerActionHandler(
+  k: KAPLAYCtx,
+  onCapture?: (id: string) => void
+): () => void {
   let canSwing = true;
   const swingCooldown = 0.5;
 
@@ -216,8 +245,8 @@ function createHammerActionHandler(k: KAPLAYCtx): () => void {
       playDeathAnimation(k, creature, () => {
         creature.destroy();
 
-        if (captureCallback) {
-          captureCallback(creatureId);
+        if (onCapture) {
+          onCapture(creatureId);
         }
       });
     });
@@ -234,28 +263,15 @@ function createCreatureRoom(
   creatureConfig: BuildingCreatureConfig,
   offsetX: number,
   offsetY: number,
-  data?: InteriorSceneData
+  data?: InteriorSceneData,
+  onCapture?: (id: string) => void
 ): void {
   const floorColor = getFloorColor(section);
   createFloorGrid(k, offsetX, offsetY, ROOM_W, ROOM_H, floorColor, -10);
   createRoomWalls(k, offsetX, offsetY, ROOM_W, ROOM_H);
 
   // Exit Door
-  k.add([
-    k.rect(T * 2, T),
-    k.pos(offsetX + ROOM_W / 2 - T, offsetY + ROOM_H - T),
-    k.color(100, 70, 50),
-    k.outline(1, k.Color.fromArray([70, 50, 35])),
-    k.z(0),
-  ]);
-  k.add([
-    k.rect(T * 2, T),
-    k.pos(offsetX + ROOM_W / 2 - T, offsetY + ROOM_H - T),
-    k.area(),
-    k.opacity(0),
-    "exit",
-    { returnPos: data?.returnPos ?? { x: 320, y: 280 } },
-  ]);
+  createExitDoor(k, offsetX, offsetY, data?.returnPos ?? { x: 320, y: 280 });
 
   // Title (from config or content)
   const content = BUILDING_CONTENT[section];
@@ -296,13 +312,13 @@ function createCreatureRoom(
   let actionLabel = "Action";
   
   if (creatureConfig.actionType === "pokeball") {
-    actionHandler = createPokeballActionHandler(k);
+    actionHandler = createPokeballActionHandler(k, onCapture);
     actionLabel = "Catch";
   } else if (creatureConfig.actionType === "arrow") {
-    actionHandler = createArrowActionHandler(k);
+    actionHandler = createArrowActionHandler(k, onCapture);
     actionLabel = "Shoot";
   } else if (creatureConfig.actionType === "hammer") {
-    actionHandler = createHammerActionHandler(k);
+    actionHandler = createHammerActionHandler(k, onCapture);
     actionLabel = "Smash";
   }
 
@@ -340,7 +356,11 @@ function createCreatureRoom(
 /**
  * Create a standard interior scene for non-experience buildings
  */
-function createStandardInteriorScene(k: KAPLAYCtx, section: SectionType): void {
+function createStandardInteriorScene(
+  k: KAPLAYCtx,
+  section: SectionType,
+  onSectionInteract?: (section: string) => void
+): void {
   k.scene(section, (data?: InteriorSceneData) => {
     const content = BUILDING_CONTENT[section];
     const offsetX = (k.width() - ROOM_W) / 2;
@@ -354,21 +374,7 @@ function createStandardInteriorScene(k: KAPLAYCtx, section: SectionType): void {
     createRoomWalls(k, offsetX, offsetY, ROOM_W, ROOM_H);
 
     // Exit Door
-    k.add([
-      k.rect(T * 2, T),
-      k.pos(offsetX + ROOM_W / 2 - T, offsetY + ROOM_H - T),
-      k.color(100, 70, 50),
-      k.outline(1, k.Color.fromArray([70, 50, 35])),
-      k.z(0),
-    ]);
-    k.add([
-      k.rect(T * 2, T),
-      k.pos(offsetX + ROOM_W / 2 - T, offsetY + ROOM_H - T),
-      k.area(),
-      k.opacity(0),
-      "exit",
-      { returnPos: data?.returnPos ?? { x: 320, y: 280 } },
-    ]);
+    createExitDoor(k, offsetX, offsetY, data?.returnPos ?? { x: 320, y: 280 });
 
     // Furniture
     createInteriorFurniture(k, section, offsetX, offsetY, ROOM_W);
@@ -406,8 +412,8 @@ function createStandardInteriorScene(k: KAPLAYCtx, section: SectionType): void {
     // SPACE interaction for About and Contact rooms
     if (section === "about" || section === "contact") {
       const handleInteract = () => {
-        if (sectionInteractCallback) {
-          sectionInteractCallback(section);
+        if (onSectionInteract) {
+          onSectionInteract(section);
         }
       };
 
@@ -429,23 +435,29 @@ function createStandardInteriorScene(k: KAPLAYCtx, section: SectionType): void {
 /**
  * Setup all interior scenes
  * Uses BUILDING_CREATURE_CONFIGS to determine room type (creatures vs content board)
+ * 
+ * Callbacks are captured via closure when scenes are registered, so they remain
+ * available when scenes are actually executed via k.go().
  */
-export function setupInteriorScenes(k: KAPLAYCtx): void {
+export function setupInteriorScenes(
+  k: KAPLAYCtx,
+  callbacks?: InteriorSceneCallbacks
+): void {
   const allSections: SectionType[] = ["about", "projects", "skills", "experience", "contact"];
   
   allSections.forEach((section) => {
     const creatureConfig = getCreatureConfigForSection(section);
     
     if (creatureConfig?.hasCreatures) {
-      // Create a creature room
+      // Create a creature room - callback captured in closure
       k.scene(section, (data?: InteriorSceneData) => {
         const offsetX = (k.width() - ROOM_W) / 2;
         const offsetY = (k.height() - ROOM_H) / 2;
-        createCreatureRoom(k, section, creatureConfig, offsetX, offsetY, data);
+        createCreatureRoom(k, section, creatureConfig, offsetX, offsetY, data, callbacks?.onCapture);
       });
     } else {
-      // Create a standard content board room
-      createStandardInteriorScene(k, section);
+      // Create a standard content board room - callback captured in closure
+      createStandardInteriorScene(k, section, callbacks?.onSectionInteract);
     }
   });
 }

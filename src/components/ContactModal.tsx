@@ -1,16 +1,9 @@
+import { memo } from "react";
 import Modal from "./Modal";
 import { usePortfolioData } from "../context/PortfolioContext";
+import type { ModalContentProps } from "../types/modal";
 
-type Section = "about" | "projects" | "skills" | "experience" | "contact";
-
-interface ContactModalProps {
-  onClose: () => void;
-  showNav?: boolean;
-  currentSection?: Section;
-  onNavigate?: (section: Section) => void;
-}
-
-export default function ContactModal({ onClose, showNav, currentSection, onNavigate }: ContactModalProps) {
+function ContactModal({ onClose, showNav, currentSection, onNavigate }: ModalContentProps) {
   const { contact } = usePortfolioData();
 
   return (
@@ -28,13 +21,13 @@ export default function ContactModal({ onClose, showNav, currentSection, onNavig
 
         {/* Social Links */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {contact.socialLinks.map((link, index) => (
+          {contact.socialLinks.map((link) => (
             <a
-              key={index}
+              key={link.name}
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-4 p-5 sm:p-6 bg-slate-800/80 rounded-xl border border-slate-700 hover:border-blue-500 hover:bg-slate-750 transition-all group"
+              className="flex items-center gap-4 p-5 sm:p-6 bg-slate-800/80 rounded-xl border border-slate-700 hover:border-blue-500 hover:bg-slate-700 transition-all group"
             >
               <span className="text-3xl">{link.icon}</span>
               <div>
@@ -69,3 +62,5 @@ export default function ContactModal({ onClose, showNav, currentSection, onNavig
     </Modal>
   );
 }
+
+export default memo(ContactModal);

@@ -37,7 +37,9 @@ export function useBackgroundMusic() {
       audioRef.current.play().then(() => {
         setIsPlaying(true);
       }).catch((err) => {
-        console.warn("Audio playback failed:", err);
+        if (import.meta.env.DEV) {
+          console.warn("Audio playback failed:", err);
+        }
       });
     }
   }, [isPlaying]);

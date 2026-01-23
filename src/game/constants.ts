@@ -77,3 +77,32 @@ export const PLAZA = {
   W: 240,
   H: 160,
 } as const;
+
+// Game background color
+export const BACKGROUND_COLOR: [number, number, number] = [34, 100, 34];
+
+// Interaction distances
+export const INTERACTION = {
+  PROXIMITY_DISTANCE: 50,
+} as const;
+
+// Creature animation settings
+export const ANIMATION = {
+  CREATURE_IDLE_MIN: 2,
+  CREATURE_IDLE_MAX: 5,
+  BOB_SPEED: 3,
+  BOB_AMPLITUDE: 2,
+} as const;
+
+// Projectile settings
+export const PROJECTILE = {
+  LIFETIME: 2,
+  HAMMER_HIT_RANGE: 0.6,
+} as const;
+
+// Building dimensions
+export const BUILDING = {
+  DOOR_WIDTH: 14,
+  DOOR_HEIGHT: 18,
+  ROOF_HEIGHT: 20,
+} as const;

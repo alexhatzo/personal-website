@@ -1,4 +1,5 @@
 import type { KAPLAYCtx, GameObj } from "../types";
+import { calculateDirection, createLifetimeTracker, createCleanup } from "./projectileBase";
 
 const POKEBALL_SPEED = 200;
 const POKEBALL_SIZE = 8;
@@ -12,12 +13,8 @@ export function throwPokeball(
   target: GameObj,
   onHit: (creature: GameObj) => void
 ): GameObj {
-  // Calculate direction to target
-  const dx = target.pos.x - from.x;
-  const dy = target.pos.y - from.y;
-  const dist = Math.sqrt(dx * dx + dy * dy);
-  const dirX = dx / dist;
-  const dirY = dy / dist;
+  // Calculate direction to target using shared utility
+  const dir = calculateDirection(from, target.pos);
 
   // Create pokeball as two semicircles (red top, white bottom)
   const pokeball = k.add([
@@ -29,7 +26,7 @@ export function throwPokeball(
     k.outline(1, k.Color.fromArray([30, 30, 30])),
     k.z(200),
     "pokeball",
-    { velocity: { x: dirX * POKEBALL_SPEED, y: dirY * POKEBALL_SPEED } },
+    { velocity: { x: dir.x * POKEBALL_SPEED, y: dir.y * POKEBALL_SPEED } },
   ]);
 
   // Add white bottom half indicator (small rect)
@@ -53,12 +50,18 @@ export function throwPokeball(
     "pokeball-center",
   ]);
 
-  // Movement and collision detection
-  let lifetime = 0;
-  const maxLifetime = 2; // seconds
+  // Create cleanup function using shared utility
+  const cleanup = createCleanup(pokeball, whiteHalf, centerBtn);
+
+  // Movement and collision detection using shared lifetime tracker
+  const lifetimeTracker = createLifetimeTracker();
 
   pokeball.onUpdate(() => {
-    lifetime += k.dt();
+    // Check lifetime expiration
+    if (lifetimeTracker.update(k.dt())) {
+      cleanup();
+      return;
+    }
 
     // Move pokeball
     pokeball.pos.x += pokeball.velocity.x * k.dt();
@@ -69,11 +72,6 @@ export function throwPokeball(
     whiteHalf.pos.y = pokeball.pos.y + POKEBALL_SIZE / 2;
     centerBtn.pos.x = pokeball.pos.x;
     centerBtn.pos.y = pokeball.pos.y;
-
-    // Timeout - destroy if no hit
-    if (lifetime > maxLifetime) {
-      cleanup();
-    }
   });
 
   // Collision with creatures
@@ -81,12 +79,6 @@ export function throwPokeball(
     onHit(creature);
     cleanup();
   });
-
-  function cleanup() {
-    if (pokeball.exists()) pokeball.destroy();
-    if (whiteHalf.exists()) whiteHalf.destroy();
-    if (centerBtn.exists()) centerBtn.destroy();
-  }
 
   return pokeball;
 }

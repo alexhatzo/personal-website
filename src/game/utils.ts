@@ -3,6 +3,53 @@ import { SIZES, CSS_COLORS } from "./constants";
 
 const T = SIZES.TILE;
 
+// ============================================================================
+// Math/Geometry Utilities
+// ============================================================================
+
+/**
+ * Calculate Euclidean distance between two points
+ */
+export function distance(x1: number, y1: number, x2: number, y2: number): number {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+// ============================================================================
+// Color Utilities
+// ============================================================================
+
+/**
+ * Darken a hex color by a specified amount
+ * @param hex - Hex color string (e.g., "#ff0000" or "ff0000")
+ * @param amount - Amount to darken (0-255)
+ */
+export function darkenColor(hex: string, amount: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.max(0, (num >> 16) - amount);
+  const g = Math.max(0, ((num >> 8) & 0xff) - amount);
+  const b = Math.max(0, (num & 0xff) - amount);
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
+
+/**
+ * Lighten a hex color by a specified amount
+ * @param hex - Hex color string (e.g., "#ff0000" or "ff0000")
+ * @param amount - Amount to lighten (0-255)
+ */
+export function lightenColor(hex: string, amount: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, (num >> 16) + amount);
+  const g = Math.min(255, ((num >> 8) & 0xff) + amount);
+  const b = Math.min(255, (num & 0xff) + amount);
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
+
+// ============================================================================
+// Scene/World Utilities
+// ============================================================================
+
 /**
  * Create grass background using CSS colors (not tilemap)
  */

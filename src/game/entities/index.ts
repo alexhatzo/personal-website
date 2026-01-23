@@ -1,5 +1,5 @@
 // Re-export all entity factories
-export { createPlayer, setupCamera, setupWorldBounds, mobileInput, mobileAction } from "./player";
+export { createPlayer, setupCamera, setupWorldBounds, mobileInput, mobileAction, ACTION_LABEL_CHANGE_EVENT } from "./player";
 export {
   createTree,
   createBench,
@@ -28,6 +28,13 @@ export {
 export { throwPokeball, createCaptureEffect } from "./pokeball";
 export { shootArrow, createArrowHitEffect } from "./arrow";
 export { swingHammer, createHammerHitEffect } from "./hammer";
+export {
+  calculateDirection,
+  createLifetimeTracker,
+  createCleanup,
+  createProjectileMovement,
+  type ProjectileConfig,
+} from "./projectileBase";
 export {
   createWanderingCreature,
   findNearestWanderingCreature,

@@ -1,0 +1,124 @@
+---
+description: Orchestrator delegates work to subagents via Beads, Agent Mail, Serena
+alwaysApply: true
+---
+
+# Orchestrated Workflow
+
+## You Are the Orchestrator
+
+**Delegate to subagents. Don't implement directly.**
+
+1. Break request into Beads issues: `bd create`
+2. Register your orchestrator identity: `register_agent(project_key, program="orchestrator", model="...", task="Coordinating work")`
+3. Spawn subagent per issue: `Task(prompt="Work on bd-{id}...")`
+4. Monitor Agent Mail inbox: `fetch_inbox(project_key, agent_name)`
+5. Communicate via Agent Mail: `send_message(...)`, `reply_message(...)`
+6. Integrate when complete
+7. After all work done, clean up agent registrations if needed
+
+## Subagent Instructions
+
+Every subagent MUST:
+
+```python
+# 1. Register
+register_agent(project_key, program="subagent", model="...", task="bd-{id}: {title}")
+
+# 2. Reserve files
+file_reservation_paths(project_key, agent_name, ["path/**"], reason="bd-{id}")
+
+# 3. Use Serena for search (NOT grep/find)
+find_symbol("MyClass")  # Search code
+
+# 4. Complete work
+
+# 5. Create beads issues for any additional work discovered
+# If you find bugs, improvements, or follow-up tasks:
+bd create --title="Issue discovered during bd-{id}" --priority=P2
+
+# 6. Git commit (REQUIRED - work is not done until committed!)
+git add <changed-files>
+git commit -m "[bd-{id}] Brief description of changes"
+
+# 7. Close issue & report
+bd close bd-{id}
+send_message(..., to=["OrchestratorAgent"], subject="[bd-{id}] Complete", thread_id="bd-{id}")
+
+# 8. Release & deregister
+release_file_reservations(project_key, agent_name)
+# Orchestrator can handle deregistration, or agent can self-deregister if final task
+```
+
+## Orchestrator Responsibilities
+
+**During Work:**
+- Monitor inbox: `fetch_inbox(project_key, agent_name)`
+- Respond to subagent questions: `reply_message(...)`
+- Track subagent progress via Agent Mail threads
+
+**After Each Batch:**
+1. Verify all changes are committed: `git status`
+2. If uncommitted changes exist, commit them
+3. Push to remote: `git push`
+4. Sync beads: `bd sync`
+5. Review any new issues created by subagents
+6. Plan next batch of work based on discovered issues
+
+**Work is NOT complete until `git push` succeeds.**
+
+## Tool Access
+
+Subagents have access to:
+- **Beads** - All `bd` commands
+- **Agent Mail** - Register, message, reserve files
+- **Serena** - Code search and navigation
+
+## Rules
+
+- Track ALL work in Beads (no TODOs)
+- Thread ID = Issue ID (`bd-123`)
+- Reserve files BEFORE editing
+- Use Serena for search (not grep)
+- One issue = one subagent
+- **Orchestrator registers** - Register with Agent Mail before spawning subagents
+- **Agent Mail for coordination** - All orchestrator ↔ subagent communication via Agent Mail
+- **Discovered work → Beads** - Subagents create issues for bugs/improvements found
+- **Git commit per issue** - Each subagent commits before closing
+- **Orchestrator pushes** - After each batch, verify and push
+
+## Example
+
+**User:** "Add caching"
+
+**You (Orchestrator):**
+```bash
+# 1. Register yourself
+register_agent(project_key, program="orchestrator", model="claude-sonnet-4", task="Coordinating caching implementation")
+
+# 2. Create issues
+bd create "Design cache interface" --priority=1
+bd create "Implement Redis cache" --priority=2
+
+# 3. Spawn subagents
+Task(prompt="Work on bd-101. Follow subagent instructions. Report to OrchestratorAgent via Agent Mail.")
+
+# 4. Monitor
+fetch_inbox(project_key, "OrchestratorAgent")
+
+# 5. After subagent completes, check for new issues
+bd ready  # See if subagent discovered additional work
+
+# 6. Push everything
+git push
+bd sync
+```
+
+**Subagent discovers issue while working:**
+```bash
+# During implementation, subagent finds a bug
+bd create "Fix memory leak in cache cleanup" --priority=P1 --type=bug
+
+# Mentions in completion report
+send_message(..., body="Cache implemented. NOTE: Discovered memory leak, created bd-103.")
+```

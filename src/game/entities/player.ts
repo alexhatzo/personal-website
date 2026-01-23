@@ -9,6 +9,9 @@ export const mobileInput = {
   down: false,
 };
 
+// Custom event name for action label changes
+export const ACTION_LABEL_CHANGE_EVENT = "mobileActionLabelChange";
+
 // Shared state for action button
 export const mobileAction = {
   pressed: false,
@@ -20,7 +23,13 @@ export const mobileAction = {
     }
   },
   setLabel(newLabel: string) {
-    this.label = newLabel;
+    if (this.label !== newLabel) {
+      this.label = newLabel;
+      // Dispatch custom event to notify listeners of the label change
+      window.dispatchEvent(
+        new CustomEvent(ACTION_LABEL_CHANGE_EVENT, { detail: newLabel })
+      );
+    }
   },
   setCallback(cb: (() => void) | null) {
     this.callback = cb;

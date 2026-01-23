@@ -26,3 +26,6 @@ dist-ssr
 # Downloaded asset packs (source files, not needed for deployment)
 kenney_rpg-urban-pack/
 rpg-type-retro-top-down-playable-character-spritesheett/
+
+# bv (beads viewer) local config and caches
+.bv/

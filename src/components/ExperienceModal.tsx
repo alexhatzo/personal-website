@@ -1,16 +1,9 @@
+import { memo } from "react";
 import Modal from "./Modal";
 import { usePortfolioData } from "../context/PortfolioContext";
+import type { ModalContentProps } from "../types/modal";
 
-type Section = "about" | "projects" | "skills" | "experience" | "contact";
-
-interface ExperienceModalProps {
-  onClose: () => void;
-  showNav?: boolean;
-  currentSection?: Section;
-  onNavigate?: (section: Section) => void;
-}
-
-export default function ExperienceModal({ onClose, showNav, currentSection, onNavigate }: ExperienceModalProps) {
+function ExperienceModal({ onClose, showNav, currentSection, onNavigate }: ModalContentProps) {
   const { experience } = usePortfolioData();
 
   return (
@@ -45,8 +38,8 @@ export default function ExperienceModal({ onClose, showNav, currentSection, onNa
                 </div>
 
                 <ul className="space-y-2.5 text-slate-300 mb-5">
-                  {exp.description.map((item, itemIndex) => (
-                    <li key={itemIndex} className="flex gap-3 leading-relaxed">
+                  {exp.description.map((item) => (
+                    <li key={item} className="flex gap-3 leading-relaxed">
                       <span className="text-slate-500 mt-1">•</span>
                       <span>{item}</span>
                     </li>
@@ -55,9 +48,9 @@ export default function ExperienceModal({ onClose, showNav, currentSection, onNa
 
                 {exp.tech && exp.tech.length > 0 && (
                   <div className="flex flex-wrap gap-2 pt-2">
-                    {exp.tech.map((tech, techIndex) => (
+                    {exp.tech.map((tech) => (
                       <span
-                        key={techIndex}
+                        key={tech}
                         className="px-3 py-1 bg-slate-700/80 text-slate-400 text-sm rounded-lg"
                       >
                         {tech}
@@ -73,7 +66,7 @@ export default function ExperienceModal({ onClose, showNav, currentSection, onNa
         {/* Resume link */}
         <div className="text-center pt-6 mt-2 border-t border-slate-700">
           <a
-            href="/resume.pdf"
+            href="/data/Hatzopoulos Alexandros Resume 2025.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition-colors font-medium"
@@ -85,3 +78,5 @@ export default function ExperienceModal({ onClose, showNav, currentSection, onNa
     </Modal>
   );
 }
+
+export default memo(ExperienceModal);

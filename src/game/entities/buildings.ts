@@ -1,5 +1,5 @@
 import type { KAPLAYCtx, BuildingConfig, SectionType } from "../types";
-import { COLORS, SIZES } from "../constants";
+import { COLORS, SIZES, BUILDING } from "../constants";
 import { getBuildingLabel } from "../content";
 
 const T = SIZES.TILE;
@@ -90,8 +90,8 @@ export function createBuilding(k: KAPLAYCtx, config: Omit<BuildingConfig, "label
   ];
 
   // === DOOR POSITION CALCULATION (same for both styles) ===
-  const doorW = 14;
-  const doorH = 18;
+  const doorW = BUILDING.DOOR_WIDTH;
+  const doorH = BUILDING.DOOR_HEIGHT;
   let doorX: number, doorY: number;
   let doorCollisionX: number, doorCollisionY: number;
   let doorCollisionW: number, doorCollisionH: number;
@@ -213,7 +213,7 @@ function createHouse(
   darken: (c: readonly [number, number, number], amt: number) => [number, number, number],
   lighten: (c: readonly [number, number, number], amt: number) => [number, number, number]
 ): void {
-  const roofHeight = 20;
+  const roofHeight = BUILDING.ROOF_HEIGHT;
   const roofColor: [number, number, number] = [139, 90, 43]; // Brown roof
 
   // === 3D DEPTH ===
