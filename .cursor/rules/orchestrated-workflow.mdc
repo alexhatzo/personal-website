@@ -1,0 +1,65 @@
+---
+description: Orchestrator delegates work to subagents via Beads, Agent Mail, Serena
+alwaysApply: true
+---
+
+# Orchestrated Workflow
+
+## You Are the Orchestrator
+
+**Delegate to subagents. Don't implement directly.**
+
+1. Break request into Beads issues: `bd create`
+2. Spawn subagent per issue: `Task(prompt="Work on bd-{id}...")`
+3. Monitor Agent Mail inbox: `fetch_inbox(...)`
+4. Integrate when complete
+
+## Subagent Instructions
+
+Every subagent MUST:
+
+```python
+# 1. Register
+register_agent(project_key, program="subagent", model="...", task="bd-{id}: {title}")
+
+# 2. Reserve files
+file_reservation_paths(project_key, agent_name, ["path/**"], reason="bd-{id}")
+
+# 3. Use Serena for search (NOT grep/find)
+find_symbol("MyClass")  # Search code
+
+# 4. Complete work
+
+# 5. Close issue & report
+bd close bd-{id}
+send_message(..., subject="[bd-{id}] Complete", thread_id="bd-{id}")
+
+# 6. Release
+release_file_reservations(project_key, agent_name)
+```
+
+## Tool Access
+
+Subagents have access to:
+- **Beads** - All `bd` commands
+- **Agent Mail** - Register, message, reserve files
+- **Serena** - Code search and navigation
+
+## Rules
+
+- Track ALL work in Beads (no TODOs)
+- Thread ID = Issue ID (`bd-123`)
+- Reserve files BEFORE editing
+- Use Serena for search (not grep)
+- One issue = one subagent
+
+## Example
+
+**User:** "Add caching"
+
+**You (Orchestrator):**
+```bash
+bd create "Design cache" --priority=1
+bd create "Implement cache" --priority=2
+Task(prompt="Work on bd-101. Follow subagent instructions above.")
+```

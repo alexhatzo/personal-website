@@ -1,5 +1,5 @@
 import type { KAPLAYCtx, GameObj, CitySceneData, Position } from "../types";
-import { SIZES, PLAZA } from "../constants";
+import { SIZES, PLAZA, INTERACTION } from "../constants";
 import { createGrassField, createRoadSegment, createRoadMarkings, createVerticalRoadMarkings, createPlaza, createUIText } from "../utils";
 import {
   createPlayer,
@@ -297,14 +297,14 @@ export function setupCityScene(k: KAPLAYCtx): void {
       
       for (const door of doors) {
         const dist = player.pos.dist(door.pos);
-        if (dist < 50) {
+        if (dist < INTERACTION.PROXIMITY_DISTANCE) {
           nearDoor = true;
           break;
         }
       }
 
       // Check for nearby wandering creatures
-      const nearestCreature = findNearestWanderingCreature(k, player.pos, 50);
+      const nearestCreature = findNearestWanderingCreature(k, player.pos, INTERACTION.PROXIMITY_DISTANCE);
       const nearCreature = nearestCreature !== null;
 
       // Determine which hint to show (creature takes priority)
@@ -328,7 +328,7 @@ export function setupCityScene(k: KAPLAYCtx): void {
     const handleTalk = () => {
       if (!canTalk) return;
 
-      const nearestCreature = findNearestWanderingCreature(k, player.pos, 50);
+      const nearestCreature = findNearestWanderingCreature(k, player.pos, INTERACTION.PROXIMITY_DISTANCE);
       if (!nearestCreature) return;
 
       canTalk = false;

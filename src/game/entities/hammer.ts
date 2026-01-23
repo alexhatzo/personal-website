@@ -1,4 +1,6 @@
 import type { KAPLAYCtx, GameObj } from "../types";
+import { PROJECTILE } from "../constants";
+import { createCleanup } from "./projectileBase";
 
 const HAMMER_HEAD_W = 16;
 const HAMMER_HEAD_H = 10;
@@ -88,6 +90,9 @@ export function swingHammer(
   // Track which creatures we've already hit
   const hitCreatures = new Set<GameObj>();
 
+  // Create cleanup function using shared utility
+  const cleanup = createCleanup(handle, head, hitArea);
+
   // Animate the swing
   let swingTime = 0;
   const swingUpdate = k.onUpdate(() => {
@@ -119,7 +124,7 @@ export function swingHammer(
         Math.pow(creature.pos.y - head.pos.y, 2)
       );
       
-      if (dist < SWING_RANGE * 0.6) {
+      if (dist < SWING_RANGE * PROJECTILE.HAMMER_HIT_RANGE) {
         hitCreatures.add(creature);
         onHit(creature);
         createHammerHitEffect(k, creature.pos);
@@ -132,12 +137,6 @@ export function swingHammer(
       cleanup();
     }
   });
-
-  function cleanup() {
-    if (handle.exists()) handle.destroy();
-    if (head.exists()) head.destroy();
-    if (hitArea.exists()) hitArea.destroy();
-  }
 }
 
 /**

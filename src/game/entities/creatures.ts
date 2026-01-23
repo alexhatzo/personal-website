@@ -1,5 +1,6 @@
 import type { KAPLAYCtx, GameObj } from "../types";
 import { getSpriteTypeForSprite } from "../sprites";
+import { ANIMATION } from "../constants";
 
 // ============================================================================
 // Types
@@ -89,7 +90,7 @@ export function createCreature(
   ]);
 
   // Timer to switch animations randomly
-  let animTimer = 2 + Math.random() * 3;
+  let animTimer = ANIMATION.CREATURE_IDLE_MIN + Math.random() * (ANIMATION.CREATURE_IDLE_MAX - ANIMATION.CREATURE_IDLE_MIN);
   
   // Simple bobbing animation
   let bobTime = Math.random() * Math.PI * 2;
@@ -97,8 +98,8 @@ export function createCreature(
     if (creature.isDying) return;
     
     // Bob up and down
-    bobTime += k.dt() * 3;
-    creature.pos.y = y + Math.sin(bobTime) * 2;
+    bobTime += k.dt() * ANIMATION.BOB_SPEED;
+    creature.pos.y = y + Math.sin(bobTime) * ANIMATION.BOB_AMPLITUDE;
     labelObj.pos.y = creature.pos.y - 40;
     labelObj.pos.x = creature.pos.x;
     
@@ -107,7 +108,7 @@ export function createCreature(
     if (animTimer <= 0) {
       const newAnim = getRandomStandingAnim(sprite);
       creature.play(newAnim);
-      animTimer = 2 + Math.random() * 3;
+      animTimer = ANIMATION.CREATURE_IDLE_MIN + Math.random() * (ANIMATION.CREATURE_IDLE_MAX - ANIMATION.CREATURE_IDLE_MIN);
     }
   });
 

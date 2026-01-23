@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { mobileInput, mobileAction } from "../game/GameCanvas";
+import { mobileInput, mobileAction, ACTION_LABEL_CHANGE_EVENT } from "../game/GameCanvas";
 
 // Detect if device has touch capability (true mobile device)
 function isTouchDevice(): boolean {
@@ -57,7 +57,11 @@ const KNOB_SIZE = 44; // Inner knob diameter
 const MAX_DISTANCE = (JOYSTICK_SIZE - KNOB_SIZE) / 2; // Max distance knob can move from center
 const DEAD_ZONE = 0.15; // Dead zone as percentage of max distance
 
-export default function MobileControls() {
+interface MobileControlsProps {
+  onSkip?: () => void;
+}
+
+export default function MobileControls({ onSkip }: MobileControlsProps) {
   const [actionLabel, setActionLabel] = useState("Chat");
   const [showControls, setShowControls] = useState(false);
   const [knobPosition, setKnobPosition] = useState({ x: 0, y: 0 });
@@ -82,15 +86,28 @@ export default function MobileControls() {
     };
   }, []);
 
-  // Update label periodically to reflect current context
+  // Listen for action label changes via custom event (event-driven, not polling)
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (mobileAction.label !== actionLabel) {
-        setActionLabel(mobileAction.label);
-      }
-    }, 100);
-    return () => clearInterval(interval);
-  }, [actionLabel]);
+    const handleLabelChange = (e: CustomEvent<string>) => {
+      setActionLabel(e.detail);
+    };
+
+    // Set initial value from current state
+    setActionLabel(mobileAction.label);
+
+    // Listen for changes
+    window.addEventListener(
+      ACTION_LABEL_CHANGE_EVENT,
+      handleLabelChange as EventListener
+    );
+
+    return () => {
+      window.removeEventListener(
+        ACTION_LABEL_CHANGE_EVENT,
+        handleLabelChange as EventListener
+      );
+    };
+  }, []);
 
   // Calculate joystick input from knob position
   const updateInput = useCallback((x: number, y: number) => {
@@ -208,6 +225,18 @@ export default function MobileControls() {
 
   return (
     <>
+      {/* Portfolio/Skip button - mobile accessible alternative */}
+      {onSkip && (
+        <button
+          onClick={onSkip}
+          className="fixed top-4 right-4 z-40 flex items-center gap-1.5 px-3 py-2 bg-slate-800/80 active:bg-slate-700 text-slate-300 text-sm rounded-lg border border-slate-600 shadow-lg select-none touch-none"
+          aria-label="View as traditional portfolio"
+        >
+          <span className="text-base">📋</span>
+          <span className="font-medium">Portfolio</span>
+        </button>
+      )}
+
       {/* Virtual Joystick on the left */}
       <div
         ref={joystickRef}

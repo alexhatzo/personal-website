@@ -1,4 +1,5 @@
 import type { KAPLAYCtx, GameObj } from "../types";
+import { calculateDirection, createLifetimeTracker, createCleanup } from "./projectileBase";
 
 const ARROW_SPEED = 250;
 const ARROW_LENGTH = 12;
@@ -13,22 +14,15 @@ export function shootArrow(
   target: GameObj,
   onHit: (creature: GameObj) => void
 ): GameObj {
-  // Calculate direction to target
-  const dx = target.pos.x - from.x;
-  const dy = target.pos.y - from.y;
-  const dist = Math.sqrt(dx * dx + dy * dy);
-  const dirX = dx / dist;
-  const dirY = dy / dist;
-
-  // Calculate rotation angle for arrow
-  const angle = Math.atan2(dy, dx);
+  // Calculate direction to target using shared utility
+  const dir = calculateDirection(from, target.pos);
 
   // Create arrow shaft (rectangle)
   const shaft = k.add([
     k.rect(ARROW_LENGTH, ARROW_WIDTH),
     k.pos(from.x, from.y),
     k.anchor("center"),
-    k.rotate(k.rad2deg(angle)),
+    k.rotate(k.rad2deg(dir.angle)),
     k.color(139, 90, 43), // Brown wooden color
     k.outline(1, k.Color.fromArray([80, 50, 20])),
     k.z(200),
@@ -43,9 +37,9 @@ export function shootArrow(
       k.vec2(headSize, 0),
       k.vec2(0, headSize / 2),
     ]),
-    k.pos(from.x + dirX * (ARROW_LENGTH / 2 + headSize / 2), from.y + dirY * (ARROW_LENGTH / 2 + headSize / 2)),
+    k.pos(from.x + dir.x * (ARROW_LENGTH / 2 + headSize / 2), from.y + dir.y * (ARROW_LENGTH / 2 + headSize / 2)),
     k.anchor("center"),
-    k.rotate(k.rad2deg(angle)),
+    k.rotate(k.rad2deg(dir.angle)),
     k.color(120, 120, 130), // Metal gray
     k.outline(1, k.Color.fromArray([60, 60, 70])),
     k.z(201),
@@ -59,9 +53,9 @@ export function shootArrow(
       k.vec2(-6, 0),
       k.vec2(0, 4),
     ]),
-    k.pos(from.x - dirX * (ARROW_LENGTH / 2), from.y - dirY * (ARROW_LENGTH / 2)),
+    k.pos(from.x - dir.x * (ARROW_LENGTH / 2), from.y - dir.y * (ARROW_LENGTH / 2)),
     k.anchor("center"),
-    k.rotate(k.rad2deg(angle)),
+    k.rotate(k.rad2deg(dir.angle)),
     k.color(180, 50, 50), // Red feathers
     k.z(199),
     "arrow-fletching",
@@ -72,20 +66,26 @@ export function shootArrow(
     k.rect(ARROW_LENGTH + headSize, ARROW_WIDTH * 2),
     k.pos(from.x, from.y),
     k.anchor("center"),
-    k.rotate(k.rad2deg(angle)),
+    k.rotate(k.rad2deg(dir.angle)),
     k.area(),
     k.opacity(0),
     k.z(200),
     "arrow",
-    { velocity: { x: dirX * ARROW_SPEED, y: dirY * ARROW_SPEED } },
+    { velocity: { x: dir.x * ARROW_SPEED, y: dir.y * ARROW_SPEED } },
   ]);
 
-  // Movement and collision detection
-  let lifetime = 0;
-  const maxLifetime = 2; // seconds
+  // Create cleanup function using shared utility
+  const cleanup = createCleanup(arrow, shaft, arrowHead, fletching);
+
+  // Movement and collision detection using shared lifetime tracker
+  const lifetimeTracker = createLifetimeTracker();
 
   arrow.onUpdate(() => {
-    lifetime += k.dt();
+    // Check lifetime expiration
+    if (lifetimeTracker.update(k.dt())) {
+      cleanup();
+      return;
+    }
 
     // Move arrow
     arrow.pos.x += arrow.velocity.x * k.dt();
@@ -94,15 +94,10 @@ export function shootArrow(
     // Update visual parts
     shaft.pos.x = arrow.pos.x;
     shaft.pos.y = arrow.pos.y;
-    arrowHead.pos.x = arrow.pos.x + dirX * (ARROW_LENGTH / 2 + headSize / 2);
-    arrowHead.pos.y = arrow.pos.y + dirY * (ARROW_LENGTH / 2 + headSize / 2);
-    fletching.pos.x = arrow.pos.x - dirX * (ARROW_LENGTH / 2);
-    fletching.pos.y = arrow.pos.y - dirY * (ARROW_LENGTH / 2);
-
-    // Timeout - destroy if no hit
-    if (lifetime > maxLifetime) {
-      cleanup();
-    }
+    arrowHead.pos.x = arrow.pos.x + dir.x * (ARROW_LENGTH / 2 + headSize / 2);
+    arrowHead.pos.y = arrow.pos.y + dir.y * (ARROW_LENGTH / 2 + headSize / 2);
+    fletching.pos.x = arrow.pos.x - dir.x * (ARROW_LENGTH / 2);
+    fletching.pos.y = arrow.pos.y - dir.y * (ARROW_LENGTH / 2);
   });
 
   // Collision with creatures
@@ -110,13 +105,6 @@ export function shootArrow(
     onHit(creature);
     cleanup();
   });
-
-  function cleanup() {
-    if (arrow.exists()) arrow.destroy();
-    if (shaft.exists()) shaft.destroy();
-    if (arrowHead.exists()) arrowHead.destroy();
-    if (fletching.exists()) fletching.destroy();
-  }
 
   return arrow;
 }

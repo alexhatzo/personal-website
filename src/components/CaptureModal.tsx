@@ -61,8 +61,8 @@ function ExperienceContent({ job }: { job: Experience }) {
         </div>
 
         <ul className="space-y-3 text-slate-300 mb-6">
-          {job.description.map((item, index) => (
-            <li key={index} className="flex gap-3 leading-relaxed">
+          {job.description.map((item) => (
+            <li key={item} className="flex gap-3 leading-relaxed">
               <span className="text-yellow-500 mt-1">★</span>
               <span>{item}</span>
             </li>
@@ -73,9 +73,9 @@ function ExperienceContent({ job }: { job: Experience }) {
           <div className="pt-5 border-t border-slate-700/50">
             <p className="text-sm text-slate-400 mb-3 font-medium">Technologies:</p>
             <div className="flex flex-wrap gap-2">
-              {job.tech.map((tech, index) => (
+              {job.tech.map((tech) => (
                 <span
-                  key={index}
+                  key={tech}
                   className="px-3 py-1.5 bg-slate-700/80 text-slate-300 text-sm rounded-lg hover:bg-slate-600 transition-colors"
                 >
                   {tech}
@@ -108,8 +108,8 @@ function ProjectContent({ category }: { category: ProjectCategory }) {
 
         {/* Projects in this category */}
         <div className="space-y-5">
-          {category.projects.map((project, index) => (
-            <div key={index} className="bg-slate-700/50 rounded-lg p-4 border border-slate-600/50">
+          {category.projects.map((project) => (
+            <div key={project.title} className="bg-slate-700/50 rounded-lg p-4 border border-slate-600/50">
               <div className="flex justify-between items-start gap-3 mb-2">
                 <h4 className="text-lg font-semibold text-white">{project.title}</h4>
                 <div className="flex gap-2 flex-shrink-0">
@@ -119,6 +119,7 @@ function ProjectContent({ category }: { category: ProjectCategory }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-400 hover:text-blue-300 text-sm transition-colors"
+                      aria-label={`View source code on GitHub: ${project.title}`}
                     >
                       📂
                     </a>
@@ -129,6 +130,7 @@ function ProjectContent({ category }: { category: ProjectCategory }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-green-400 hover:text-green-300 text-sm transition-colors"
+                      aria-label={`View live project: ${project.title}`}
                     >
                       🔗
                     </a>
@@ -137,9 +139,9 @@ function ProjectContent({ category }: { category: ProjectCategory }) {
               </div>
               <p className="text-slate-300 text-sm leading-relaxed mb-3">{project.description}</p>
               <div className="flex flex-wrap gap-1.5">
-                {project.tech.map((tech, techIndex) => (
+                {project.tech.map((tech) => (
                   <span
-                    key={techIndex}
+                    key={tech}
                     className="px-2 py-1 bg-slate-600/80 text-slate-300 text-xs rounded"
                   >
                     {tech}
@@ -171,9 +173,9 @@ function SkillsContent({ category }: { category: SkillCategory }) {
         </div>
 
         <div className="flex flex-wrap gap-3">
-          {category.skills.map((skill, index) => (
+          {category.skills.map((skill) => (
             <span
-              key={index}
+              key={skill}
               className="px-4 py-2.5 bg-blue-600/20 text-blue-200 text-sm rounded-xl border border-blue-500/20 hover:bg-blue-600/40 hover:border-blue-500/40 transition-all"
             >
               {skill}

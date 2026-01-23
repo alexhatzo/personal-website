@@ -1,16 +1,9 @@
+import { memo } from "react";
 import Modal from "./Modal";
 import { usePortfolioData } from "../context/PortfolioContext";
+import type { ModalContentProps } from "../types/modal";
 
-type Section = "about" | "projects" | "skills" | "experience" | "contact";
-
-interface ProjectsModalProps {
-  onClose: () => void;
-  showNav?: boolean;
-  currentSection?: Section;
-  onNavigate?: (section: Section) => void;
-}
-
-export default function ProjectsModal({ onClose, showNav, currentSection, onNavigate }: ProjectsModalProps) {
+function ProjectsModal({ onClose, showNav, currentSection, onNavigate }: ModalContentProps) {
   const { projects } = usePortfolioData();
 
   return (
@@ -22,8 +15,8 @@ export default function ProjectsModal({ onClose, showNav, currentSection, onNavi
       onNavigate={onNavigate}
     >
       <div className="space-y-10">
-        {projects.categories.map((category, catIndex) => (
-          <div key={catIndex}>
+        {projects.categories.map((category) => (
+          <div key={category.name}>
             {/* Category Header */}
             <div className="flex items-center gap-3 mb-6">
               <span className="text-3xl">{category.icon}</span>
@@ -33,18 +26,18 @@ export default function ProjectsModal({ onClose, showNav, currentSection, onNavi
 
             {/* Projects in this category */}
             <div className="space-y-6">
-              {category.projects.map((project, projIndex) => (
+              {category.projects.map((project) => (
                 <div
-                  key={projIndex}
+                  key={project.title}
                   className="bg-slate-800/80 rounded-xl p-6 sm:p-8 border border-slate-700 hover:border-slate-500 transition-colors"
                 >
                   <h3 className="text-xl font-bold text-white mb-3">{project.title}</h3>
                   <p className="text-slate-300 mb-5 leading-relaxed">{project.description}</p>
 
                   <div className="flex flex-wrap gap-2 sm:gap-3 mb-5">
-                    {project.tech.map((tech, techIndex) => (
+                    {project.tech.map((tech) => (
                       <span
-                        key={techIndex}
+                        key={tech}
                         className="px-3 py-1.5 bg-slate-700/80 text-slate-300 text-sm rounded-lg"
                       >
                         {tech}
@@ -59,6 +52,7 @@ export default function ProjectsModal({ onClose, showNav, currentSection, onNavi
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                        aria-label={`View live project: ${project.title}`}
                       >
                         🔗 Link
                       </a>
@@ -69,6 +63,7 @@ export default function ProjectsModal({ onClose, showNav, currentSection, onNavi
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                        aria-label={`View source code on GitHub: ${project.title}`}
                       >
                         📂 GitHub
                       </a>
@@ -83,3 +78,5 @@ export default function ProjectsModal({ onClose, showNav, currentSection, onNavi
     </Modal>
   );
 }
+
+export default memo(ProjectsModal);

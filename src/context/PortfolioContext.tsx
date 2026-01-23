@@ -29,7 +29,9 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
         setData(portfolioData);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error occurred");
-        console.error("Error loading portfolio data:", err);
+        if (import.meta.env.DEV) {
+          console.error("Error loading portfolio data:", err);
+        }
       } finally {
         setIsLoading(false);
       }

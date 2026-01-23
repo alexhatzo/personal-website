@@ -1,16 +1,9 @@
+import { memo } from "react";
 import Modal from "./Modal";
 import { usePortfolioData } from "../context/PortfolioContext";
+import type { ModalContentProps } from "../types/modal";
 
-type Section = "about" | "projects" | "skills" | "experience" | "contact";
-
-interface AboutModalProps {
-  onClose: () => void;
-  showNav?: boolean;
-  currentSection?: Section;
-  onNavigate?: (section: Section) => void;
-}
-
-export default function AboutModal({ onClose, showNav, currentSection, onNavigate }: AboutModalProps) {
+function AboutModal({ onClose, showNav, currentSection, onNavigate }: ModalContentProps) {
   const { about } = usePortfolioData();
 
   return (
@@ -65,3 +58,5 @@ export default function AboutModal({ onClose, showNav, currentSection, onNavigat
     </Modal>
   );
 }
+
+export default memo(AboutModal);
