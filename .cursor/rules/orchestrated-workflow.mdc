@@ -30,13 +30,27 @@ find_symbol("MyClass")  # Search code
 
 # 4. Complete work
 
-# 5. Close issue & report
+# 5. Git commit (REQUIRED - work is not done until committed!)
+git add <changed-files>
+git commit -m "[bd-{id}] Brief description of changes"
+
+# 6. Close issue & report
 bd close bd-{id}
 send_message(..., subject="[bd-{id}] Complete", thread_id="bd-{id}")
 
-# 6. Release
+# 7. Release
 release_file_reservations(project_key, agent_name)
 ```
+
+## Orchestrator Git Responsibilities
+
+After each batch of subagents completes:
+1. Verify all changes are committed: `git status`
+2. If uncommitted changes exist, commit them
+3. Push to remote: `git push`
+4. Sync beads: `bd sync`
+
+**Work is NOT complete until `git push` succeeds.**
 
 ## Tool Access
 
@@ -52,6 +66,8 @@ Subagents have access to:
 - Reserve files BEFORE editing
 - Use Serena for search (not grep)
 - One issue = one subagent
+- **Git commit per issue** - Each subagent commits before closing
+- **Orchestrator pushes** - After each batch, verify and push
 
 ## Example
 
