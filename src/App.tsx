@@ -120,8 +120,11 @@ function AppContent() {
   }, []);
 
   const handleSkipToStatic = useCallback(() => {
+    if (!isMuted) {
+      toggleMute();
+    }
     setStaticView(true);
-  }, []);
+  }, [isMuted, toggleMute]);
 
   const handleBackToGame = useCallback(() => {
     setStaticView(false);
