@@ -28,6 +28,7 @@ function Job({ job, i, still }: { job: Experience; i: number; still: boolean }) 
           job.company
         )}
       </h3>
+      {job.summary && <p className="cx-para">{job.summary}</p>}
       <ul className="cx-bullets">
         {job.description.map((d) => (
           <li key={d}>{d}</li>

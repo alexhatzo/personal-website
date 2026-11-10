@@ -121,7 +121,8 @@ html[data-xp="plain"] :is(body, #root) { background-color: #f3eee3; }
 .plain-job h3 { font: 400 clamp(26px, 3vw, 38px) / 1.1 var(--serif); }
 .plain-when { font: var(--mono); color: var(--dim); text-align: right; white-space: nowrap; }
 .plain-when span { display: block; }
-.plain-job ul { grid-column: 1 / -1; max-width: 76ch; margin-top: 14px; }
+.plain-job ul,
+.plain-job .plain-sum { grid-column: 1 / -1; max-width: 76ch; margin-top: 14px; }
 .plain-job li { position: relative; padding-left: 1.5em; margin-top: 6px; }
 .plain-job li::before { content: "–"; position: absolute; left: 0; color: var(--dim); }
 .plain-job .plain-tech { grid-column: 1 / -1; margin-top: 14px; }
@@ -190,7 +191,8 @@ html[data-xp="plain"] :is(body, #root) { background-color: #f3eee3; }
   .plain-intro { margin-top: 12pt; }
   .plain-lede { font-size: 15pt; }
   .plain-sec { grid-template-columns: 88pt 1fr; gap: 12pt; padding-block: 14pt; }
-  .plain-dl > div { grid-template-columns: 96pt 1fr; padding-block: 5pt; }
+  .plain-dl > div { grid-template-columns: 96pt 1fr; padding-block: 4pt; }
+  .plain-job :is(.plain-sum, .plain-sum + ul) { margin-top: 6pt; }
   .plain-sec:first-of-type { margin-top: 16pt; }
   .plain-sec > h2 { position: static; }
   .plain-job { padding-block: 10pt; }

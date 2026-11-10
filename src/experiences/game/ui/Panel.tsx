@@ -32,6 +32,7 @@ function Job({ job }: { job: Experience }) {
           {job.location ? ` · ${job.location}` : ""}
         </p>
       </header>
+      {job.summary && <p>{job.summary}</p>}
       <ul className="hz-bullets">
         {job.description.map((d) => (
           <li key={d}>{d}</li>

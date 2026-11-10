@@ -4,7 +4,7 @@ import { hostOf, job, pad, projectsIn } from "../state";
 export default function OneOff({ data }: { data: PortfolioData }) {
   const oo = job(data, "job-oneoff");
   if (!oo) return null;
-  const project = projectsIn(data, "Work").find((p) => p.title === oo.company);
+  const lede = oo.summary ?? projectsIn(data, "Work").find((p) => p.title === oo.company)?.description;
   const city = (oo.location ?? data.about.quickFacts.location).split(",")[0];
   const [since] = oo.period.split(" - ");
 
@@ -36,7 +36,7 @@ export default function OneOff({ data }: { data: PortfolioData }) {
               <p className="oo-role">
                 {oo.role} <span>{oo.period}</span>
               </p>
-              {project && <p className="oo-lede">{project.description}</p>}
+              {lede && <p className="oo-lede">{lede}</p>}
               {oo.url && (
                 <a className="oo-link" href={oo.url} target="_blank" rel="noreferrer">
                   {hostOf(oo.url)} <span aria-hidden="true">↗</span>

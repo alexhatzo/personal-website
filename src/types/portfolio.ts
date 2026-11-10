@@ -23,6 +23,7 @@ export interface Experience {
   period: string;
   location?: string;
   url?: string;
+  summary?: string;
   description: string[];
   tech: string[];
 }

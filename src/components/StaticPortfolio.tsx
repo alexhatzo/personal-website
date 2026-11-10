@@ -82,6 +82,7 @@ export default function StaticPortfolio() {
               {job.period.replace(" - ", " – ")}
               {job.location && <span>{job.location}</span>}
             </p>
+            {job.summary && <p className="plain-sum">{job.summary}</p>}
             <ul>
               {job.description.map((d) => (
                 <li key={d}>{d}</li>
