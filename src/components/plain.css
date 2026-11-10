@@ -200,9 +200,11 @@ html[data-xp="plain"] :is(body, #root) { background-color: #f3eee3; }
   .plain-cat h4 { font-size: 14pt; }
   .plain-cat li > p:not(.plain-tech) { font-size: 9.5pt; }
   .plain-tech { font-size: 8pt; }
-  .plain-job,
+  .plain-job li,
   .plain-cat li,
   .plain-dl > div { break-inside: avoid; }
   .plain-sec > h2,
+  .plain-job h3,
+  .plain-when,
   .plain-cat h3 { break-after: avoid; }
 }

@@ -486,7 +486,7 @@ export function buildAtelier(ctx: WorldCtx) {
   });
   ctx.scene.add(rack);
   ctx.box(bx + 8.4, bz + 5.5, 1.6, 0.4, -0.9);
-  // try-on mirror (the AI bit)
+  // mirror
   const mirrorTex = textTexture(128, 256, (c) => {
     const g = c.createLinearGradient(0, 0, 0, 256);
     g.addColorStop(0, "#ff8ab0");

@@ -3,7 +3,7 @@ import type { PortfolioData } from "../../types/portfolio";
 // ?section=<id> accepts these ids.
 export const SECTIONS = [
   { id: "about", label: "About", accent: "#6f97ff", kicker: "Athens → Los Angeles", pos: [0.08, 0.13] },
-  { id: "now", label: "Now", accent: "#ff5c9a", kicker: "Founding engineer, fashion × AI", pos: [0.31, 0.16] },
+  { id: "now", label: "Now", accent: "#ff5c9a", kicker: "Founding engineer, creator commerce × AI", pos: [0.31, 0.16] },
   { id: "before", label: "Before", accent: "#ffb23e", kicker: "Clusters, clouds, campaigns", pos: [0.54, 0.12] },
   { id: "projects", label: "Projects", accent: "#c6ff4a", kicker: "Things shipped and tinkered", pos: [0.76, 0.15] },
   { id: "skills", label: "Skills", accent: "#43dcff", kicker: "What orbits the work", pos: [0.2, 0.87] },

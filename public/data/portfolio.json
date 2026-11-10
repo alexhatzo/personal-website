@@ -4,7 +4,7 @@
     "title": "Founding Engineer @ OneOff",
     "avatar": "🛠️",
     "bio": [
-      "Founding engineer at OneOff, building AI into a social fashion discovery and shopping app.",
+      "Founding engineer at OneOff, building an AI-powered affiliate marketing platform for creators and the agent that runs their storefront for them.",
       "Before that, four years of DevOps at P1 Technologies: Kubernetes platforms, Terraform and cloud migrations for animation studios.",
       "I like turning messy systems into repeatable ones and shipping tools that make teams (and now their agents) faster."
     ],
@@ -25,12 +25,12 @@
       "location": "Los Angeles, CA",
       "url": "https://www.oneoff.world",
       "description": [
-        "Founding engineer at OneOff, a social fashion discovery and shopping app where people curate shoppable edits, get AI-personalized recommendations and try pieces on virtually",
-        "Focus on AI integrations across the product: LLM and vision pipelines behind recommendations, product understanding and try-on",
-        "Work across the whole stack (API, web, iOS, admin tools, product ingestion) and the infrastructure, CI/CD and observability under it",
-        "Build the agent tooling the team ships with: multi-agent workflows, MCP servers and review automation"
+        "Building the agent that runs a creator's storefront: text it a photo, a link or a screenshot and it finds the products, creates the affiliate links and drafts the post for approval. Claude with per-creator memory, MCP tools and evals gating every release",
+        "Own the API behind every client: one OpenAPI contract (~150 operations), typed end to end for iOS, creator, shopper and admin, plus ~90 background jobs for product ingestion, affiliate attribution and payouts",
+        "Led the redesign of the shopper web app (new home, profiles, a full-screen feed, in-feed product view) and built the creator dashboard, with the accessibility, SEO and performance work under both",
+        "Automated the admin side: bulk ingest, AI-judged dedupe, sold-out replacement, image review and payout reconciliation, with human approval where money is at stake. Same for the team: MCP servers and an ops agent watching production"
       ],
-      "tech": ["TypeScript", "Node.js", "Next.js", "React", "Swift", "Postgres", "Supabase", "Redis", "Trigger.dev", "OpenAI", "Gemini", "Vercel", "Heroku"]
+      "tech": ["TypeScript", "Node.js", "Next.js", "React", "Postgres", "pgvector", "Supabase", "Redis", "Trigger.dev", "Claude", "Gemini", "MCP", "OpenAPI", "Vercel", "Heroku"]
     },
     {
       "id": "job-p1",
@@ -80,8 +80,8 @@
         "projects": [
           {
             "title": "OneOff",
-            "description": "Social fashion discovery and shopping app (iOS + web): curated shoppable edits, AI-personalized recommendations and virtual try-on.",
-            "tech": ["TypeScript", "Next.js", "Swift", "Supabase", "LLMs"],
+            "description": "AI-powered affiliate marketing platform for creators: a better-designed shopping experience and an agent that manages your storefront with very little input. It starts over text; the goal is a storefront that runs itself.",
+            "tech": ["TypeScript", "Next.js", "Postgres", "Claude", "MCP"],
             "link": "https://www.oneoff.world"
           },
           {
@@ -194,7 +194,7 @@
       {
         "name": "AI & Agents",
         "icon": "🤖",
-        "skills": ["LLM integrations", "Agent orchestration", "MCP servers", "RAG / vector search", "Prompt engineering", "Claude Code", "Cursor"]
+        "skills": ["LLM integrations", "Agent orchestration", "Agent evals", "MCP servers", "RAG / vector search", "Prompt engineering", "Claude Code", "Cursor"]
       },
       {
         "name": "Fullstack",

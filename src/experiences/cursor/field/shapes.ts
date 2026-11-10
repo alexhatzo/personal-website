@@ -169,7 +169,7 @@ function wreath(seeds: Float32Array) {
   return sample(ctx, seeds);
 }
 
-// Now: a clothes hanger (OneOff, fashion) with the company name from data.
+// Now: a clothes hanger (OneOff, creator storefronts) with the company name from data.
 function hanger(seeds: Float32Array, company: string) {
   const ctx = canvas(1024, 1024);
   ctx.strokeStyle = ink(0.4, 0.55);
