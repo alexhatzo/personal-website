@@ -1,0 +1,212 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap");
+
+/* the page is paper all the way to the edges, overscroll included */
+html[data-xp="plain"],
+html[data-xp="plain"] :is(body, #root) { background-color: #f3eee3; }
+@media (prefers-reduced-motion: no-preference) {
+  html[data-xp="plain"] { scroll-behavior: smooth; }
+}
+
+.plain {
+  --ink: #17130e;
+  --dim: #6d665a;
+  --line: rgb(23 19 14 / 0.16);
+  --accent: #2456c4;
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --mono: 400 12px/1.6 "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  box-sizing: border-box;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(16px, 2.6vw, 36px);
+  color: var(--ink);
+  font: 400 16px/1.6 "Instrument Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.plain a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+.plain a:hover { color: var(--accent); text-decoration-color: currentColor; }
+.plain :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* small uppercase mono: every label on the page */
+.plain-top,
+.plain-links,
+.plain-nav,
+.plain-sec > h2,
+.plain-cat h3,
+.plain-dl dt,
+.plain-foot {
+  font: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.plain-top { margin: 0; color: var(--dim); padding-right: 150px; /* version switcher sits top right */ }
+.plain-top span { margin-inline: 0.6em; }
+
+.plain-head h1 {
+  margin: clamp(28px, 7vh, 84px) 0 0;
+  font: 400 clamp(54px, 11.5vw, 156px) / 0.88 var(--serif);
+  letter-spacing: -0.02em;
+}
+.plain-head h1 em { display: block; }
+.plain-intro {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 20px clamp(24px, 5vw, 72px);
+  margin-top: clamp(24px, 4vw, 48px);
+}
+.plain-intro p { margin: 0 0 0.8em; }
+.plain-lede {
+  margin: 0;
+  font: 400 clamp(24px, 2.7vw, 36px) / 1.18 var(--serif);
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.plain-links { display: flex; flex-wrap: wrap; gap: 6px 20px; padding-top: 10px; }
+.plain-links button {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: 0 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.plain-links button:hover { background: var(--ink); color: #f3eee3; }
+
+.plain-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 28px;
+  margin-top: clamp(32px, 6vw, 72px);
+  padding-block: 12px;
+  border-top: 1px solid var(--ink);
+}
+.plain .plain-nav a { text-decoration: none; padding-block: 4px; }
+.plain-nav span,
+.plain-sec > h2 span,
+.plain-cat h3 span { color: var(--dim); margin-right: 0.5em; }
+
+.plain-sec {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 5fr;
+  gap: 20px 32px;
+  padding-block: clamp(28px, 4vw, 48px);
+  border-top: 1px solid var(--ink);
+  scroll-margin-top: 8px;
+}
+.plain-sec > h2 { margin: 0; position: sticky; top: 20px; align-self: start; font-weight: 500; }
+.plain-sec :is(h3, h4, p, ul, dl, dd) { margin: 0; padding: 0; }
+.plain-sec ul { list-style: none; }
+.plain-tech { margin-top: 10px; font: var(--mono); color: var(--dim); }
+
+.plain-job {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0 24px;
+  align-items: baseline;
+  padding-block: 28px;
+  border-top: 1px solid var(--line);
+}
+.plain-job:first-child { padding-top: 0; border-top: 0; }
+.plain-job:last-child { padding-bottom: 0; }
+.plain-job h3 { font: 400 clamp(26px, 3vw, 38px) / 1.1 var(--serif); }
+.plain-when { font: var(--mono); color: var(--dim); text-align: right; white-space: nowrap; }
+.plain-when span { display: block; }
+.plain-job ul,
+.plain-job .plain-sum { grid-column: 1 / -1; max-width: 76ch; margin-top: 14px; }
+.plain-job li { position: relative; padding-left: 1.5em; margin-top: 6px; }
+.plain-job li::before { content: "–"; position: absolute; left: 0; color: var(--dim); }
+.plain-job .plain-tech { grid-column: 1 / -1; margin-top: 14px; }
+
+.plain-cat + .plain-cat { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line); }
+.plain-cat h3 { font-weight: 500; }
+.plain-cat h3 span { margin: 0 0 0 0.5em; }
+.plain-cat ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 28px clamp(24px, 4vw, 48px);
+  margin-top: 16px;
+}
+.plain-cat h4 { font: 400 25px/1.15 var(--serif); margin-bottom: 6px; }
+.plain .plain-cat h4 a { text-decoration: none; }
+.plain-cat h4 span { font-size: 0.7em; color: var(--dim); transition: color 0.2s; }
+.plain-cat h4 a:hover span { color: inherit; }
+.plain-cat li > p:not(.plain-tech) { font-size: 15px; line-height: 1.5; }
+
+.plain-dl > div {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) 4fr;
+  gap: 2px 24px;
+  align-items: baseline;
+  padding-block: 12px;
+  border-top: 1px solid var(--line);
+}
+.plain-dl > div:first-child { padding-top: 0; border-top: 0; }
+.plain-dl dt { color: var(--dim); }
+.plain-sec .plain-lede { max-width: 26em; margin-bottom: 28px; }
+
+.plain-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding-block: 16px 40px;
+  border-top: 1px solid var(--ink);
+  color: var(--dim);
+}
+.plain-foot a { margin-left: 1.2em; color: var(--ink); }
+
+@media (max-width: 760px) {
+  .plain-intro,
+  .plain-sec,
+  .plain-job { grid-template-columns: 1fr; }
+  .plain-sec > h2 { position: static; }
+  .plain-when { text-align: left; margin-top: 6px; }
+  .plain-when span { display: inline; }
+  .plain-when span::before { content: " / "; }
+  .plain-dl > div { grid-template-columns: 1fr; }
+}
+
+@media print {
+  @page { margin: 14mm; }
+  html[data-xp="plain"],
+  html[data-xp="plain"] :is(body, #root) { background-color: #fff; }
+  .xp-switcher,
+  .plain-nav,
+  .plain-links button,
+  .plain-foot { display: none; }
+  .plain { max-width: none; padding: 0; font-size: 10pt; line-height: 1.45; }
+  .plain a { text-decoration: none; }
+  .plain-head h1 { margin-top: 10pt; font-size: 46pt; }
+  .plain-head h1 em { display: inline; }
+  .plain-intro { margin-top: 12pt; }
+  .plain-lede { font-size: 15pt; }
+  .plain-sec { grid-template-columns: 88pt 1fr; gap: 12pt; padding-block: 14pt; }
+  .plain-dl > div { grid-template-columns: 96pt 1fr; padding-block: 4pt; }
+  .plain-job :is(.plain-sum, .plain-sum + ul) { margin-top: 6pt; }
+  .plain-sec:first-of-type { margin-top: 16pt; }
+  .plain-sec > h2 { position: static; }
+  .plain-job { padding-block: 10pt; }
+  .plain-job h3 { font-size: 17pt; }
+  .plain-cat + .plain-cat { margin-top: 14pt; padding-top: 12pt; }
+  .plain-cat ul { grid-template-columns: 1fr 1fr; gap: 12pt 20pt; }
+  .plain-cat h4 { font-size: 14pt; }
+  .plain-cat li > p:not(.plain-tech) { font-size: 9.5pt; }
+  .plain-tech { font-size: 8pt; }
+  .plain-job li,
+  .plain-cat li,
+  .plain-dl > div { break-inside: avoid; }
+  .plain-sec > h2,
+  .plain-job h3,
+  .plain-when,
+  .plain-cat h3 { break-after: avoid; }
+}

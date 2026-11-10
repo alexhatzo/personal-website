@@ -1,25 +1,44 @@
 {
   "about": {
     "name": "Alexandros Hatzopoulos",
-    "title": "DevOps/Cloud Engineer",
+    "title": "Founding Engineer @ OneOff",
     "avatar": "🛠️",
     "bio": [
-      "DevOps engineer focused on building reliable cloud infrastructure, Kubernetes platforms, and automation across AWS and OCI.",
-      "I like turning messy deployments into repeatable systems (Terraform, Helm, CI/CD) and shipping tools that make teams faster."
+      "Founding engineer at OneOff, a platform where creators recommend products and earn a commission when their followers buy. I work on the backend, the web apps and an AI agent that runs a creator's storefront for them.",
+      "Before that, four years of DevOps at P1 Technologies: Kubernetes platforms, Terraform and cloud migrations for animation studios.",
+      "I like turning messy systems into repeatable ones and shipping tools that make teams (and now their agents) faster."
     ],
     "quickFacts": {
-      "location": "Venice, CA",
+      "location": "Los Angeles, CA",
+      "hometown": "Athens, Greece",
       "education": "USC (BS CS & Business, 2023)",
-      "status": "P1 Technologies",
+      "status": "Founding Engineer @ OneOff",
       "funFact": "Bilingual (Greek/English) and into DJing + tennis."
     }
   },
   "experience": [
     {
-      "id": "job-0",
+      "id": "job-oneoff",
+      "role": "Founding Engineer",
+      "company": "OneOff",
+      "period": "Mar 2026 - Present",
+      "location": "Los Angeles, CA",
+      "url": "https://www.oneoff.world",
+      "summary": "OneOff's mission is to let creators earn from the products they recommend without the work of running a shop. Each creator gets a storefront their followers can shop, and an AI agent keeps it up to date with very little input.",
+      "description": [
+        "Building an AI agent that runs a creator's storefront over text message: they send a photo or a link, it finds the products and drafts the post for them to approve. The aim is to replace a manual, multi-step task with a single message",
+        "Owning the backend behind every product: one API serves the iOS app, the creator and shopper websites and the internal tools, so a feature is built once and works everywhere. It also tracks each sale back to the creator who drove it and works out their payout",
+        "Leading the redesign of the shopper web app (home, profiles, feed, product view) and building the creator dashboard, including the accessibility, SEO and performance work",
+        "Automating back-office work that used to be done by hand: adding products to the catalog, merging duplicates, swapping out sold-out items and reconciling payouts, with a person approving anything that involves money"
+      ],
+      "tech": ["TypeScript", "Node.js", "Next.js", "React", "Postgres", "pgvector", "Supabase", "Redis", "Trigger.dev", "Claude", "Gemini", "MCP", "OpenAPI", "Vercel", "Heroku"]
+    },
+    {
+      "id": "job-p1",
       "role": "DevOps Engineer",
       "company": "P1 Technologies",
-      "period": "May 2022 - Present",
+      "period": "May 2022 - Mar 2026",
+      "location": "Manhattan Beach, CA",
       "description": [
         "Led migration of Skydance Animation services to OCI, standing up OKE (Kubernetes) and standardizing infra with Terraform/Ansible/Packer",
         "Cut deployment time 50%+ by replacing many K8s manifests with a single custom Helm chart (EKS) for Warner Brothers animation studio",
@@ -29,10 +48,11 @@
       "tech": ["Kubernetes", "AWS", "OCI", "GCP", "Terraform", "Helm", "Python", "Grafana", "Prometheus", "Ansible", "Packer", "CI/CD", "Slack", "Jira"]
     },
     {
-      "id": "job-1",
+      "id": "job-veto",
       "role": "Web Developer",
       "company": "VETO A.E.",
       "period": "Sep 2020 - Aug 2021",
+      "location": "Athens, Greece",
       "description": [
         "Redesigned e-commerce front ends (CS-Cart) and improved UI/UX across multiple sites",
         "Helped drive 110%+ e-shop sales growth through UX + e-commerce strategy improvements",
@@ -41,10 +61,11 @@
       "tech": ["JavaScript", "HTML", "CSS", "MySQL", "PHP", "CS-Cart"]
     },
     {
-      "id": "job-2",
+      "id": "job-mccann",
       "role": "Front-End Developer",
       "company": "McCann Worldgroup",
       "period": "May 2020 - Aug 2020",
+      "location": "Athens, Greece",
       "description": [
         "Introduced/implemented modern frameworks (Laravel + Vue) into active projects",
         "Built campaign front-end experiences with Vue.js and collaborated with remote stakeholders"
@@ -58,6 +79,12 @@
         "name": "Work",
         "icon": "💼",
         "projects": [
+          {
+            "title": "OneOff",
+            "description": "A platform where creators recommend products and earn a commission on sales. Each creator gets a storefront, shoppers get one place to browse them, and an AI agent keeps the storefront up to date. The agent is still early.",
+            "tech": ["TypeScript", "Next.js", "Postgres", "Claude", "MCP"],
+            "link": "https://www.oneoff.world"
+          },
           {
             "title": "P1 Protect Monitoring Platform",
             "description": "Monitoring + alerting system for edge infrastructure using Kubernetes + Grafana with Slack/Jira integrations to catch outages early.",
@@ -90,10 +117,28 @@
         "icon": "🧪",
         "projects": [
           {
+            "title": "Agent Board",
+            "description": "Async message board for coworkers' AI agents, served as a remote MCP server. Your agent and theirs leave each other messages; nobody copy-pastes through Slack.",
+            "tech": ["TypeScript", "MCP", "Postgres", "Vercel"],
+            "github": "https://github.com/alexhatzo/agent-board"
+          },
+          {
+            "title": "AI Slack God",
+            "description": "Slack bot that answers natural-language questions about your codebase: it clones the repos, searches the code with AI-driven tool calls and replies in-thread with citations.",
+            "tech": ["TypeScript", "Express", "Trigger.dev", "Slack"],
+            "github": "https://github.com/alexhatzo/ai-slack-god"
+          },
+          {
             "title": "Agent²",
             "description": "Multi-agent orchestration MCP for Cursor that chains specialized AI agents together for complex development workflows.",
             "tech": ["Python", "MCP", "AI Agents", "Cursor"],
             "github": "https://github.com/alexhatzo/agent-squared"
+          },
+          {
+            "title": "MoltID",
+            "description": "The trust layer for AI agents.",
+            "tech": ["AI Agents", "Identity"],
+            "github": "https://github.com/alexhatzo/moltid"
           },
           {
             "title": "Mnesia",
@@ -108,9 +153,15 @@
             "github": "https://github.com/alexhatzo/ai-product-descriptions"
           },
           {
+            "title": "Intune macOS Admins",
+            "description": "Script-based admin elevation for macOS fleets managed with Microsoft Intune.",
+            "tech": ["Shell", "macOS", "Intune"],
+            "github": "https://github.com/alexhatzo/Intune-MacOS-Admins"
+          },
+          {
             "title": "Personal Website",
-            "description": "This game-style interactive portfolio built with React, TypeScript, and Kaplay game engine.",
-            "tech": ["React", "TypeScript", "Kaplay", "Tailwind CSS"],
+            "description": "This site: one résumé, three interactive takes. An open-world island, a cursor-driven particle field and a scroll story.",
+            "tech": ["React", "TypeScript", "three.js", "GSAP"],
             "github": "https://github.com/alexhatzo/personal-website"
           }
         ]
@@ -142,9 +193,14 @@
   "skills": {
     "categories": [
       {
+        "name": "AI & Agents",
+        "icon": "🤖",
+        "skills": ["LLM integrations", "Agent orchestration", "Agent evals", "MCP servers", "RAG / vector search", "Prompt engineering", "Claude Code", "Cursor"]
+      },
+      {
         "name": "Fullstack",
         "icon": "💻",
-        "skills": ["React.js", "Vue.js", "JavaScript", "HTML", "CSS", "Python", "Java", "C++", "PHP", "MySQL"]
+        "skills": ["TypeScript", "Node.js", "React", "Next.js", "Python", "Go", "Postgres", "Vue.js", "JavaScript", "HTML", "CSS", "Java", "C++", "PHP", "MySQL"]
       },
       {
         "name": "DevOps & Cloud",
@@ -154,13 +210,13 @@
       {
         "name": "General",
         "icon": "🌟",
-        "skills": ["Greek (Native)", "English (Native)", "French (Basic)", "AI Integrations", "Event Planning", "DJ-ing", "Skiing"]
+        "skills": ["Greek (Native)", "English (Native)", "French (Basic)", "Event Planning", "DJ-ing", "Skiing"]
       }
     ],
-    "currentlyLearning": "Building more interactive web experiences (creative coding / game-style UIs) and sharpening system design for scalable platforms."
+    "currentlyLearning": "Creative coding (WebGL, shaders, game feel; this site is the homework) and multi-agent workflows that hold up in production."
   },
   "contact": {
-    "intro": "If you're building cloud platforms, Kubernetes infrastructure, or automation-heavy systems, I’d love to connect.",
+    "intro": "Building something with AI, agents or infrastructure that has to actually work? I'd love to connect.",
     "email": "alexandros.hatzo@gmail.com",
     "socialLinks": [
       {
@@ -182,27 +238,5 @@
         "handle": "alexandros.hatzo@gmail.com"
       }
     ]
-  },
-  "buildings": {
-    "about": {
-      "label": "ABOUT ME",
-      "interiorTitle": "About Me"
-    },
-    "projects": {
-      "label": "PROJECTS",
-      "interiorTitle": "My Projects"
-    },
-    "skills": {
-      "label": "SKILLS",
-      "interiorTitle": "My Skills"
-    },
-    "experience": {
-      "label": "EXPERIENCE",
-      "interiorTitle": "Work Experience"
-    },
-    "contact": {
-      "label": "CONTACT",
-      "interiorTitle": "Contact Me"
-    }
   }
 }

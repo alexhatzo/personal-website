@@ -47,6 +47,7 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function usePortfolio(): PortfolioContextType {
   const context = useContext(PortfolioContext);
   if (context === undefined) {
@@ -56,6 +57,7 @@ export function usePortfolio(): PortfolioContextType {
 }
 
 // Helper hook that throws if data is not loaded (for components that require data)
+// eslint-disable-next-line react-refresh/only-export-components
 export function usePortfolioData(): PortfolioData {
   const { data, isLoading, error } = usePortfolio();
   

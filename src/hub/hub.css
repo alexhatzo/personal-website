@@ -1,0 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap");
+
+.hub {
+  --ink: #f4f1ea;
+  --dim: #8f8b83;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: clamp(16px, 3vh, 32px);
+  padding: clamp(16px, 2.6vw, 36px);
+  background: #0b0b0c;
+  color: var(--ink);
+  font: 400 13px/1.5 "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  letter-spacing: 0.02em;
+}
+.hub a { color: inherit; text-decoration: none; }
+.hub :focus-visible { outline: 2px solid #f5c34a; outline-offset: 3px; }
+
+.hub-top,
+.hub-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  color: var(--dim);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+.hub-foot a { padding-block: 6px; }
+.hub-foot a:hover { color: var(--ink); }
+.hub-foot span { display: flex; gap: 20px; }
+
+.hub-head h1 {
+  margin: 0;
+  font: 400 clamp(44px, 9.2vw, 148px) / 0.92 "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.hub-head p { margin: 14px 0 0; color: var(--dim); max-width: 46ch; }
+
+.hub-doors { display: flex; gap: 12px; min-height: 300px; }
+.hub-door {
+  /* pointer position in the door (0..1), last horizontal direction, flight progress: set by Hub.tsx */
+  --px: 0.5;
+  --py: 0.3;
+  --dir: 1;
+  --fly: 0.06;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: clamp(16px, 1.8vw, 28px);
+  border-radius: 22px;
+  overflow: hidden;
+  isolation: isolate;
+  transition: flex-grow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hub-door:hover,
+.hub-door:focus-visible { flex-grow: 1.55; }
+
+.hub-art { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+.hub-kicker { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.75; }
+.hub-hint { margin-left: 1.2em; opacity: 0; transition: opacity 0.3s; }
+.hub-door:hover .hub-hint { opacity: 1; }
+.hub-title { font: 400 clamp(40px, 5vw, 76px) / 1 "Instrument Serif", Georgia, serif; }
+.hub-blurb { max-width: 34ch; opacity: 0.85; }
+.hub-cta {
+  margin-top: 10px;
+  align-self: flex-start;
+  padding: 8px 14px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+/* 01 Island: pointer x rides the scooter along the ridge, pointer y is the time of day */
+.hub-door.hub-door-game {
+  --night: clamp(0, (var(--py) - 0.45) * 1.6, 0.82);
+  background: linear-gradient(#2c4a7a 0%, #e98d5b 34%, #f7c98a 52%);
+  color: #fffaf0;
+}
+.hub-door-game:hover .hub-cta { background: #fffaf0; color: #176d86; }
+.hub-sun { transform: translateY(calc(var(--py) * 190px - 50px)); transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.hub-night { opacity: var(--night); transition: opacity 0.4s; }
+.hub-lights { opacity: calc(var(--night) * 1.22); transition: opacity 0.4s; }
+.hub-scooter {
+  offset-path: path("M-20 345 Q90 262 210 316 T420 345");
+  offset-distance: calc(8% + var(--px) * 84%);
+  transition: offset-distance 0.3s ease-out;
+}
+.hub-scooter > g { transform: scale(calc(var(--dir) * 1.4), 1.4); transition: transform 0.2s; }
+.hub-wave { fill: none; stroke: #fff3d6; stroke-opacity: 0.35; stroke-width: 1.5; animation: hub-drift 5s linear infinite; }
+.hub-wave-2 { animation-duration: 7s; animation-direction: reverse; }
+@keyframes hub-drift { to { transform: translateX(-100px); } }
+
+/* 02 Field: a canvas of dots the pointer pushes around (Dots in Hub.tsx) */
+.hub-door.hub-door-cursor { background: #050507; color: #eafcff; border: 1px solid #1c1c22; }
+.hub-door-cursor:hover .hub-cta { background: #7df9ff; color: #050507; border-color: #7df9ff; }
+
+/* 03 Journey: boarding-pass paper; the wheel flies the plane */
+.hub-door.hub-door-scroll { background: #efe7d8; color: #17130e; }
+.hub-door-scroll:hover { --fly: 0.2; }
+.hub-door-scroll:focus-visible { --fly: 1; }
+.hub-door-scroll:hover .hub-cta,
+.hub-door-scroll:focus-visible .hub-cta,
+.hub-door-scroll[data-landed] .hub-cta { background: #17130e; color: #efe7d8; }
+.hub-door-scroll text { font: 500 11px "DM Mono", monospace; letter-spacing: 0.14em; fill: currentColor; }
+.hub-plane {
+  offset-path: path("M40 330 Q200 60 360 250");
+  offset-distance: calc(var(--fly) * 100%);
+  transition: offset-distance 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hub-trail {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--fly));
+  transition: stroke-dashoffset 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hub-dest { transition: fill 0.3s; }
+.hub-door-scroll:focus-visible .hub-dest,
+.hub-door-scroll[data-landed] .hub-dest { fill: currentColor; }
+
+@media (hover: none) {
+  .hub-hint { display: none; }
+}
+
+@media (max-width: 760px) {
+  .hub-doors { flex-direction: column; }
+  .hub-door { flex: none; }
+  /* art becomes a band above the text so the two never overlap */
+  .hub-art { position: static; order: -1; flex: none; width: calc(100% + 32px); height: 120px; margin: -16px -16px 10px; }
+  .hub-door.hub-door-game {
+    background: linear-gradient(#2c4a7a, #e98d5b 64px, color-mix(in srgb, #0a1238 calc(var(--night) * 100%), #176d86) 64px);
+  }
+  .hub-door:hover, .hub-door:focus-visible { flex-grow: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-door, .hub-sun, .hub-night, .hub-lights, .hub-scooter, .hub-scooter > g, .hub-plane, .hub-trail { transition: none; }
+  .hub-wave { animation: none; }
+}

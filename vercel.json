@@ -1,0 +1,3 @@
+{
+  "rewrites": [{ "source": "/(game|cursor|scroll|plain)", "destination": "/index.html" }]
+}
