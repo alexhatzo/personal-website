@@ -4,7 +4,7 @@
     "title": "Founding Engineer @ OneOff",
     "avatar": "🛠️",
     "bio": [
-      "Founding engineer at OneOff, building an AI-powered affiliate marketing platform for creators and the agent that runs their storefront for them.",
+      "Founding engineer at OneOff, an affiliate marketing platform for creators. I work on the API, the web apps and the AI agent that manages creators' storefronts.",
       "Before that, four years of DevOps at P1 Technologies: Kubernetes platforms, Terraform and cloud migrations for animation studios.",
       "I like turning messy systems into repeatable ones and shipping tools that make teams (and now their agents) faster."
     ],
@@ -25,10 +25,10 @@
       "location": "Los Angeles, CA",
       "url": "https://www.oneoff.world",
       "description": [
-        "Building the agent that runs a creator's storefront: text it a photo, a link or a screenshot and it finds the products, creates the affiliate links and drafts the post for approval. Claude with per-creator memory, MCP tools and evals gating every release",
-        "Own the API behind every client: one OpenAPI contract (~150 operations), typed end to end for iOS, creator, shopper and admin, plus ~90 background jobs for product ingestion, affiliate attribution and payouts",
-        "Led the redesign of the shopper web app (new home, profiles, a full-screen feed, in-feed product view) and built the creator dashboard, with the accessibility, SEO and performance work under both",
-        "Automated the admin side: bulk ingest, AI-judged dedupe, sold-out replacement, image review and payout reconciliation, with human approval where money is at stake. Same for the team: MCP servers and an ops agent watching production"
+        "Building an agent that manages a creator's storefront over text: from a photo, link or screenshot it matches the products, creates affiliate links and drafts a post for the creator to approve. Built on Claude with per-creator memory and MCP tools; an eval suite gates each release",
+        "Own the API: one OpenAPI contract (~150 operations) shared by the iOS app, the creator and shopper web apps and admin, plus ~90 background jobs for product ingestion, affiliate attribution and payouts",
+        "Led the redesign of the shopper web app (home, profiles, feed, product view) and built the creator dashboard, including the accessibility, SEO and performance work",
+        "Automated admin work: bulk ingest, LLM-judged dedupe, sold-out replacement, image review and payout reconciliation, with human approval on anything involving money. Also built internal tooling: MCP servers and an ops agent that monitors production"
       ],
       "tech": ["TypeScript", "Node.js", "Next.js", "React", "Postgres", "pgvector", "Supabase", "Redis", "Trigger.dev", "Claude", "Gemini", "MCP", "OpenAPI", "Vercel", "Heroku"]
     },
@@ -80,7 +80,7 @@
         "projects": [
           {
             "title": "OneOff",
-            "description": "AI-powered affiliate marketing platform for creators: a better-designed shopping experience and an agent that manages your storefront with very little input. It starts over text; the goal is a storefront that runs itself.",
+            "description": "Affiliate marketing platform for creators: storefronts, a shopper app and an AI agent that manages a creator's storefront over text. The agent is early and taking on more of the storefront work.",
             "tech": ["TypeScript", "Next.js", "Postgres", "Claude", "MCP"],
             "link": "https://www.oneoff.world"
           },
