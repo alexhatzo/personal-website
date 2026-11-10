@@ -1,40 +1,20 @@
 @import "tailwindcss";
 
-/* ============================================
-   BASE RESET (in base layer to not override utilities)
-   ============================================ */
-@layer base {
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+/* Base: each experience owns its own styles, scoped under its root class. */
+html, body, #root {
+  margin: 0;
+  min-height: 100dvh;
+  background-color: #0a0a0a;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  html, body, #root {
-    width: 100%;
-    height: 100%;
-    /* Use dynamic viewport height for mobile browser compatibility */
-    height: 100dvh;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #0a0a0a;
-    /* Prevent mobile browser zoom/scale issues */
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-text-size-adjust: 100%;
-    /* Prevent text selection on mobile */
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  /* Prevent iOS Safari zoom on input focus */
-  @supports (-webkit-touch-callout: none) {
-    html, body, #root {
-      /* Use -webkit-fill-available as fallback for older Safari */
-      min-height: -webkit-fill-available;
-    }
-  }
+/* Full-viewport canvas experiences never scroll the document. */
+html[data-xp="game"], html[data-xp="cursor"],
+html[data-xp="game"] body, html[data-xp="cursor"] body {
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 /* ============================================
@@ -89,22 +69,6 @@
   --shadow-glow: 0 0 20px rgb(251 191 36 / 0.3);
 }
 
-/* Pixel art rendering - prevents blurring when scaling */
-canvas {
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
-
-/* Kaplay letterbox bars - match game aesthetic */
-._kap {
-  background-color: #0a0a0a !important;
-}
-
-/* Game container background for letterbox areas */
-.game-container {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-}
-
 /* ============================================
    FOCUS STYLES (Accessibility)
    ============================================ */
@@ -116,103 +80,6 @@ canvas {
 /* Remove default focus for mouse users */
 :focus:not(:focus-visible) {
   outline: none;
-}
-
-/* ============================================
-   ANIMATIONS
-   ============================================ */
-
-/* Modal Entrance */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.2s ease-out;
-}
-
-.animate-scaleIn {
-  animation: scaleIn 0.2s ease-out;
-}
-
-/* Modal Exit Animations */
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes scaleOut {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-}
-
-.animate-fadeOut {
-  animation: fadeOut 0.2s ease-out forwards;
-}
-
-.animate-scaleOut {
-  animation: scaleOut 0.2s ease-out forwards;
-}
-
-/* Sparkle Animation */
-@keyframes sparkle {
-  0%, 100% {
-    opacity: 0;
-    transform: scale(0) rotate(0deg);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2) rotate(180deg);
-  }
-}
-
-.animate-sparkle {
-  animation: sparkle 1.5s ease-in-out infinite;
-}
-
-/* Card Reveal Animation */
-@keyframes cardReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  60% {
-    transform: translateY(-5px) scale(1.02);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.animate-cardReveal {
-  animation: cardReveal 0.4s ease-out forwards;
 }
 
 /* ============================================
@@ -248,24 +115,4 @@ canvas {
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
   background: #475569;
-}
-
-/* ============================================
-   REDUCED MOTION (Accessibility)
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  /* Disable all custom animations */
-  .animate-fadeIn,
-  .animate-scaleIn,
-  .animate-fadeOut,
-  .animate-scaleOut,
-  .animate-sparkle,
-  .animate-cardReveal {
-    animation: none !important;
-  }
-
-  /* Minimize transition durations globally */
-  * {
-    transition-duration: 0.01ms !important;
-  }
 }

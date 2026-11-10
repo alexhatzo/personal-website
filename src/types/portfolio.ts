@@ -2,6 +2,7 @@
 
 export interface QuickFacts {
   location: string;
+  hometown: string;
   education: string;
   status: string;
   funFact: string;
@@ -20,6 +21,8 @@ export interface Experience {
   role: string;
   company: string;
   period: string;
+  location?: string;
+  url?: string;
   description: string[];
   tech: string[];
 }
@@ -66,24 +69,10 @@ export interface ContactData {
   socialLinks: SocialLink[];
 }
 
-export interface BuildingInfo {
-  label: string;
-  interiorTitle: string;
-}
-
-export interface BuildingsData {
-  about: BuildingInfo;
-  projects: BuildingInfo;
-  skills: BuildingInfo;
-  experience: BuildingInfo;
-  contact: BuildingInfo;
-}
-
 export interface PortfolioData {
   about: AboutData;
   experience: Experience[];
   projects: ProjectsData;
   skills: SkillsData;
   contact: ContactData;
-  buildings: BuildingsData;
 }

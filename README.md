@@ -1,73 +1,37 @@
-# React + TypeScript + Vite
+# alexhatzo/personal-website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+One résumé, three interactive takes, plus a plain page.
 
-Currently, two official plugins are available:
+| Route | What it is | Code |
+|---|---|---|
+| `/` | Hub: pick a version | `src/hub/` |
+| `/game` | Island: open-world three.js island you ride around | `src/experiences/game/` |
+| `/cursor` | Field: GPU particle field driven by the cursor | `src/experiences/cursor/` |
+| `/scroll` | Journey: Athens to Los Angeles scroll story (GSAP + Lenis) | `src/experiences/scroll/` |
+| `/plain` | Static résumé | `src/components/StaticPortfolio.tsx` |
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Editing content
 
-## React Compiler
+Everything every version shows comes from `public/data/portfolio.json` (types in
+`src/types/portfolio.ts`). Edit the JSON; all five routes update.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## Develop
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
+npm run build
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Vite + React 19 + TypeScript. No router library: `src/App.tsx` picks a lazy view from
+`location.pathname` and `vercel.json` rewrites the routes to `index.html`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Each experience accepts URL params that jump straight to a state (handy for screenshots
+and debugging); they are listed at the top of each experience's `index.tsx`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Preview
+
+| Hub | Island | Field | Journey |
+|---|---|---|---|
+| ![Hub](docs/screenshots/hub.jpg) | ![Island](docs/screenshots/island.jpg) | ![Field](docs/screenshots/field.jpg) | ![Journey](docs/screenshots/journey.jpg) |

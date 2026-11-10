@@ -1,25 +1,43 @@
 {
   "about": {
     "name": "Alexandros Hatzopoulos",
-    "title": "DevOps/Cloud Engineer",
+    "title": "Founding Engineer @ OneOff",
     "avatar": "🛠️",
     "bio": [
-      "DevOps engineer focused on building reliable cloud infrastructure, Kubernetes platforms, and automation across AWS and OCI.",
-      "I like turning messy deployments into repeatable systems (Terraform, Helm, CI/CD) and shipping tools that make teams faster."
+      "Founding engineer at OneOff, building AI into a social fashion discovery and shopping app.",
+      "Before that, four years of DevOps at P1 Technologies: Kubernetes platforms, Terraform and cloud migrations for animation studios.",
+      "I like turning messy systems into repeatable ones and shipping tools that make teams (and now their agents) faster."
     ],
     "quickFacts": {
-      "location": "Venice, CA",
+      "location": "Los Angeles, CA",
+      "hometown": "Athens, Greece",
       "education": "USC (BS CS & Business, 2023)",
-      "status": "P1 Technologies",
+      "status": "Founding Engineer @ OneOff",
       "funFact": "Bilingual (Greek/English) and into DJing + tennis."
     }
   },
   "experience": [
     {
-      "id": "job-0",
+      "id": "job-oneoff",
+      "role": "Founding Engineer",
+      "company": "OneOff",
+      "period": "Mar 2026 - Present",
+      "location": "Los Angeles, CA",
+      "url": "https://www.oneoff.world",
+      "description": [
+        "Founding engineer at OneOff, a social fashion discovery and shopping app where people curate shoppable edits, get AI-personalized recommendations and try pieces on virtually",
+        "Focus on AI integrations across the product: LLM and vision pipelines behind recommendations, product understanding and try-on",
+        "Work across the whole stack (API, web, iOS, admin tools, product ingestion) and the infrastructure, CI/CD and observability under it",
+        "Build the agent tooling the team ships with: multi-agent workflows, MCP servers and review automation"
+      ],
+      "tech": ["TypeScript", "Node.js", "Next.js", "React", "Swift", "Postgres", "Supabase", "Redis", "Trigger.dev", "OpenAI", "Gemini", "Vercel", "Heroku"]
+    },
+    {
+      "id": "job-p1",
       "role": "DevOps Engineer",
       "company": "P1 Technologies",
-      "period": "May 2022 - Present",
+      "period": "May 2022 - Mar 2026",
+      "location": "Manhattan Beach, CA",
       "description": [
         "Led migration of Skydance Animation services to OCI, standing up OKE (Kubernetes) and standardizing infra with Terraform/Ansible/Packer",
         "Cut deployment time 50%+ by replacing many K8s manifests with a single custom Helm chart (EKS) for Warner Brothers animation studio",
@@ -29,10 +47,11 @@
       "tech": ["Kubernetes", "AWS", "OCI", "GCP", "Terraform", "Helm", "Python", "Grafana", "Prometheus", "Ansible", "Packer", "CI/CD", "Slack", "Jira"]
     },
     {
-      "id": "job-1",
+      "id": "job-veto",
       "role": "Web Developer",
       "company": "VETO A.E.",
       "period": "Sep 2020 - Aug 2021",
+      "location": "Athens, Greece",
       "description": [
         "Redesigned e-commerce front ends (CS-Cart) and improved UI/UX across multiple sites",
         "Helped drive 110%+ e-shop sales growth through UX + e-commerce strategy improvements",
@@ -41,10 +60,11 @@
       "tech": ["JavaScript", "HTML", "CSS", "MySQL", "PHP", "CS-Cart"]
     },
     {
-      "id": "job-2",
+      "id": "job-mccann",
       "role": "Front-End Developer",
       "company": "McCann Worldgroup",
       "period": "May 2020 - Aug 2020",
+      "location": "Athens, Greece",
       "description": [
         "Introduced/implemented modern frameworks (Laravel + Vue) into active projects",
         "Built campaign front-end experiences with Vue.js and collaborated with remote stakeholders"
@@ -58,6 +78,12 @@
         "name": "Work",
         "icon": "💼",
         "projects": [
+          {
+            "title": "OneOff",
+            "description": "Social fashion discovery and shopping app (iOS + web): curated shoppable edits, AI-personalized recommendations and virtual try-on.",
+            "tech": ["TypeScript", "Next.js", "Swift", "Supabase", "LLMs"],
+            "link": "https://www.oneoff.world"
+          },
           {
             "title": "P1 Protect Monitoring Platform",
             "description": "Monitoring + alerting system for edge infrastructure using Kubernetes + Grafana with Slack/Jira integrations to catch outages early.",
@@ -90,10 +116,28 @@
         "icon": "🧪",
         "projects": [
           {
+            "title": "Agent Board",
+            "description": "Async message board for coworkers' AI agents, served as a remote MCP server. Your agent and theirs leave each other messages; nobody copy-pastes through Slack.",
+            "tech": ["TypeScript", "MCP", "Postgres", "Vercel"],
+            "github": "https://github.com/alexhatzo/agent-board"
+          },
+          {
+            "title": "AI Slack God",
+            "description": "Slack bot that answers natural-language questions about your codebase: it clones the repos, searches the code with AI-driven tool calls and replies in-thread with citations.",
+            "tech": ["TypeScript", "Express", "Trigger.dev", "Slack"],
+            "github": "https://github.com/alexhatzo/ai-slack-god"
+          },
+          {
             "title": "Agent²",
             "description": "Multi-agent orchestration MCP for Cursor that chains specialized AI agents together for complex development workflows.",
             "tech": ["Python", "MCP", "AI Agents", "Cursor"],
             "github": "https://github.com/alexhatzo/agent-squared"
+          },
+          {
+            "title": "MoltID",
+            "description": "The trust layer for AI agents.",
+            "tech": ["AI Agents", "Identity"],
+            "github": "https://github.com/alexhatzo/moltid"
           },
           {
             "title": "Mnesia",
@@ -108,9 +152,15 @@
             "github": "https://github.com/alexhatzo/ai-product-descriptions"
           },
           {
+            "title": "Intune macOS Admins",
+            "description": "Script-based admin elevation for macOS fleets managed with Microsoft Intune.",
+            "tech": ["Shell", "macOS", "Intune"],
+            "github": "https://github.com/alexhatzo/Intune-MacOS-Admins"
+          },
+          {
             "title": "Personal Website",
-            "description": "This game-style interactive portfolio built with React, TypeScript, and Kaplay game engine.",
-            "tech": ["React", "TypeScript", "Kaplay", "Tailwind CSS"],
+            "description": "This site: one résumé, three interactive takes. An open-world island, a cursor-driven particle field and a scroll story.",
+            "tech": ["React", "TypeScript", "three.js", "GSAP"],
             "github": "https://github.com/alexhatzo/personal-website"
           }
         ]
@@ -142,9 +192,14 @@
   "skills": {
     "categories": [
       {
+        "name": "AI & Agents",
+        "icon": "🤖",
+        "skills": ["LLM integrations", "Agent orchestration", "MCP servers", "RAG / vector search", "Prompt engineering", "Claude Code", "Cursor"]
+      },
+      {
         "name": "Fullstack",
         "icon": "💻",
-        "skills": ["React.js", "Vue.js", "JavaScript", "HTML", "CSS", "Python", "Java", "C++", "PHP", "MySQL"]
+        "skills": ["TypeScript", "Node.js", "React", "Next.js", "Python", "Go", "Postgres", "Vue.js", "JavaScript", "HTML", "CSS", "Java", "C++", "PHP", "MySQL"]
       },
       {
         "name": "DevOps & Cloud",
@@ -154,13 +209,13 @@
       {
         "name": "General",
         "icon": "🌟",
-        "skills": ["Greek (Native)", "English (Native)", "French (Basic)", "AI Integrations", "Event Planning", "DJ-ing", "Skiing"]
+        "skills": ["Greek (Native)", "English (Native)", "French (Basic)", "Event Planning", "DJ-ing", "Skiing"]
       }
     ],
-    "currentlyLearning": "Building more interactive web experiences (creative coding / game-style UIs) and sharpening system design for scalable platforms."
+    "currentlyLearning": "Creative coding (WebGL, shaders, game feel; this site is the homework) and multi-agent workflows that hold up in production."
   },
   "contact": {
-    "intro": "If you're building cloud platforms, Kubernetes infrastructure, or automation-heavy systems, I’d love to connect.",
+    "intro": "Building something with AI, agents or infrastructure that has to actually work? I'd love to connect.",
     "email": "alexandros.hatzo@gmail.com",
     "socialLinks": [
       {
@@ -182,27 +237,5 @@
         "handle": "alexandros.hatzo@gmail.com"
       }
     ]
-  },
-  "buildings": {
-    "about": {
-      "label": "ABOUT ME",
-      "interiorTitle": "About Me"
-    },
-    "projects": {
-      "label": "PROJECTS",
-      "interiorTitle": "My Projects"
-    },
-    "skills": {
-      "label": "SKILLS",
-      "interiorTitle": "My Skills"
-    },
-    "experience": {
-      "label": "EXPERIENCE",
-      "interiorTitle": "Work Experience"
-    },
-    "contact": {
-      "label": "CONTACT",
-      "interiorTitle": "Contact Me"
-    }
   }
 }

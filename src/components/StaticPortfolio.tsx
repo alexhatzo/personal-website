@@ -1,9 +1,5 @@
 import { usePortfolioData } from "../context/PortfolioContext";
 
-interface StaticPortfolioProps {
-  onBackToGame: () => void;
-}
-
 const SECTIONS = [
   { id: "about", label: "About", icon: "👤" },
   { id: "projects", label: "Projects", icon: "💼" },
@@ -12,7 +8,7 @@ const SECTIONS = [
   { id: "contact", label: "Contact", icon: "📬" },
 ] as const;
 
-export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) {
+export default function StaticPortfolio() {
   const { about, projects, skills, experience, contact } = usePortfolioData();
 
   return (
@@ -20,15 +16,6 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
       {/* Hero Section */}
       <header className="relative bg-gradient-to-b from-slate-800 to-slate-900 pt-12 pb-16 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Back to game button */}
-          <button
-            onClick={onBackToGame}
-            className="absolute top-4 right-4 px-4 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition-colors flex items-center gap-2"
-          >
-            <span>🎮</span>
-            <span className="hidden sm:inline">Back to Game</span>
-          </button>
-
           <div className="w-24 h-24 sm:w-32 sm:h-32 bg-slate-700/80 rounded-2xl flex items-center justify-center text-5xl sm:text-6xl mx-auto mb-6 shadow-xl">
             {about.avatar}
           </div>
@@ -328,15 +315,15 @@ export default function StaticPortfolio({ onBackToGame }: StaticPortfolioProps) 
       {/* Footer */}
       <footer className="bg-slate-800/50 border-t border-slate-700 py-8 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <button
-            onClick={onBackToGame}
+          <a
+            href="/"
             className="inline-flex items-center gap-2 px-6 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-xl transition-colors mb-4"
           >
             <span>🎮</span>
-            <span>Try the interactive game version</span>
-          </button>
+            <span>Try the interactive versions</span>
+          </a>
           <p className="text-slate-500 text-sm">
-            © {new Date().getFullYear()} {about.name}. Built with React + Kaplay.
+            © {new Date().getFullYear()} {about.name}. Built with React.
           </p>
         </div>
       </footer>
