@@ -1,226 +1,84 @@
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap");
 
+/* a rolodex on a blue-grey studio sweep: the canvas fills the page, the controls sit over its bottom edge */
 .hub {
-  --ink: #f4f1ea;
-  --dim: #8f8b83;
-  --bg: #0b0b0c;
-  --paper: #efe7d8;
+  --ink: #f3f5f8;
+  --dim: rgb(243 245 248 / 0.66);
+  position: relative;
   min-height: 100dvh;
   box-sizing: border-box;
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: clamp(14px, 2.6vh, 28px);
-  padding: clamp(16px, 2.6vw, 36px);
-  overflow-x: clip;
-  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(14px, 2.4vw, 28px);
+  overflow: hidden;
+  background: radial-gradient(120% 85% at 50% 42%, #a3b1c2 0%, #7c8ba1 42%, #515f77 78%, #3c475b 100%);
   color: var(--ink);
   font: 400 13px/1.5 "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
   letter-spacing: 0.02em;
 }
 .hub a { color: inherit; text-decoration: none; }
-.hub :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.hub :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.hub-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-.hub-top,
+.hub-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+.hub-canvas:active { cursor: grabbing; }
+
+.hub-ctl,
+.hub-caption,
+.hub-foot { position: relative; }
+.hub-ctl,
+.hub-foot { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+.hub-ctl { display: flex; align-items: center; gap: 6px; user-select: none; -webkit-user-select: none; }
+:where(.hub-ctl) button { all: unset; box-sizing: border-box; cursor: pointer; }
+.hub-ctl > * {
+  min-height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgb(18 22 30 / 0.34);
+  backdrop-filter: blur(6px);
+  transition: background-color 0.2s;
+}
+.hub-ctl > *:hover { background: rgb(18 22 30 / 0.6); }
+.hub .hub-go { min-width: 20ch; background: #12161e; }
+.hub .hub-go:hover { background: #000; }
+
+/* the card text is small on a phone, so its words are repeated under the rolodex there */
+.hub-caption { max-width: 44ch; margin: 0; text-align: center; color: var(--dim); }
+@media (min-width: 701px) {
+  .hub-caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
+
 .hub-foot {
+  align-self: stretch;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 8px 24px;
+  gap: 4px 24px;
   color: var(--dim);
-  text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.12em;
 }
 .hub-foot a { padding-block: 6px; }
 .hub-foot a:hover { color: var(--ink); }
 .hub-foot span { display: flex; gap: 20px; }
 
-.hub-head h1 {
-  margin: 0;
-  font: 400 clamp(40px, 7.4vw, 112px) / 0.92 "Instrument Serif", "Iowan Old Style", Georgia, serif;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
-.hub-head p { margin: 12px 0 0; color: var(--dim); }
-
-/* preview | rolodex | what to expect */
-.hub-stage {
-  --h: clamp(150px, 30vh, 250px); /* card height; the preview is sized from it */
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 420px) minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(24px, 4.5vw, 72px);
-}
-
-/* the rolodex: one card stands on the base; the others wait behind it or have flipped down out of sight.
-   Hub.tsx sets --rx (tilt in degrees) and --back (how far behind) on each card */
-.hub-wheel {
-  position: relative;
-  touch-action: none;
-  user-select: none;
-  -webkit-user-select: none;
-  cursor: grab;
-}
-.hub-wheel:active { cursor: grabbing; }
-.hub-drum {
-  position: relative;
-  height: var(--h);
-  perspective: 1800px;
-  clip-path: inset(-50% -30% 0 -30%); /* a card that flips past the hinge drops out of view */
-}
-/* the two rings the cards hang from */
-.hub-drum::before,
-.hub-drum::after {
-  content: "";
-  position: absolute;
-  z-index: 100;
-  bottom: -13px;
-  width: 12px;
-  height: 30px;
-  box-sizing: border-box;
-  border: 3px solid #4a4a50;
-  border-radius: 50%;
-  pointer-events: none;
-}
-.hub-drum::before { left: calc(24% + 7px); }
-.hub-drum::after { right: calc(24% + 7px); }
-.hub .hub-card {
-  --rx: 0;
-  --back: 0;
-  position: absolute;
-  inset: 0;
-  box-sizing: border-box;
-  display: grid;
-  grid-template: auto 1fr / 1fr auto;
-  align-items: start;
-  padding: 18px 22px 28px;
-  border-radius: 14px;
-  background: var(--paper) repeating-linear-gradient(transparent 0 25px, rgb(23 19 14 / 0.07) 25px 26px);
-  color: #17130e;
-  transform-origin: 50% 100%;
-  transform: translateZ(calc(var(--back) * -4px)) rotateX(calc(var(--rx) * 1deg));
-  backface-visibility: hidden;
-  filter: brightness(calc(1 - var(--back) * 0.2));
-  -webkit-user-drag: none;
-}
-.hub .hub-card:focus-visible { outline-color: #17130e; outline-offset: -6px; }
-.hub-card[data-off] { pointer-events: none; }
-/* the two slots the rings pass through */
-.hub-card::before,
-.hub-card::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 26px;
-  height: 9px;
-  border-radius: 6px 6px 0 0;
-  background: var(--bg);
-}
-.hub-card::before { left: 24%; }
-.hub-card::after { right: 24%; }
-.hub-tab,
-.hub-enter,
-.hub-kicker,
-.hub-base { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
-.hub-tab { opacity: 0.7; }
-.hub-enter { padding: 3px 10px; border-radius: 999px; background: #17130e; color: var(--paper); }
-.hub-title {
-  grid-column: 1 / -1;
-  align-self: end;
-  font: 400 clamp(40px, calc(var(--h) * 0.34), 84px) / 1 "Instrument Serif", Georgia, serif;
-  white-space: nowrap;
-}
-.hub-base {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 40px;
-  margin-inline: -10px;
-  padding-inline: 10px;
-  border: 1px solid #2c2c31;
-  border-radius: 4px 4px 16px 16px;
-  background: #141416;
-  color: var(--dim);
-}
-.hub-base button { all: unset; padding: 8px 10px; cursor: pointer; }
-.hub-base button:hover { color: var(--ink); }
-
-/* what to expect */
-.hub-detail { max-width: 38ch; min-height: 15em; }
-.hub-detail > div { animation: hub-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
-@keyframes hub-in { from { opacity: 0; transform: translateY(8px); } }
-.hub-kicker { margin: 0; color: var(--accent); transition: color 0.3s; }
-.hub-blurb {
-  margin: 10px 0 18px;
-  font: 400 clamp(21px, 2vw, 30px) / 1.15 "Instrument Serif", Georgia, serif;
-  letter-spacing: 0;
-  text-wrap: balance;
-}
-.hub-facts { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 0; }
-.hub-facts dt { color: var(--dim); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding-top: 2px; }
-.hub-facts dd { margin: 0; }
-
-/* preview: each way's art, playing by itself while its card is shown */
-.hub-pv {
-  position: relative;
-  justify-self: end;
-  width: min(100%, 400px);
-  height: min(calc(var(--h) * 1.7), 460px);
-  border-radius: 22px;
-  overflow: hidden;
-  isolation: isolate;
-}
-.hub-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.35s; }
-.hub-slide[data-on] { opacity: 1; }
-.hub-art { position: absolute; inset: 0; width: 100%; height: 100%; }
-
-/* 01 Island: the scooter rides the ridge while the day turns to night and back */
-.hub-slide-game { background: linear-gradient(#2c4a7a 0%, #e98d5b 34%, #f7c98a 52%); }
-.hub-scooter { offset-path: path("M-20 345 Q90 262 210 316 T420 345"); offset-distance: 38%; }
-.hub-scooter > g { transform: scale(1.4); }
-.hub-night,
-.hub-lights { opacity: 0; }
-.hub-wave { fill: none; stroke: #fff3d6; stroke-opacity: 0.35; stroke-width: 1.5; }
-.hub-slide[data-on] .hub-scooter { animation: hub-ride 7s linear infinite; }
-.hub-slide[data-on] .hub-sun { animation: hub-sunset 6s ease-in-out infinite alternate; }
-.hub-slide[data-on] .hub-night { animation: hub-dusk 6s ease-in-out infinite alternate; }
-.hub-slide[data-on] .hub-lights { animation: hub-dusk 6s ease-in-out infinite alternate; }
-.hub-slide[data-on] .hub-wave { animation: hub-drift 5s linear infinite; }
-.hub-slide[data-on] .hub-wave-2 { animation-duration: 7s; animation-direction: reverse; }
-@keyframes hub-ride { from { offset-distance: 0%; } to { offset-distance: 100%; } }
-@keyframes hub-sunset { from { transform: translateY(-40px); } to { transform: translateY(120px); } }
-@keyframes hub-dusk { 0%, 35% { opacity: 0; } to { opacity: 0.82; } }
-@keyframes hub-drift { to { transform: translateX(-100px); } }
-
-/* 02 Field: a canvas of dots (Dots in Hub.tsx) */
-.hub-slide-cursor { background: #050507; box-shadow: inset 0 0 0 1px #1c1c22; border-radius: inherit; }
-
-/* 03 Journey: boarding-pass paper, the plane flies ATH to LAX on a loop */
-.hub-slide-scroll { background: var(--paper); color: #17130e; }
-.hub-slide-scroll .hub-art { inset: 12% 6%; width: 88%; height: 76%; }
-.hub-slide-scroll text { font: 500 11px "DM Mono", monospace; letter-spacing: 0.14em; fill: currentColor; }
-.hub-plane { offset-path: path("M40 330 Q200 60 360 250"); offset-distance: 20%; }
-.hub-trail { stroke-dasharray: 1; stroke-dashoffset: 0.8; }
-.hub-slide[data-on] .hub-plane { animation: hub-fly 4.5s cubic-bezier(0.5, 0, 0.3, 1) infinite; }
-.hub-slide[data-on] .hub-trail { animation: hub-trail 4.5s cubic-bezier(0.5, 0, 0.3, 1) infinite; }
-@keyframes hub-fly { from { offset-distance: 0%; } 80%, to { offset-distance: 100%; } }
-@keyframes hub-trail { from { stroke-dashoffset: 1; } 80%, to { stroke-dashoffset: 0; } }
-
-/* 04 Plain: a sheet of paper that writes itself */
-.hub-slide-plain { background: #cfc7b8; }
-.hub-line { transform-box: fill-box; transform-origin: left; }
-.hub-slide[data-on] .hub-line { animation: hub-write 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i) * 45ms); }
-@keyframes hub-write { from { transform: scaleX(0); } }
-
-@media (max-width: 860px) {
-  .hub-stage { --h: 176px; grid-template-columns: minmax(0, 1fr); gap: 18px; }
-  .hub-pv { justify-self: stretch; width: auto; height: 116px; }
-  .hub-slide-scroll .hub-art { inset: 6% 0; width: 100%; height: 88%; }
-  .hub-detail { max-width: none; min-height: 13em; }
-}
+/* no WebGL */
+.hub[data-flat] { justify-content: center; align-items: flex-start; }
+.hub[data-flat] h1 { margin: 0; font: 400 clamp(40px, 8vw, 112px) / 0.95 "Instrument Serif", Georgia, serif; }
+.hub-list { list-style: none; margin: 16px 0 auto; padding: 0; display: grid; gap: 14px; max-width: 60ch; }
+.hub-list a { display: block; font: 400 32px/1.1 "Instrument Serif", Georgia, serif; }
+.hub-list span { color: var(--dim); }
 
 @media (prefers-reduced-motion: reduce) {
-  .hub-slide, .hub-kicker { transition: none; }
-  .hub .hub-detail > div,
-  .hub .hub-slide[data-on] * { animation: none; }
+  .hub-ctl > * { transition: none; }
 }
