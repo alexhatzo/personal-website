@@ -40,7 +40,6 @@ const WAYS = [
 
 type WayId = (typeof WAYS)[number]["id"];
 const N = WAYS.length;
-const STEP = 45; // degrees between cards; hub.css uses the same angle
 const mod = (n: number) => ((n % N) + N) % N;
 // line widths of the résumé sheet in the plain preview: 0 is a gap, under 100 a heading
 const SHEET = [150, 0, 70, 208, 176, 196, 0, 84, 200, 164, 186, 140, 0, 60, 204, 152, 190, 0, 76, 198, 170];
@@ -237,16 +236,15 @@ export default function Hub({ data }: { data: PortfolioData }) {
   const { about, contact } = data;
   const stage = useRef<HTMLDivElement>(null);
   const [front, setFront] = useState(0);
-  const [hover, setHover] = useState<number | null>(null);
-  const shown = hover ?? front;
-  const way = WAYS[shown];
+  const flip = useRef<(by: number) => void>(() => {});
+  const way = WAYS[front];
 
   useLayoutEffect(() => {
     const el = stage.current!;
     const wheel = el.querySelector<HTMLElement>(".hub-wheel")!;
     const cards = [...wheel.querySelectorAll<HTMLElement>(".hub-card")];
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let pos = 0; // wheel position in cards, unbounded so it can spin forever
+    let pos = 0; // which card is up, unbounded so it can flip round forever
     let rest = 0; // where it last came to rest
     let target: number | null = null;
     let raf = 0;
@@ -256,9 +254,12 @@ export default function Hub({ data }: { data: PortfolioData }) {
 
     const paint = () => {
       cards.forEach((c, i) => {
-        const d = mod(i - pos + N / 2) - N / 2; // -2..2, 0 is the front
-        c.style.setProperty("--d", d.toFixed(4));
-        c.toggleAttribute("data-off", Math.abs(d) > 1.5);
+        // -2..2: 0 stands up, negative has flipped down over the hinge, positive waits behind
+        const d = mod(i - pos + N / 2) - N / 2;
+        c.style.setProperty("--rx", (d < 0 ? Math.max(d, -1) * 180 : d * 8).toFixed(2));
+        c.style.setProperty("--back", Math.max(d, 0).toFixed(3));
+        c.style.zIndex = String(50 - Math.round(d * 10));
+        c.toggleAttribute("data-off", Math.abs(d) > 0.5);
       });
       setFront(mod(Math.round(pos)));
     };
@@ -283,7 +284,6 @@ export default function Hub({ data }: { data: PortfolioData }) {
     const hold = () => {
       cancelAnimationFrame(raf);
       target = null;
-      setHover(null);
     };
     // a small push still turns one card; a big one lands on the nearest
     const settle = () => {
@@ -291,6 +291,12 @@ export default function Hub({ data }: { data: PortfolioData }) {
       const a = Math.abs(by);
       go(a < 0.12 ? rest : a < 0.5 ? rest + Math.sign(by) : Math.round(pos));
     };
+    const step = (by: number) => {
+      const to = Math.round(target ?? pos) + by;
+      go(to);
+      return to;
+    };
+    flip.current = step;
     const face = (i: number) => {
       const base = Math.round(target ?? pos);
       go(base + mod(i - base + N / 2) - N / 2);
@@ -320,7 +326,7 @@ export default function Hub({ data }: { data: PortfolioData }) {
         wheel.setPointerCapture(e.pointerId);
         hold();
       }
-      pos = drag.pos - dy / cards[0].offsetHeight;
+      pos = drag.pos + dy / cards[0].offsetHeight; // pull down to flip forward
       paint();
     };
     const onUp = () => {
@@ -340,12 +346,10 @@ export default function Hub({ data }: { data: PortfolioData }) {
       const by = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
       if (!by || e.metaKey || e.ctrlKey || e.altKey) return;
       e.preventDefault();
-      const to = Math.round(target ?? pos) + by;
-      setHover(null);
-      go(to);
+      const to = step(by);
       if (wheel.contains(document.activeElement)) cards[mod(to)].focus({ preventScroll: true });
     };
-    // tabbing to a card turns it to the front; a mouse press must not move it mid-click
+    // tabbing to a card flips to it; a mouse press must not move it mid-click
     const onFocus = (e: FocusEvent) => {
       const i = cards.indexOf(e.target as HTMLElement);
       if (i >= 0 && cards[i].matches(":focus-visible")) face(i);
@@ -377,7 +381,7 @@ export default function Hub({ data }: { data: PortfolioData }) {
   }, []);
 
   return (
-    <main className="hub" style={{ "--accent": way.accent, "--step": `${STEP}deg` } as CSSProperties}>
+    <main className="hub" style={{ "--accent": way.accent } as CSSProperties}>
       <header className="hub-top">
         <span>{about.title}</span>
         <span>{about.quickFacts.location}</span>
@@ -385,13 +389,13 @@ export default function Hub({ data }: { data: PortfolioData }) {
 
       <div className="hub-head">
         <h1>{about.name}</h1>
-        <p>One résumé, four ways to read it. Scroll or drag the wheel to pick one.</p>
+        <p>One résumé, four ways to read it. Scroll or drag the card to flip through them.</p>
       </div>
 
       <div className="hub-stage" ref={stage}>
         <div className="hub-pv" aria-hidden>
           {WAYS.map((w, i) => (
-            <div key={w.id} className={`hub-slide hub-slide-${w.id}`} data-on={i === shown || undefined}>
+            <div key={w.id} className={`hub-slide hub-slide-${w.id}`} data-on={i === front || undefined}>
               <Art id={w.id} />
             </div>
           ))}
@@ -405,9 +409,6 @@ export default function Hub({ data }: { data: PortfolioData }) {
                 href={ROUTES[w.id].path}
                 className="hub-card"
                 draggable={false}
-                data-shown={i === shown || undefined}
-                onPointerEnter={(e) => e.pointerType === "mouse" && setHover(i)}
-                onPointerLeave={() => setHover(null)}
               >
                 <span className="hub-tab">
                   0{i + 1} / {w.verb}
@@ -419,12 +420,23 @@ export default function Hub({ data }: { data: PortfolioData }) {
               </a>
             ))}
           </div>
+          <div className="hub-base">
+            <button type="button" onClick={() => flip.current(-1)} aria-label="Previous version">
+              ← Prev
+            </button>
+            <span aria-hidden>
+              0{front + 1} / 0{N}
+            </span>
+            <button type="button" onClick={() => flip.current(1)} aria-label="Next version">
+              Next →
+            </button>
+          </div>
         </nav>
 
         <div className="hub-detail" aria-live="polite">
           <div key={way.id}>
             <p className="hub-kicker">
-              0{shown + 1} / {ROUTES[way.id].label}
+              0{front + 1} / {ROUTES[way.id].label}
             </p>
             <p className="hub-blurb">{way.blurb}</p>
             <dl className="hub-facts">

@@ -43,70 +43,69 @@
 }
 .hub-head p { margin: 12px 0 0; color: var(--dim); }
 
-/* preview | wheel | what to expect */
+/* preview | rolodex | what to expect */
 .hub-stage {
-  --h: clamp(96px, 20vh, 190px); /* card height; everything else is sized from it */
-  --r: calc(var(--h) * 1.25); /* drum radius */
+  --h: clamp(150px, 30vh, 250px); /* card height; the preview is sized from it */
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 400px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 420px) minmax(0, 1fr);
   align-items: center;
   gap: clamp(24px, 4.5vw, 72px);
 }
 
-/* the wheel: four cards on a drum, turned by --d (each card's distance from the front, set by Hub.tsx) */
+/* the rolodex: one card stands on the base; the others wait behind it or have flipped down out of sight.
+   Hub.tsx sets --rx (tilt in degrees) and --back (how far behind) on each card */
 .hub-wheel {
   position: relative;
-  height: calc(var(--h) * 2.7);
-  perspective: 1400px;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   cursor: grab;
 }
 .hub-wheel:active { cursor: grabbing; }
-/* the drum's two side discs, seen edge-on */
-.hub-wheel::before,
-.hub-wheel::after {
+.hub-drum {
+  position: relative;
+  height: var(--h);
+  perspective: 1800px;
+  clip-path: inset(-50% -30% 0 -30%); /* a card that flips past the hinge drops out of view */
+}
+/* the two rings the cards hang from */
+.hub-drum::before,
+.hub-drum::after {
   content: "";
   position: absolute;
-  inset-block: 3%;
-  width: 36px;
-  border: 1px solid #2c2c31;
+  z-index: 100;
+  bottom: -13px;
+  width: 12px;
+  height: 30px;
+  box-sizing: border-box;
+  border: 3px solid #4a4a50;
   border-radius: 50%;
   pointer-events: none;
 }
-.hub-wheel::before { left: -18px; }
-.hub-wheel::after { right: -18px; }
-.hub-drum {
+.hub-drum::before { left: calc(24% + 7px); }
+.hub-drum::after { right: calc(24% + 7px); }
+.hub .hub-card {
+  --rx: 0;
+  --back: 0;
   position: absolute;
   inset: 0;
-  transform-style: preserve-3d;
-  transform: translateZ(calc(var(--r) * -1));
-}
-.hub .hub-card {
-  --d: 0;
-  --a: max(var(--d), calc(var(--d) * -1));
-  position: absolute;
-  inset: 50% 0 auto;
-  height: var(--h);
-  margin-top: calc(var(--h) / -2);
   box-sizing: border-box;
   display: grid;
   grid-template: auto 1fr / 1fr auto;
   align-items: start;
-  padding: 14px 18px 20px;
+  padding: 18px 22px 28px;
   border-radius: 14px;
   background: var(--paper) repeating-linear-gradient(transparent 0 25px, rgb(23 19 14 / 0.07) 25px 26px);
   color: #17130e;
-  transform: rotateX(calc(var(--d) * var(--step) * -1)) translateZ(var(--r));
+  transform-origin: 50% 100%;
+  transform: translateZ(calc(var(--back) * -4px)) rotateX(calc(var(--rx) * 1deg));
   backface-visibility: hidden;
-  opacity: clamp(0, (1.8 - var(--a)) * 2, 1);
-  filter: brightness(calc(1 - var(--a) * 0.42));
+  filter: brightness(calc(1 - var(--back) * 0.2));
   -webkit-user-drag: none;
 }
-.hub .hub-card[data-shown] { filter: none; }
+.hub .hub-card:focus-visible { outline-color: #17130e; outline-offset: -6px; }
 .hub-card[data-off] { pointer-events: none; }
-/* the two slots a rolodex card hangs from */
+/* the two slots the rings pass through */
 .hub-card::before,
 .hub-card::after {
   content: "";
@@ -121,23 +120,30 @@
 .hub-card::after { right: 24%; }
 .hub-tab,
 .hub-enter,
-.hub-kicker { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+.hub-kicker,
+.hub-base { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
 .hub-tab { opacity: 0.7; }
-.hub-enter {
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: #17130e;
-  color: var(--paper);
-  opacity: 0;
-  transition: opacity 0.25s;
-}
-.hub-card[data-shown] .hub-enter { opacity: 1; }
+.hub-enter { padding: 3px 10px; border-radius: 999px; background: #17130e; color: var(--paper); }
 .hub-title {
   grid-column: 1 / -1;
   align-self: end;
-  font: 400 clamp(32px, calc(var(--h) * 0.42), 68px) / 1 "Instrument Serif", Georgia, serif;
+  font: 400 clamp(40px, calc(var(--h) * 0.34), 84px) / 1 "Instrument Serif", Georgia, serif;
   white-space: nowrap;
 }
+.hub-base {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  margin-inline: -10px;
+  padding-inline: 10px;
+  border: 1px solid #2c2c31;
+  border-radius: 4px 4px 16px 16px;
+  background: #141416;
+  color: var(--dim);
+}
+.hub-base button { all: unset; padding: 8px 10px; cursor: pointer; }
+.hub-base button:hover { color: var(--ink); }
 
 /* what to expect */
 .hub-detail { max-width: 38ch; min-height: 15em; }
@@ -159,7 +165,7 @@
   position: relative;
   justify-self: end;
   width: min(100%, 400px);
-  height: calc(var(--h) * 2.7);
+  height: min(calc(var(--h) * 1.7), 460px);
   border-radius: 22px;
   overflow: hidden;
   isolation: isolate;
@@ -207,14 +213,14 @@
 @keyframes hub-write { from { transform: scaleX(0); } }
 
 @media (max-width: 860px) {
-  .hub-stage { --h: 92px; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .hub-stage { --h: 176px; grid-template-columns: minmax(0, 1fr); gap: 18px; }
   .hub-pv { justify-self: stretch; width: auto; height: 116px; }
   .hub-slide-scroll .hub-art { inset: 6% 0; width: 100%; height: 88%; }
   .hub-detail { max-width: none; min-height: 13em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hub-slide, .hub-enter, .hub-kicker { transition: none; }
+  .hub-slide, .hub-kicker { transition: none; }
   .hub .hub-detail > div,
   .hub .hub-slide[data-on] * { animation: none; }
 }
