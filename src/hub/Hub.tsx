@@ -1,48 +1,57 @@
-import { useEffect, useRef, type PointerEvent } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import type { PortfolioData } from "../types/portfolio";
 import { ROUTES } from "../shared/routes";
 import "./hub.css";
 
-// Each door is a small demo of its own verb: drive, stir, scroll.
-const DOORS = [
+const WAYS = [
   {
     id: "game",
     verb: "Play",
-    hint: "move to ride, down for night",
+    accent: "#f5c34a",
     blurb: "An open world. Ride a scooter around a Greek island and bump into my résumé.",
+    controls: "WASD or arrow keys. A joystick on touch.",
+    goodFor: "A few spare minutes and some curiosity.",
   },
   {
     id: "cursor",
     verb: "Move",
-    hint: "stir it",
-    blurb: "A field of particles and your cursor. Point at something and it takes shape.",
+    accent: "#7df9ff",
+    blurb: "A field of particles and your cursor. Point at a section and it takes shape.",
+    controls: "Move the pointer. Drag and tap on touch.",
+    goodFor: "Skimming seven sections in any order.",
   },
   {
     id: "scroll",
     verb: "Scroll",
-    hint: "scroll to fly",
-    blurb: "Athens to Los Angeles as one long flight. Scroll to fly.",
+    accent: "#e98d5b",
+    blurb: "Athens to Los Angeles as one long flight, told in ten chapters.",
+    controls: "Just scroll.",
+    goodFor: "The whole story, start to finish.",
+  },
+  {
+    id: "plain",
+    verb: "Read",
+    accent: "#f4f1ea",
+    blurb: "Everything on one page, in the order a recruiter expects.",
+    controls: "None. It prints to PDF.",
+    goodFor: "Anyone in a hurry.",
   },
 ] as const;
 
-// Feeds the cursor position to CSS so each door's art can react without a render.
-function track(e: PointerEvent<HTMLAnchorElement>) {
-  if (e.pointerType === "touch") return; // touch is driven by page scroll instead
-  const el = e.currentTarget;
-  const r = el.getBoundingClientRect();
-  el.style.setProperty("--px", String((e.clientX - r.left) / r.width));
-  el.style.setProperty("--py", String((e.clientY - r.top) / r.height));
-  if (e.movementX) el.style.setProperty("--dir", e.movementX > 0 ? "1" : "-1");
-}
+type WayId = (typeof WAYS)[number]["id"];
+const N = WAYS.length;
+const STEP = 45; // degrees between cards; hub.css uses the same angle
+const mod = (n: number) => ((n % N) + N) % N;
+// line widths of the résumé sheet in the plain preview: 0 is a gap, under 100 a heading
+const SHEET = [150, 0, 70, 208, 176, 196, 0, 84, 200, 164, 186, 140, 0, 60, 204, 152, 190, 0, 76, 198, 170];
 
 // Dot grid the pointer pushes around; a slow wanderer stirs it when nobody is.
 function Dots() {
   const ref = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const c = ref.current!;
     const door = c.parentElement!;
-    const nav = door.parentElement!;
     const g = c.getContext("2d")!;
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const GAP = 14;
@@ -86,9 +95,6 @@ function Dots() {
     };
 
     const layout = () => {
-      // a row door grows on hover: size for its widest state and let the door clip
-      const row = getComputedStyle(nav).flexDirection === "row";
-      c.style.width = row ? `${Math.ceil(nav.clientWidth * 0.45)}px` : "";
       const dpr = Math.min(devicePixelRatio, 2);
       w = c.clientWidth;
       h = c.clientHeight;
@@ -120,7 +126,7 @@ function Dots() {
     const leave = () => (own = false);
 
     const ro = new ResizeObserver(layout);
-    ro.observe(nav);
+    ro.observe(door);
     if (!still) {
       door.addEventListener("pointermove", move);
       door.addEventListener("pointerleave", leave);
@@ -137,7 +143,7 @@ function Dots() {
   return <canvas ref={ref} className="hub-art" aria-hidden />;
 }
 
-function Art({ id }: { id: (typeof DOORS)[number]["id"] }) {
+function Art({ id }: { id: WayId }) {
   if (id === "game") {
     return (
       <svg className="hub-art" viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice" aria-hidden>
@@ -191,6 +197,29 @@ function Art({ id }: { id: (typeof DOORS)[number]["id"] }) {
     );
   }
   if (id === "cursor") return <Dots />;
+  if (id === "plain") {
+    return (
+      <svg className="hub-art" viewBox="0 0 400 520" preserveAspectRatio="xMidYMin slice" aria-hidden>
+        <rect x="70" y="56" width="260" height="520" rx="5" fill="#fffdf8" />
+        {SHEET.map((w, i) =>
+          w ? (
+            <rect
+              key={i}
+              className="hub-line"
+              style={{ "--i": i } as CSSProperties}
+              x="96"
+              y={92 + i * 21}
+              width={w}
+              height={w < 100 ? 8 : 5}
+              rx="2.5"
+              fill="#17130e"
+              fillOpacity={w < 100 ? 0.85 : 0.28}
+            />
+          ) : null,
+        )}
+      </svg>
+    );
+  }
   return (
     <svg className="hub-art" viewBox="0 150 400 230" preserveAspectRatio="xMidYMin meet" aria-hidden>
       <path d="M40 330 Q200 60 360 250" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 7" strokeLinecap="round" />
@@ -206,42 +235,149 @@ function Art({ id }: { id: (typeof DOORS)[number]["id"] }) {
 
 export default function Hub({ data }: { data: PortfolioData }) {
   const { about, contact } = data;
-  const nav = useRef<HTMLElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const [front, setFront] = useState(0);
+  const [hover, setHover] = useState<number | null>(null);
+  const shown = hover ?? front;
+  const way = WAYS[shown];
 
-  useEffect(() => {
-    const doors = [...nav.current!.querySelectorAll<HTMLElement>(".hub-door")];
-    const flight = nav.current!.querySelector<HTMLElement>(".hub-door-scroll")!;
-    let fly = 0.2; // matches the :hover takeoff in hub.css
+  useLayoutEffect(() => {
+    const el = stage.current!;
+    const wheel = el.querySelector<HTMLElement>(".hub-wheel")!;
+    const cards = [...wheel.querySelectorAll<HTMLElement>(".hub-card")];
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let pos = 0; // wheel position in cards, unbounded so it can spin forever
+    let rest = 0; // where it last came to rest
+    let target: number | null = null;
+    let raf = 0;
+    let idle = 0;
+    let drag: { y: number; pos: number; moved: boolean } | null = null;
+    let dragged = false;
+
+    const paint = () => {
+      cards.forEach((c, i) => {
+        const d = mod(i - pos + N / 2) - N / 2; // -2..2, 0 is the front
+        c.style.setProperty("--d", d.toFixed(4));
+        c.toggleAttribute("data-off", Math.abs(d) > 1.5);
+      });
+      setFront(mod(Math.round(pos)));
+    };
+
+    const tick = () => {
+      if (target === null) return;
+      const diff = target - pos;
+      if (still || Math.abs(diff) < 0.002) {
+        pos = rest = target;
+        target = null;
+      } else {
+        pos += diff * 0.16;
+        raf = requestAnimationFrame(tick);
+      }
+      paint();
+    };
+    const go = (to: number) => {
+      target = to;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(tick);
+    };
+    const hold = () => {
+      cancelAnimationFrame(raf);
+      target = null;
+      setHover(null);
+    };
+    // a small push still turns one card; a big one lands on the nearest
+    const settle = () => {
+      const by = pos - rest;
+      const a = Math.abs(by);
+      go(a < 0.12 ? rest : a < 0.5 ? rest + Math.sign(by) : Math.round(pos));
+    };
+    const face = (i: number) => {
+      const base = Math.round(target ?? pos);
+      go(base + mod(i - base + N / 2) - N / 2);
+    };
 
     const onWheel = (e: WheelEvent) => {
       if (e.ctrlKey) return; // pinch zoom
-      const next = Math.min(1, Math.max(0, fly + (e.deltaMode ? e.deltaY * 33 : e.deltaY) / 900));
-      if (next === fly) return; // at either end the page scrolls as usual
       e.preventDefault();
-      fly = next;
-      flight.style.setProperty("--fly", String(fly));
-      flight.toggleAttribute("data-landed", fly === 1);
+      hold();
+      pos += (e.deltaMode ? e.deltaY * 33 : e.deltaY) / 260;
+      paint();
+      clearTimeout(idle);
+      idle = window.setTimeout(settle, 120);
     };
 
-    // touch has no hover or wheel, so the page scroll drives every door
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      if (max <= 0 || !matchMedia("(hover: none)").matches) return;
-      const p = Math.min(1, Math.max(0, scrollY / max)).toFixed(3);
-      for (const d of doors) for (const k of ["--px", "--py", "--fly"]) d.style.setProperty(k, p);
-      flight.toggleAttribute("data-landed", p === "1.000");
+    const onDown = (e: PointerEvent) => {
+      dragged = false;
+      if (e.button === 0) drag = { y: e.clientY, pos, moved: false };
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!(e.buttons & 1)) drag = null; // released outside the wheel
+      if (!drag) return;
+      const dy = e.clientY - drag.y;
+      if (!drag.moved) {
+        if (Math.abs(dy) < 6) return;
+        drag.moved = dragged = true;
+        wheel.setPointerCapture(e.pointerId);
+        hold();
+      }
+      pos = drag.pos - dy / cards[0].offsetHeight;
+      paint();
+    };
+    const onUp = () => {
+      if (drag?.moved) settle();
+      drag = null;
+    };
+    // a drag that ends over a card must not follow its link
+    const onClick = (e: MouseEvent) => {
+      if (!dragged) return;
+      dragged = false;
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    const noDrag = (e: Event) => e.preventDefault();
+
+    const onKey = (e: KeyboardEvent) => {
+      const by = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (!by || e.metaKey || e.ctrlKey || e.altKey) return;
+      e.preventDefault();
+      const to = Math.round(target ?? pos) + by;
+      setHover(null);
+      go(to);
+      if (wheel.contains(document.activeElement)) cards[mod(to)].focus({ preventScroll: true });
+    };
+    // tabbing to a card turns it to the front; a mouse press must not move it mid-click
+    const onFocus = (e: FocusEvent) => {
+      const i = cards.indexOf(e.target as HTMLElement);
+      if (i >= 0 && cards[i].matches(":focus-visible")) face(i);
     };
 
-    flight.addEventListener("wheel", onWheel, { passive: false });
-    addEventListener("scroll", onScroll, { passive: true });
+    paint();
+    el.addEventListener("wheel", onWheel, { passive: false });
+    wheel.addEventListener("pointerdown", onDown);
+    wheel.addEventListener("pointermove", onMove);
+    wheel.addEventListener("pointerup", onUp);
+    wheel.addEventListener("pointercancel", onUp);
+    wheel.addEventListener("click", onClick, true);
+    wheel.addEventListener("dragstart", noDrag);
+    wheel.addEventListener("focusin", onFocus);
+    addEventListener("keydown", onKey);
     return () => {
-      flight.removeEventListener("wheel", onWheel);
-      removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+      clearTimeout(idle);
+      el.removeEventListener("wheel", onWheel);
+      wheel.removeEventListener("pointerdown", onDown);
+      wheel.removeEventListener("pointermove", onMove);
+      wheel.removeEventListener("pointerup", onUp);
+      wheel.removeEventListener("pointercancel", onUp);
+      wheel.removeEventListener("click", onClick, true);
+      wheel.removeEventListener("dragstart", noDrag);
+      wheel.removeEventListener("focusin", onFocus);
+      removeEventListener("keydown", onKey);
     };
   }, []);
 
   return (
-    <main className="hub">
+    <main className="hub" style={{ "--accent": way.accent, "--step": `${STEP}deg` } as CSSProperties}>
       <header className="hub-top">
         <span>{about.title}</span>
         <span>{about.quickFacts.location}</span>
@@ -249,25 +385,57 @@ export default function Hub({ data }: { data: PortfolioData }) {
 
       <div className="hub-head">
         <h1>{about.name}</h1>
-        <p>One résumé, three ways in. Pick how you want to read it.</p>
+        <p>One résumé, four ways to read it. Scroll or drag the wheel to pick one.</p>
       </div>
 
-      <nav className="hub-doors" aria-label="Versions" ref={nav}>
-        {DOORS.map((d, i) => (
-          <a key={d.id} href={ROUTES[d.id].path} className={`hub-door hub-door-${d.id}`} onPointerMove={track}>
-            <Art id={d.id} />
-            <span className="hub-kicker">
-              0{i + 1} / {d.verb}
-              <span className="hub-hint">{d.hint}</span>
-            </span>
-            <span className="hub-title">{ROUTES[d.id].label}</span>
-            <span className="hub-blurb">{d.blurb}</span>
-            <span className="hub-cta" aria-hidden>
-              Enter →
-            </span>
-          </a>
-        ))}
-      </nav>
+      <div className="hub-stage" ref={stage}>
+        <div className="hub-pv" aria-hidden>
+          {WAYS.map((w, i) => (
+            <div key={w.id} className={`hub-slide hub-slide-${w.id}`} data-on={i === shown || undefined}>
+              <Art id={w.id} />
+            </div>
+          ))}
+        </div>
+
+        <nav className="hub-wheel" aria-label="Versions">
+          <div className="hub-drum">
+            {WAYS.map((w, i) => (
+              <a
+                key={w.id}
+                href={ROUTES[w.id].path}
+                className="hub-card"
+                draggable={false}
+                data-shown={i === shown || undefined}
+                onPointerEnter={(e) => e.pointerType === "mouse" && setHover(i)}
+                onPointerLeave={() => setHover(null)}
+              >
+                <span className="hub-tab">
+                  0{i + 1} / {w.verb}
+                </span>
+                <span className="hub-enter" aria-hidden>
+                  Enter →
+                </span>
+                <span className="hub-title">{ROUTES[w.id].label}</span>
+              </a>
+            ))}
+          </div>
+        </nav>
+
+        <div className="hub-detail" aria-live="polite">
+          <div key={way.id}>
+            <p className="hub-kicker">
+              0{shown + 1} / {ROUTES[way.id].label}
+            </p>
+            <p className="hub-blurb">{way.blurb}</p>
+            <dl className="hub-facts">
+              <dt>Controls</dt>
+              <dd>{way.controls}</dd>
+              <dt>Good for</dt>
+              <dd>{way.goodFor}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
 
       <footer className="hub-foot">
         <a href={ROUTES.plain.path}>In a hurry? Plain résumé →</a>
